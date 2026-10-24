@@ -58,11 +58,16 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 @keyframes talk{ from{ transform:scaleY(1) } to{ transform:scaleY(1.035) translateY(-.4rem) } }
 #whiskers.breath{ animation:breath 3.2s ease-in-out 1; }
 @keyframes breath{ 0%{transform:scale(1)} 45%{transform:scale(1.12)} 60%{transform:scale(1.12)} 100%{transform:scale(1)} }
+#whiskers.wave{ animation:wave .45s ease-in-out 5 alternate; }
+@keyframes wave{ from{ transform:rotate(-5deg) } to{ transform:rotate(6deg) translateY(-.6rem) } }
 #bubble{ position:absolute; left:24.5rem; bottom:8rem; max-width:48rem; background:var(--bubble); border-radius:3rem; padding:1.5rem 2.4rem; font-size:3.4rem; line-height:1.15; font-weight:600; box-shadow:0 .6rem 0 var(--shadow); }
 #bubble:after{ content:''; position:absolute; left:-1.5rem; bottom:2.4rem; border:1.3rem solid transparent; border-right-color:var(--bubble); border-left:0; }
 #ghost{ position:absolute; z-index:8; font-size:9rem; line-height:1; pointer-events:none; opacity:0; transform:translate(-35%,-10%); transition:opacity .3s; filter:drop-shadow(0 .5rem .5rem rgba(0,0,0,.3)); }
 #ghost.on{ opacity:1; animation:tapbounce .6s ease-in-out infinite alternate; }
 @keyframes tapbounce{ from{ transform:translate(-35%,-10%) } to{ transform:translate(-35%,-32%) } }
+#ghost.on.press{ animation:none; transform:translate(-35%,-4%) scale(.88); }
+#ghost.on.lift{ animation:ghostlift 1.4s ease forwards; }
+@keyframes ghostlift{ from{ transform:translate(-35%,-10%); opacity:1 } to{ transform:translate(-35%,-110%); opacity:0 } }
 
 /* shared pieces */
 .banner{ position:absolute; left:50%; top:10.5rem; transform:translateX(-50%); font-size:4.4rem; font-weight:700; color:#fff; text-shadow:0 .35rem 0 rgba(0,0,0,.22); white-space:nowrap; }
@@ -89,7 +94,10 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .t1{ font-size:7rem; font-weight:700; color:#fff; text-shadow:0 .5rem 0 rgba(0,0,0,.2); line-height:1; }
 .t2{ font-size:15rem; font-weight:700; color:var(--red); -webkit-text-stroke:.35rem #fff; text-shadow:0 .9rem 0 rgba(0,0,0,.18); line-height:1; margin:0 0 3rem; }
 .tiny{ margin-top:2.2rem; font-size:2.6rem; color:#fff; text-shadow:0 .2rem 0 rgba(0,0,0,.25); }
-.tiny-btn{ margin-top:1.6rem; font-size:2.3rem; padding:.8rem 2rem; border-radius:2rem; border:0; background:rgba(255,255,255,.28); color:#fff; }
+.title .big{ display:block; margin:0 auto; }
+.tiny-btn{ display:block; margin:1.6rem auto 0; font-size:2.3rem; padding:.8rem 2rem; border-radius:2rem; border:0; background:rgba(255,255,255,.28); color:#fff; }
+.pop-in{ animation:pop .6s cubic-bezier(.2,1.6,.4,1) both; }
+.banner.sm{ font-size:3.5rem; }
 
 /* balloon */
 .balloon-wrap{ position:absolute; left:50%; top:36rem; transform:translate(-50%,-50%); width:34rem; height:36rem; display:grid; place-items:center; }
@@ -287,7 +295,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
         <label><span>Name on screen</span><input id="p-name" maxlength="20"></label>
         <label><span>Say the name as</span><input id="p-say" maxlength="24"></label>
         <label><span>Voice</span><select id="p-voice"></select></label>
-        <label><span>Goodbye line</span><input id="p-bye" maxlength="60"></label>
+        <label><span>Goodbye line (optional)</span><input id="p-bye" maxlength="60" placeholder="said after Bye-bye"></label>
         <div class="row"><button id="p-test">▶ Test voice</button><button id="p-save">Save</button></div>
         <div><b>Slides in the mission</b></div>
         <div class="slides" id="p-slides"></div>
@@ -315,7 +323,8 @@ const NUMWORD=['zero','one','two','three','four','five','six','seven','eight','n
 // ---------- settings, levels, progress (kept on this device only)
 function load(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return (v&&typeof v==='object')?Object.assign({},d,v):Object.assign({},d); }catch(e){ return Object.assign({},d); } }
 function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
-const SET=load('rsh-settings',{name:'Hero', sayAs:'Hero', voice:'', bye:'Time for a big hug!', slides:{}});
+const SET=load('rsh-settings',{name:'Hero', sayAs:'Hero', voice:'', bye:'', slides:{}});
+if(SET.bye==='Time for a big hug!') SET.bye='';
 SET.slides=SET.slides||{};
 const LV=load('rsh-levels',{green:0,flash:0,karuta:0,shapes:0,count:0,letter:0,shark:0});
 const PROG=load('rsh-progress',{missions:0,longestWait:0,letters:[]});
@@ -345,7 +354,13 @@ const sfx={
   boop(){ tone(200,.18,'triangle',.15); },
   pop(){ tone(640,.09,'sine',.2); tone(960,.08,'sine',.12,.06); },
   cheer(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,.35,'triangle',.18,i*.09)); },
-  horn(){ tone(392,.3,'square',.1); tone(494,.3,'square',.1); },
+  // a cartoon "beep-beep": two nasal notes, the second a little higher, like a toy car horn
+  horn(){ const c=audio(); if(!c) return; const t=c.currentTime;
+    const note=(when,f0,f1,dur)=>{ const o=c.createOscillator(), o2=c.createOscillator(), f=c.createBiquadFilter(), g=c.createGain();
+      o.type='square'; o2.type='sawtooth'; o.frequency.setValueAtTime(f0,when); o.frequency.exponentialRampToValueAtTime(f1,when+dur); o2.frequency.setValueAtTime(f0*1.004,when); o2.frequency.exponentialRampToValueAtTime(f1*1.004,when+dur);
+      f.type='bandpass'; f.frequency.value=f0*2.1; f.Q.value=1.3; g.gain.setValueAtTime(.0001,when); g.gain.exponentialRampToValueAtTime(.26,when+.02); g.gain.setValueAtTime(.26,when+dur-.05); g.gain.exponentialRampToValueAtTime(.0001,when+dur);
+      o.connect(f); o2.connect(f); f.connect(g).connect(c.destination); o.start(when); o2.start(when); o.stop(when+dur+.02); o2.stop(when+dur+.02); };
+    note(t,620,560,.18); note(t+.25,760,700,.24); },
   yum(){ tone(300,.12,'triangle',.2); tone(420,.14,'triangle',.2,.1); },
   bye(){ [784,659,523,659,523,392].forEach((f,i)=>tone(f,.4,'triangle',.16,i*.28)); },
   whoosh(){ const c=audio(); if(!c) return; const n=Math.floor(c.sampleRate*.7); const b=c.createBuffer(1,n,c.sampleRate); const d=b.getChannelData(0); for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*(1-i/n); const s=c.createBufferSource(); s.buffer=b; const f=c.createBiquadFilter(); f.type='bandpass'; f.Q.value=.8; f.frequency.setValueAtTime(250,c.currentTime); f.frequency.exponentialRampToValueAtTime(3000,c.currentTime+.6); const g=c.createGain(); g.gain.value=.3; s.connect(f).connect(g).connect(c.destination); s.start(); }
@@ -359,19 +374,22 @@ function engineStop(){ if(!eng||!actx) return; const e=eng; eng=null; try{ e.g.g
 const synth=('speechSynthesis' in window)?window.speechSynthesis:null;
 let voice=null;
 function englishVoices(){ if(!synth) return []; return (synth.getVoices()||[]).filter(v=>/^en/i.test((v.lang||'').replace('_','-'))); }
+// A calm female voice by default: British first, then Australian, then American. Enhanced/Premium downloads win over compact ones.
+const FEMALE=/karen|catherine|matilda|kate|serena|martha|stephanie|fiona|samantha|\bava\b|allison|zoe|nicky|susan|shelley|sandy|moira|tessa|veena|isha|joelle|\bflo\b/i;
+const MALE=/daniel|oliver|arthur|aaron|fred|rishi|gordon|\blee\b|\btom\b|alex|evan|nathan|reed|rocko|eddy|grandpa|ralph|bruce|junior|albert|bahh|bells|boing|bubbles|cellos|deranged|good news|bad news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox/i;
 function pickVoice(){
-  const vs=englishVoices(); if(!vs.length) return;
+  const vs=englishVoices().slice().sort((a,b)=>(/enhanced|premium/i.test(b.name)?1:0)-(/enhanced|premium/i.test(a.name)?1:0)); if(!vs.length) return;
   if(SET.voice){ const v=vs.find(v=>v.name===SET.voice); if(v){ voice=v; return; } }
-  const norm=v=>(v.lang||'').replace('_','-').toLowerCase();
-  const prefer=[['en-gb',/daniel|kate|serena|oliver|arthur|martha|stephanie/i],['en-gb',null],['en-au',null],['en-us',null],['en',null]];
-  for(const p of prefer){ const v=vs.find(v=>norm(v).indexOf(p[0])===0 && (!p[1]||p[1].test(v.name))); if(v){ voice=v; return; } }
+  const lang=v=>(v.lang||'').replace('_','-').toLowerCase();
+  const tiers=[v=>lang(v).indexOf('en-gb')===0&&FEMALE.test(v.name), v=>lang(v).indexOf('en-au')===0&&FEMALE.test(v.name), v=>lang(v).indexOf('en-us')===0&&FEMALE.test(v.name), v=>FEMALE.test(v.name), v=>!MALE.test(v.name)];
+  for(const t of tiers){ const v=vs.find(t); if(v){ voice=v; return; } }
   voice=vs[0];
 }
 if(synth){ pickVoice(); synth.onvoiceschanged=()=>{ pickVoice(); fillVoices(); }; }
 const whisk=$('#whiskers'), bubbleEl=$('#bubble');
 function bubble(t){ bubbleEl.textContent=t; }
 function say(text,opt){
-  opt=opt||{}; const sub=opt.sub!==false, rate=opt.rate||.9, pitch=opt.pitch||1.05;
+  opt=opt||{}; const sub=opt.sub!==false, rate=opt.rate||.88, pitch=opt.pitch||1.1;
   if(sub) bubble(text);
   return new Promise(res=>{
     const est=600+text.length*75;
@@ -425,7 +443,8 @@ function confetti(n){
 }
 const ghostEl=$('#ghost'); let ghostT=null;
 function posOf(el){ const r=el.getBoundingClientRect(), s=stage.getBoundingClientRect(); return {x:(r.left+r.width/2-s.left)/s.width*100, y:(r.top+r.height/2-s.top)/s.height*75}; }
-function ghost(el){ if(!el) return; const p=posOf(el); ghostEl.style.left=p.x+'rem'; ghostEl.style.top=p.y+'rem'; ghostEl.classList.add('on'); clearTimeout(ghostT); ghostT=setTimeout(()=>ghostEl.classList.remove('on'),2600); }
+function ghost(el,o){ if(!el) return; o=o||{}; const p=posOf(el); ghostEl.style.left=p.x+'rem'; ghostEl.style.top=p.y+'rem'; ghostEl.classList.remove('lift'); ghostEl.classList.toggle('press',!!o.press); ghostEl.classList.add('on'); clearTimeout(ghostT); if(!o.hold) ghostT=setTimeout(()=>ghostEl.classList.remove('on','press'),2600); }
+function ghostLift(){ ghostEl.classList.remove('press'); ghostEl.classList.add('lift'); clearTimeout(ghostT); ghostT=setTimeout(()=>ghostEl.classList.remove('on','lift'),1500); }
 function wobble(el){ el.classList.remove('wobble'); void el.offsetWidth; el.classList.add('wobble'); }
 function holdButton(el,ms,fn){ let t=null; const stop=()=>{ clearTimeout(t); t=null; el.classList.remove('holding'); };
   el.addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); try{ el.setPointerCapture(e.pointerId); }catch(x){} el.classList.add('holding'); t=setTimeout(()=>{ stop(); fn(); },ms); });
@@ -446,11 +465,12 @@ function offerAgain(root,api,replay){ return new Promise(res=>{
 });}
 
 // ---------- balloon breathing widget (opening ritual, and the calm cloud)
+// With demo:true the first breath is shown: a hand presses the balloon while it fills, lifts off while it empties, then it is the child's turn.
 function balloonWidget(root,o){
-  const breaths=o.breaths||2, alive=o.alive||(()=>true);
+  const breaths=o.breaths||1, alive=o.alive||(()=>true);
   root.innerHTML=`<div class="balloon-wrap"><div class="balloon">${BALLOON_SVG}</div></div>`;
-  const b=root.querySelector('.balloon'); let count=0, holding=false, t0=0, holdTimer=null, finished=false;
-  const down=e=>{ if(finished) return; e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(x){} if(holding) return;
+  const b=root.querySelector('.balloon'); let count=0, holding=false, t0=0, holdTimer=null, finished=false, enabled=!o.demo;
+  const down=e=>{ if(finished||!enabled) return; e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(x){} if(holding) return;
     holding=true; t0=performance.now(); b.classList.add('inflate'); say('Breathe in…'); sweep(200,420,4);
     holdTimer=setTimeout(()=>{ if(holding&&alive()) say('Hold it… lovely.'); },4200); };
   const up=()=>{ if(!holding) return; holding=false; clearTimeout(holdTimer); const held=performance.now()-t0; b.classList.remove('inflate'); if(!alive()) return;
@@ -458,19 +478,32 @@ function balloonWidget(root,o){
     count++; sweep(420,200,4); say('And breathe out… slowly.');
     if(count>=breaths){ finished=true; setTimeout(()=>{ if(alive()&&o.onDone) o.onDone(); },3800); } };
   b.addEventListener('pointerdown',down); b.addEventListener('pointerup',up); b.addEventListener('pointercancel',up);
+  if(o.demo){ (async()=>{
+    await (o.before||wait(400)); if(!alive()) return; await wait(300); if(!alive()) return;
+    ghost(b,{hold:true,press:true}); b.classList.add('inflate'); sweep(200,420,4);
+    await Promise.all([say('Tap and hold the balloon with your finger, and take a deep breath in at the same time.'), wait(4300)]); if(!alive()) return;
+    ghostLift(); b.classList.remove('inflate'); sweep(420,200,4);
+    await Promise.all([say('Now lift your finger, and breathe out slowly.'), wait(4300)]); if(!alive()) return;
+    await say('Now you have a go yourself!'); if(!alive()) return;
+    enabled=true; ghost(b); if(o.onReady) o.onReady(b);
+  })(); }
   return b;
 }
 
 // ---------- scenes
 const introScene={ key:'intro', stop:false, enter(root,api){
-  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><button class="big" id="start">START</button><div class="tiny">Sound up 🔊 · iPad sideways 🔄</div><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
+  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><button class="big pop-in" id="start" hidden>START</button><div class="tiny" id="tapme">Tap anywhere to say hello 👋</div><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
   holdButton(root.querySelector('#setup'),1200,openParent);
-  bubble(`Hi ${NAME()}! Tap START.`);
-  root.querySelector('#start').addEventListener('click',async()=>{
-    audio(); sfx.cheer();
-    await say(`Hi ${SAY()}! Ready… steady… HERO!`);
-    if(api.alive()) api.next();
-  },{once:true});
+  bubble(`Hello ${NAME()}!`);
+  let greeted=false, started=false;
+  // iPads only speak after a touch, so the welcome plays on the first tap anywhere and START appears
+  const greet=()=>{ if(greeted) return; greeted=true; audio(); whisk.classList.add('wave'); setTimeout(()=>whisk.classList.remove('wave'),2600);
+    say(`Hello ${SAY()}! Do you want to become a Hero like Spidey? Then tap START!`,{rate:.95,pitch:1.2});
+    const s=root.querySelector('#start'); s.hidden=false; root.querySelector('#tapme').hidden=true; setTimeout(()=>{ if(api.alive()&&!started) ghost(s); },1800); };
+  const onFirst=e=>{ if(e.target.closest('#setup,#gear,#cloud,#parent')) return; greet(); };
+  stage.addEventListener('pointerdown',onFirst,true); api.cleanup=()=>stage.removeEventListener('pointerdown',onFirst,true);
+  root.querySelector('#start').addEventListener('click',async()=>{ if(started) return; started=true; audio(); sfx.cheer();
+    await say('Ready… steady… HERO!',{rate:.95,pitch:1.2}); if(api.alive()) api.next(); });
 }};
 
 const balloonScene={ key:'balloon', icon:'🎈', name:'the balloon', sticker:'🎈', done:'you took calm breaths', async enter(root,api){
@@ -487,23 +520,25 @@ const balloonScene={ key:'balloon', icon:'🎈', name:'the balloon', sticker:'�
     api.hint=()=>{ say('How do you feel? Tap a face.'); ghost(root.querySelector('.pcard')); };
     say(`${SAY()}, how do you feel today? Tap a face.`);
   };
-  const b=balloonWidget(root.querySelector('#bw'),{breaths:2, alive:api.alive, onDone:async()=>{ api.hint=null; if(!api.alive()) return; sfx.ding(); await say('Nice and calm!'); if(api.alive()) feelings(); }});
-  api.hint=()=>{ say('Hold the balloon with your finger, and breathe in.'); ghost(b); };
-  say(`Let's do balloon breathing. Hold the balloon, and breathe in.`);
+  api.hint=null;
+  balloonWidget(root.querySelector('#bw'),{breaths:1, demo:true, alive:api.alive,
+    before: say(`Let's do balloon breathing, ${SAY()}. Watch first.`),
+    onReady:(bal)=>{ api.hint=()=>{ say('Tap and hold the balloon with your finger, and breathe in.'); ghost(bal); }; },
+    onDone:async()=>{ api.hint=null; if(!api.alive()) return; sfx.ding(); await say('Nice and calm!'); if(api.alive()) feelings(); }});
 }};
 
 const greenScene={ key:'green', icon:'🚦', name:'the green light', sticker:'🚦', done:'you waited for green', enter(root,api){
   const lv=LV.green||0, extra=Math.min(lv,4)*600;
   const ROUNDS=[[2500+extra,4000+extra],[4000+extra,6500+extra]]; let round=0, early=0, state='idle', timers=[], stumbles=0;
-  const build=()=>{ root.innerHTML=`<div class="road"></div><div class="finish">🏁</div><div class="tlight"><div class="lamp r"></div><div class="lamp a"></div><div class="lamp g"></div></div><div class="ruby" id="ruby">${RUBY_SVG}</div><div class="holdzone" id="hold"></div><div class="banner" id="tb">Hold Ruby…</div>`; };
+  const build=()=>{ root.innerHTML=`<div class="road"></div><div class="finish">🏁</div><div class="tlight"><div class="lamp r"></div><div class="lamp a"></div><div class="lamp g"></div></div><div class="ruby" id="ruby">${RUBY_SVG}</div><div class="holdzone" id="hold"></div><div class="banner sm" id="tb">Hold Ruby the red car…</div>`; };
   build();
   const q=s=>root.querySelector(s);
   const clearT=()=>{ timers.forEach(clearTimeout); timers=[]; };
   const setLight=c=>{ root.querySelectorAll('.lamp').forEach(l=>l.classList.toggle('on',l.classList.contains(c))); };
   const instruct=async()=>{ clearT(); engineStop(); setLight('none'); q('#ruby').classList.remove('spin','go','rev'); state='wait';
-    q('#tb').textContent='Hold Ruby. Wait for GREEN!'; state='idle'; api.hint=()=>{ say('Press and hold Ruby. Wait for green.'); ghost(q('#ruby')); };
-    say(round===0?`Ruby wants to go, go, go! Press and hold Ruby, ${SAY()}. Wait for green.`:'Again! Hold Ruby, and wait for green. It might take longer this time.'); };
-  const race=async()=>{ const ruby=q('#ruby'); ruby.classList.remove('go'); void ruby.offsetWidth; sfx.whoosh(); ruby.classList.add('spin','go'); q('#tb').textContent='GO!'; say('Go, Ruby, go!'); await wait(2400); if(!api.alive()) return; confetti(); sfx.cheer(); };
+    q('#tb').textContent='Hold Ruby the red car. Wait for GREEN!'; state='idle'; api.hint=()=>{ say('Press and hold Ruby the red car. Wait for green.'); ghost(q('#ruby')); };
+    say(round===0?`Ruby the red car wants to go, go, go! Press and hold Ruby the red car, ${SAY()}. Wait for green.`:'Again! Hold Ruby the red car, and wait for green. It might take longer this time.'); };
+  const race=async()=>{ const ruby=q('#ruby'); ruby.classList.remove('go'); void ruby.offsetWidth; sfx.whoosh(); ruby.classList.add('spin','go'); q('#tb').textContent='GO!'; say('Go, Ruby the red car, go!'); await wait(2400); if(!api.alive()) return; confetti(); sfx.cheer(); };
   const launch=async()=>{ if(state!=='green') return; state='go'; api.hint=null; clearT(); engineStop(); q('#ruby').classList.remove('rev');
     await race(); if(!api.alive()) return; await say(`Great waiting, ${SAY()}!`); if(!api.alive()) return;
     round++;
@@ -517,14 +552,14 @@ const greenScene={ key:'green', icon:'🚦', name:'the green light', sticker:'�
       if(d!==step){ stumbles++; wobble(b); sfx.boop(); say(step==='left'?'Left first. Look left.':'Now right. Look right.'); return; }
       b.classList.add('done'); sfx.ding(); if(step==='left'){ step='right'; say('Left! Now look right.'); } else { state='looked'; api.hint=null; await say('Right! All clear.'); looks.remove(); res(); } })); });
   q('#hold').addEventListener('pointerdown',e=>{ e.preventDefault(); if(state!=='idle') return; try{ q('#hold').setPointerCapture(e.pointerId); }catch(x){}
-    state='red'; api.hint=null; setLight('r'); engineStart(); q('#ruby').classList.add('rev'); q('#tb').textContent='Wait… wait…'; bubble('Wait for green… hold on, Ruby!');
+    state='red'; api.hint=null; setLight('r'); engineStart(); q('#ruby').classList.add('rev'); q('#tb').textContent='Wait… wait…'; bubble('Wait for green… hold on, Ruby the red car!');
     let red=rnd(ROUNDS[round][0],ROUNDS[round][1]); if(early>=2) red=Math.max(1500, red*.6); const started=Date.now();
     timers.push(setTimeout(()=>{ if(state!=='red') return; state='amber'; setLight('a'); engineRev(); },red));
     timers.push(setTimeout(()=>{ if(state!=='amber') return; state='green'; setLight('g'); sfx.ding(); q('#tb').textContent='GREEN! Let go!'; say('Green! Let go!');
       const waited=(Date.now()-started)/1000; if(waited>(PROG.longestWait||0)){ PROG.longestWait=Math.round(waited*10)/10; save('rsh-progress',PROG); }
       timers.push(setTimeout(()=>{ if(state==='green') launch(); },3000)); },red+1000)); });
   const release=async()=>{ if(state==='red'||state==='amber'){ clearT(); engineStop(); early++; stumbles++; state='oops'; setLight('none'); q('#ruby').classList.remove('rev'); wobble(q('#ruby')); sfx.boop(); q('#tb').textContent='Oops! Too early.';
-      await say('Oops! Too early. That\'s okay. Try again.'); if(!api.alive()) return; q('#tb').textContent='Hold Ruby. Wait for GREEN!'; state='idle'; api.hint=()=>{ say('Press and hold Ruby. Wait for green.'); ghost(q('#ruby')); }; }
+      await say('Oops! Too early. That\'s okay. Try again.'); if(!api.alive()) return; q('#tb').textContent='Hold Ruby the red car. Wait for GREEN!'; state='idle'; api.hint=()=>{ say('Press and hold Ruby the red car. Wait for green.'); ghost(q('#ruby')); }; }
     else if(state==='green') launch(); };
   q('#hold').addEventListener('pointerup',release); q('#hold').addEventListener('pointercancel',release);
   api.pause=()=>{ clearT(); engineStop(); state='paused'; setLight('none'); q('#ruby').classList.remove('spin','go','rev'); };
@@ -639,8 +674,8 @@ const shapesScene={ key:'shapes', icon:'🔺', name:'shapes', sticker:'🚀', do
   round();
 }};
 
-const countScene={ key:'count', icon:'🔢', name:'counting', sticker:'🔢', done:'you counted the cars', enter(root,api){
-  const CARS=['🚗','🚙','🚕','🚓','🚐','🚚','🚌']; const n=Math.min(3+(LV.count||0),7); let stumbles=0;
+const countScene={ key:'count', icon:'🔢', name:'counting', sticker:'🔢', done:'you counted to six', enter(root,api){
+  const CARS=['🚗','🚙','🚕','🚓','🚐','🚚']; const n=6; let stumbles=0;
   const askNumber=(root2,answer,maxN,spoken)=>new Promise(res=>{ const lo=Math.max(1,Math.min(answer-1,maxN-2)); const opts=shuffle([lo,lo+1,lo+2]);
     const nums=document.createElement('div'); nums.className='nums'; nums.innerHTML=opts.map(k=>`<button class="numbtn" data-n="${k}">${k}</button>`).join(''); root2.appendChild(nums);
     say(spoken); api.hint=()=>{ say(spoken); ghost(nums.querySelector(`[data-n="${answer}"]`)); };
@@ -648,63 +683,72 @@ const countScene={ key:'count', icon:'🔢', name:'counting', sticker:'🔢', do
       if(k===answer){ nums.dataset.done='1'; api.hint=null; b.classList.add('win'); sfx.ding(); await say(`Yes! ${NUMWORD[k]}!`); res(true); }
       else { stumbles++; wobble(b); sfx.boop(); b.classList.add('faded'); say(`Not ${NUMWORD[k]}. Count again.`); } })); });
   const roundCars=async()=>{
-    root.innerHTML=`<div class="banner">Tap each car and count!</div><div class="carrow">${CARS.slice(0,n).map((c,i)=>`<button class="ccar" data-i="${i}"><span class="num"></span>${c}</button>`).join('')}</div>`;
+    root.innerHTML=`<div class="banner">Tap each car and count!</div><div class="carrow">${CARS.map((c,i)=>`<button class="ccar" data-i="${i}"><span class="num"></span>${c}</button>`).join('')}</div>`;
     const cars=[].slice.call(root.querySelectorAll('.ccar')); let k=0;
     api.hint=()=>{ say('Tap the next car, and count.'); ghost(cars.find(c=>!c.classList.contains('counted'))); };
     const allTapped=new Promise(res=>cars.forEach(c=>c.addEventListener('pointerdown',()=>{ if(c.classList.contains('counted')) return; k++; c.classList.add('counted'); c.querySelector('.num').textContent=k; sfx.pop(); say(NUMWORD[k]+'!',{rate:1}); if(k===n){ api.hint=null; setTimeout(res,700); } })));
-    say(`Counting time! Tap each car, and count with me. Tap the first car.`);
+    say(`Counting time! Six cars. Tap each car, and count with me. Tap the first car.`);
     await allTapped;
     if(!api.alive()) return;
-    await say(`${NUMWORD[n]} cars! How many cars? Tap the number.`,{sub:true}); if(!api.alive()) return;
+    await say(`${NUMWORD[n]} cars! How many cars? Tap the number.`); if(!api.alive()) return;
     await askNumber(root,n,7,'How many cars? Tap the number.'); };
-  const DICE={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9]};
+  const DICE={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
   const roundDots=async(k)=>{ root.innerHTML=`<div class="banner">Look… how many dots?</div><div class="dotcard" id="dc">${[1,2,3,4,5,6,7,8,9].map(c=>`<div class="dot" style="grid-area:${Math.ceil(c/3)} / ${((c-1)%3)+1}; visibility:${DICE[k].includes(c)?'visible':'hidden'}"></div>`).join('')}</div>`;
     api.hint=null; await say('Look at the dots!'); if(!api.alive()) return; await wait(1200); if(!api.alive()) return; root.querySelector('#dc').classList.add('hide');
-    await askNumber(root,k,5,'How many dots did you see? Tap the number.'); };
+    await askNumber(root,k,6,'How many dots did you see? Tap the number.'); };
   (async()=>{ await roundCars(); if(!api.alive()) return; await wait(400);
-    const ks=shuffle([1,2,3]).slice(0,2); for(const k of ks){ await roundDots(k); if(!api.alive()) return; await wait(400); }
+    // three quick dot cards, three different numbers from one to six
+    const ks=shuffle([1,2,3,4,5,6]).slice(0,3); for(const k of ks){ await roundDots(k); if(!api.alive()) return; await wait(400); }
     bump('count',stumbles); api.sticker(); await say('You counted them all!'); if(api.alive()) api.next(); })();
 }};
 
-// Letter Painter: paint the letter slowly along the arrows, then find the picture that starts with it.
+// Letter Painter: paint the letter slowly along the arrows, then find the picture that starts with it. Two letters per mission,
+// and the picture to find is drawn from four words per letter, so it changes from play to play.
 const LETTERS={
-  Z:{ strokes:[[[20,15],[80,15]],[[80,15],[20,85]],[[20,85],[80,85]]], like:'zebra and zoom', opts:[['🦓','zebra',1],['🚗','car',0],['🐟','fish',0]] },
-  A:{ strokes:[[[50,10],[20,88]],[[50,10],[80,88]],[[32,58],[68,58]]], like:'apple and ant', opts:[['🍎','apple',1],['🚗','car',0],['🐱','cat',0]] },
-  C:{ strokes:[Array.from({length:14},(_,i)=>{ const th=(310-i*20)*Math.PI/180; return [50+32*Math.cos(th),50+32*Math.sin(th)]; })], like:'cat and car', opts:[['🐱','cat',1],['🦓','zebra',0],['🐟','fish',0]] },
-  H:{ strokes:[[[22,10],[22,88]],[[78,10],[78,88]],[[22,50],[78,50]]], like:'hat and house', opts:[['🏠','house',1],['🐟','fish',0],['🚗','car',0]] }
+  Z:{ strokes:[[[20,15],[80,15]],[[80,15],[20,85]],[[20,85],[80,85]]], words:[['🦓','zebra'],['0️⃣','zero'],['🤐','zip'],['🚀','zoom']] },
+  A:{ strokes:[[[50,10],[20,88]],[[50,10],[80,88]],[[32,58],[68,58]]], words:[['🍎','apple'],['🐜','ant'],['🚑','ambulance'],['🐊','alligator']] },
+  C:{ strokes:[Array.from({length:14},(_,i)=>{ const th=(310-i*20)*Math.PI/180; return [50+32*Math.cos(th),50+32*Math.sin(th)]; })], words:[['🐱','cat'],['🚗','car'],['🐄','cow'],['🥕','carrot']] },
+  H:{ strokes:[[[22,10],[22,88]],[[78,10],[78,88]],[[22,50],[78,50]]], words:[['🏠','house'],['🎩','hat'],['🐴','horse'],['🚁','helicopter']] }
 };
-const LETTER_ORDER=['Z','A','C','H'];
-const letterScene={ key:'letter', icon:'✏️', name:'the letter', sticker:'✏️', done:'you painted a letter', enter(root,api){
-  const L=LETTER_ORDER[Math.min(PROG.letters.length,LETTER_ORDER.length-1)]; const def=LETTERS[L]; letterScene.done=`you painted the letter ${L}`; let stumbles=0;
-  const first=(NAME().charAt(0).toUpperCase()===L);
-  const path=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
-  const nameHtml=NAME().split('').map((ch,i)=>(ch.toUpperCase()===L?`<b>${ch}</b>`:ch)).join('');
-  root.innerHTML=`<div class="banner">Paint the letter ${L}!</div><div class="lbox" id="lbox"><svg viewBox="0 0 100 100" id="lsvg">${def.strokes.map(s=>`<path class="guide" d="${path(s)}"/>`).join('')}${def.strokes.map((s,i)=>`<path class="paint" data-i="${i}" d="${path(s)}"/>`).join('')}<circle class="startdot" id="sdot" r="6"/></svg></div><div class="lname" id="lname">${L} is for ${first?nameHtml:def.like.split(' and ')[0]}</div><div class="hoot">${HOOT_SVG}</div>`;
-  const svg=root.querySelector('#lsvg'), paints=[].slice.call(root.querySelectorAll('.paint')), sdot=root.querySelector('#sdot');
-  const lens=def.strokes.map(s=>{ let l=0; for(let i=1;i<s.length;i++) l+=Math.hypot(s[i][0]-s[i-1][0],s[i][1]-s[i-1][1]); return l; });
-  paints.forEach((p,i)=>{ const L2=p.getTotalLength(); p.style.strokeDasharray=L2; p.style.strokeDashoffset=L2; p.dataset.len=L2; });
-  let si=0, prog=0, down=false;
-  const setDot=()=>{ const s=def.strokes[si]; sdot.setAttribute('cx',s[0][0]); sdot.setAttribute('cy',s[0][1]); };
-  setDot();
-  const toSvg=e=>{ const r=svg.getBoundingClientRect(); return [(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100]; };
-  // arc-length position of the pointer along the current stroke, with its distance from the stroke
-  const project=(pt)=>{ const s=def.strokes[si]; let acc=0, best={d:1e9,t:0}; for(let i=1;i<s.length;i++){ const a=s[i-1], b=s[i]; const vx=b[0]-a[0], vy=b[1]-a[1]; const len=Math.hypot(vx,vy)||1e-6; let t=((pt[0]-a[0])*vx+(pt[1]-a[1])*vy)/(len*len); t=Math.max(0,Math.min(1,t)); const px=a[0]+vx*t, py=a[1]+vy*t; const d=Math.hypot(pt[0]-px,pt[1]-py); if(d<best.d) best={d:d,t:(acc+len*t)/lens[si]}; acc+=len; } return best; };
-  const render=()=>{ const p=paints[si]; p.style.strokeDashoffset=(+p.dataset.len)*(1-prog); };
-  const finishLetter=async()=>{ api.hint=null; sdot.style.display='none'; root.querySelector('#lbox').classList.add('done'); confetti(); sfx.cheer();
-    await say(`${L}! You painted ${L}, ${SAY()}! ${L}, like ${def.like}.`); if(!api.alive()) return;
-    const opts=shuffle(def.opts.slice());
-    root.innerHTML=`<div class="banner">Which one starts with ${L}?</div><div class="opts">${opts.map((o,i)=>`<button class="pcard" data-i="${i}"><span class="emo">${o[0]}</span><span class="word">${o[1]}</span></button>`).join('')}</div>`;
-    api.hint=()=>{ say(`Which one starts with ${L}, like ${def.like.split(' and ')[0]}? Tap it.`); ghost(root.querySelector('.pcard')); };
-    root.querySelectorAll('.pcard').forEach(b=>b.addEventListener('pointerdown',async()=>{ if(api.phase==='done') return; const o=opts[+b.dataset.i];
-      if(o[2]){ api.phase='done'; api.hint=null; b.classList.add('win'); sfx.ding(); await say(`Yes! ${o[1]} starts with ${L}!`); if(!api.alive()) return; if(!PROG.letters.includes(L)){ PROG.letters.push(L); save('rsh-progress',PROG); } bump('letter',stumbles); api.sticker(); await wait(500); api.next(); }
-      else { stumbles++; wobble(b); sfx.boop(); b.classList.add('faded'); say(`${o[1]} doesn't start with ${L}. Try again.`); } }));
-    say(`Which one starts with ${L}? Tap it.`); };
-  const onDown=e=>{ e.preventDefault(); try{ svg.setPointerCapture(e.pointerId); }catch(x){} down=true; onMove(e); };
-  const onMove=e=>{ if(!down||si>=def.strokes.length) return; const pt=toSvg(e); const pr=project(pt); if(pr.d>13) return; if(pr.t>prog && pr.t<prog+.3){ prog=Math.min(1,pr.t); render(); if(prog>=.97){ sfx.pop(); si++; prog=0; if(si<def.strokes.length){ setDot(); say('Lovely! Now the next bit.'); } else { down=false; finishLetter(); } } } };
-  const onUp=()=>{ down=false; };
-  svg.addEventListener('pointerdown',onDown); svg.addEventListener('pointermove',onMove); svg.addEventListener('pointerup',onUp); svg.addEventListener('pointercancel',onUp);
-  api.hint=()=>{ say('Put your finger on the green dot, and paint slowly along the grey letter.'); ghost(sdot); };
-  say(first?`This is ${L}. ${L} is for ${SAY()}! Hoot says: put your finger on the green dot, and paint slowly along the letter.`:`This is ${L}, like ${def.like}. Put your finger on the green dot, and paint slowly along the letter.`);
+const DISTRACTORS=[['🚗','car'],['🐟','fish'],['🐱','cat'],['🐶','dog'],['🚌','bus'],['⚽','ball'],['🌞','sun'],['🎩','hat'],['🏠','house'],['🦈','shark'],['🍌','banana'],['🐸','frog']];
+const MISSION_LETTERS=['Z','A'];
+const letterScene={ key:'letter', icon:'✏️', name:'the letters', sticker:'✏️', done:'you painted the letters Z and A', enter(root,api){
+  let stumbles=0; const path=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
+  const runLetter=(L,idx)=>new Promise(resolve=>{
+    const def=LETTERS[L]; const words=shuffle(def.words.slice()); const target=words[0]; const like=`${words[1][1]} and ${words[2][1]}`;
+    const first=(NAME().charAt(0).toUpperCase()===L);
+    const nameHtml=NAME().split('').map(ch=>(ch.toUpperCase()===L?`<b>${ch}</b>`:ch)).join('');
+    root.innerHTML=`<div class="banner">Paint the letter ${L}!</div><div class="lbox" id="lbox"><svg viewBox="0 0 100 100" id="lsvg">${def.strokes.map(s=>`<path class="guide" d="${path(s)}"/>`).join('')}${def.strokes.map((s,i)=>`<path class="paint" data-i="${i}" d="${path(s)}"/>`).join('')}<circle class="startdot" id="sdot" r="6"/></svg></div><div class="lname">${L} is for ${first?nameHtml:target[1]}</div><div class="hoot">${HOOT_SVG}</div>`;
+    const svg=root.querySelector('#lsvg'), paints=[].slice.call(root.querySelectorAll('.paint')), sdot=root.querySelector('#sdot');
+    const lens=def.strokes.map(s=>{ let l=0; for(let i=1;i<s.length;i++) l+=Math.hypot(s[i][0]-s[i-1][0],s[i][1]-s[i-1][1]); return l; });
+    paints.forEach(p=>{ const L2=p.getTotalLength(); p.style.strokeDasharray=L2; p.style.strokeDashoffset=L2; p.dataset.len=L2; });
+    let si=0, prog=0, down=false;
+    const setDot=()=>{ const s=def.strokes[si]; sdot.setAttribute('cx',s[0][0]); sdot.setAttribute('cy',s[0][1]); }; setDot();
+    const toSvg=e=>{ const r=svg.getBoundingClientRect(); return [(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100]; };
+    // arc-length position of the pointer along the current stroke, with its distance from the stroke
+    const project=(pt)=>{ const s=def.strokes[si]; let acc=0, best={d:1e9,t:0}; for(let i=1;i<s.length;i++){ const a=s[i-1], b=s[i]; const vx=b[0]-a[0], vy=b[1]-a[1]; const len=Math.hypot(vx,vy)||1e-6; let t=((pt[0]-a[0])*vx+(pt[1]-a[1])*vy)/(len*len); t=Math.max(0,Math.min(1,t)); const px=a[0]+vx*t, py=a[1]+vy*t; const d=Math.hypot(pt[0]-px,pt[1]-py); if(d<best.d) best={d:d,t:(acc+len*t)/lens[si]}; acc+=len; } return best; };
+    const render=()=>{ const p=paints[si]; p.style.strokeDashoffset=(+p.dataset.len)*(1-prog); };
+    const question=async()=>{ api.hint=null; sdot.style.display='none'; root.querySelector('#lbox').classList.add('done'); confetti(); sfx.cheer();
+      await say(`${L}! You painted ${L}, ${SAY()}! ${L}, like ${like}.`); if(!api.alive()) return;
+      const pool=shuffle(DISTRACTORS.filter(d=>d[1].charAt(0).toUpperCase()!==L)).slice(0,2); const opts=shuffle([target].concat(pool));
+      root.innerHTML=`<div class="banner">Which one starts with ${L}?</div><div class="opts">${opts.map((o,i)=>`<button class="pcard" data-i="${i}"><span class="emo">${o[0]}</span><span class="word">${o[1]}</span></button>`).join('')}</div>`;
+      let done=false;
+      api.hint=()=>{ say(`Which one starts with ${L}, like ${target[1]}? Tap it.`); ghost(root.querySelector('.pcard')); };
+      root.querySelectorAll('.pcard').forEach(b=>b.addEventListener('pointerdown',async()=>{ if(done) return; const o=opts[+b.dataset.i];
+        if(o===target){ done=true; api.hint=null; b.classList.add('win'); sfx.ding(); await say(`Yes! ${o[1]} starts with ${L}!`); if(!api.alive()) return; if(!PROG.letters.includes(L)){ PROG.letters.push(L); save('rsh-progress',PROG); } await wait(400); resolve(); }
+        else { stumbles++; wobble(b); sfx.boop(); b.classList.add('faded'); say(`${o[1]} doesn't start with ${L}. Try again.`); } }));
+      say(`Which one starts with ${L}? Tap it.`); };
+    const onDown=e=>{ e.preventDefault(); try{ svg.setPointerCapture(e.pointerId); }catch(x){} down=true; onMove(e); };
+    const onMove=e=>{ if(!down||si>=def.strokes.length) return; const pt=toSvg(e); const pr=project(pt); if(pr.d>13) return; if(pr.t>prog && pr.t<prog+.3){ prog=Math.min(1,pr.t); render(); if(prog>=.97){ sfx.pop(); si++; prog=0; if(si<def.strokes.length){ setDot(); say('Lovely! Now the next bit.'); } else { down=false; question(); } } } };
+    const onUp=()=>{ down=false; };
+    svg.addEventListener('pointerdown',onDown); svg.addEventListener('pointermove',onMove); svg.addEventListener('pointerup',onUp); svg.addEventListener('pointercancel',onUp);
+    api.hint=()=>{ say('Put your finger on the green dot, and paint slowly along the grey letter.'); ghost(sdot); };
+    say(idx===0
+      ? (first?`This is ${L}. ${L} is for ${SAY()}! Hoot says: put your finger on the green dot, and paint slowly along the letter.`:`This is ${L}, like ${like}. Put your finger on the green dot, and paint slowly along the letter.`)
+      : `Now the letter ${L}! ${L}, like ${like}. Put your finger on the green dot, and paint slowly along the letter.`);
+  });
+  (async()=>{ for(let i=0;i<MISSION_LETTERS.length;i++){ await runLetter(MISSION_LETTERS[i],i); if(!api.alive()) return; await wait(300); }
+    bump('letter',stumbles); api.sticker(); await wait(500); if(api.alive()) api.next(); })();
 }};
 
 const sharkScene={ key:'shark', icon:'🦈', name:"Finn's snack", sticker:'🦈', done:'you fed Finn the shark', enter(root,api){
@@ -730,13 +774,13 @@ const hqScene={ key:'hq', icon:'🏆', name:'Hero HQ', stop:true, async enter(ro
   root.innerHTML=`<div class="hq"><div class="hq-title">Hero Badge!</div><div class="badge-big" id="bb"></div></div>`;
   const bb=root.querySelector('#bb'); stickers.forEach((s,i)=>{ const d=document.createElement('div'); d.className='bs'; d.textContent=s; d.style.animationDelay=(i*.25)+'s'; bb.appendChild(d); });
   confetti(220); sfx.cheer();
-  const recap=doneList.slice(-3); const recapText=recap.length?recap.join(', ')+'.':'you did every stop.';
-  await say(`You did it, ${SAY()}! Today ${recapText} Hero badge!`); if(!api.alive()) return;
+  await say(`You did it, ${SAY()}! Now you are a hero like Spidey, and you get the badge!`,{rate:.95,pitch:1.2}); if(!api.alive()) return;
+  const recap=doneList.slice(-3); if(recap.length){ await say(`Today ${recap.join(', ')}.`); if(!api.alive()) return; }
   PROG.missions=(PROG.missions||0)+1; PROG.lastPlayed=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
   whisk.classList.add('breath'); await say('One big breath together… in… and out.'); whisk.classList.remove('breath'); if(!api.alive()) return;
   await wait(600); if(!api.alive()) return;
   showNight('Bye-bye! 👋', SET.bye||'');
-  sfx.bye(); await say(`Bye-bye, ${SAY()}! ${SET.bye||''} See you tomorrow.`); if(!api.alive()) return;
+  sfx.bye(); await say(`Bye-bye, ${SAY()}! ${SET.bye?SET.bye+' ':''}See you tomorrow.`); if(!api.alive()) return;
   $('#again').classList.add('on');
 }};
 
@@ -777,7 +821,7 @@ setInterval(()=>{ if(!cur||cur.key==='intro'||cur.key==='hq'||sleeping||$('#pare
   if(idle>15000 && Date.now()-lastHint>15000 && curApi&&curApi.hint && hintCount<4){ lastHint=Date.now(); hintCount++; try{ curApi.hint(); }catch(e){} } },1000);
 
 // parent corner (hold the gear for 1.5 s)
-function fillVoices(){ const sel=$('#p-voice'); const vs=englishVoices(); sel.innerHTML='<option value="">Automatic (British first)</option>'+vs.map(v=>`<option value="${v.name.replace(/"/g,'&quot;')}">${v.name} (${v.lang})</option>`).join(''); sel.value=SET.voice||''; }
+function fillVoices(){ const sel=$('#p-voice'); const vs=englishVoices(); sel.innerHTML='<option value="">Automatic (calm female voice)</option>'+vs.map(v=>`<option value="${v.name.replace(/"/g,'&quot;')}">${v.name} (${v.lang})</option>`).join(''); sel.value=SET.voice||''; }
 function openParent(){ const p=$('#parent'); if(curApi&&curApi.pause) curApi.pause(); if(synth) synth.cancel();
   $('#p-name').value=SET.name; $('#p-say').value=SET.sayAs; $('#p-bye').value=SET.bye||''; fillVoices();
   $('#p-slides').innerHTML=SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
@@ -795,7 +839,7 @@ $('#p-reset').addEventListener('click',()=>{ Object.keys(LV).forEach(k=>LV[k]=0)
 document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(synth) synth.cancel(); engineStop(); } });
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('gesturestart',e=>e.preventDefault());
-window.__rsh={ go:goScene, sticker:addSticker, set:SET, lv:LV, prog:PROG };   // parent/dev hook: __rsh.go(2) jumps to a slide
+window.__rsh={ go:goScene, sticker:addSticker, set:SET, lv:LV, prog:PROG, voice:()=>voice&&voice.name, sfx:sfx };   // parent/dev hook: __rsh.go(2) jumps to a slide
 compose(); goScene(0);
 })();
 </script>
