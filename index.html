@@ -794,11 +794,15 @@ const LETTERS={
   Z:{ strokes:[[[20,15],[80,15]],[[80,15],[20,85]],[[20,85],[80,85]]], words:[['🦓','zebra'],['0️⃣','zero'],['🤐','zip'],['🚀','zoom']] },
   A:{ strokes:[[[50,10],[20,88]],[[50,10],[80,88]],[[32,58],[68,58]]], words:[['🍎','apple'],['🐜','ant'],['🚑','ambulance'],['🐊','alligator']] },
   C:{ strokes:[Array.from({length:14},(_,i)=>{ const th=(310-i*20)*Math.PI/180; return [50+32*Math.cos(th),50+32*Math.sin(th)]; })], words:[['🐱','cat'],['🚗','car'],['🐄','cow'],['🥕','carrot']] },
-  H:{ strokes:[[[22,10],[22,88]],[[78,10],[78,88]],[[22,50],[78,50]]], words:[['🏠','house'],['🎩','hat'],['🐴','horse'],['🚁','helicopter']] }
+  H:{ strokes:[[[22,10],[22,88]],[[78,10],[78,88]],[[22,50],[78,50]]], words:[['🏠','house'],['🎩','hat'],['🐴','horse'],['🚁','helicopter']] },
+  R:{ strokes:[[[26,10],[26,88]],[[26,10],[60,10],[74,20],[74,38],[60,48],[26,48]],[[46,48],[76,88]]], words:[['🚀','rocket'],['🐰','rabbit'],['🌈','rainbow'],['🤖','robot']] },
+  Y:{ strokes:[[[20,10],[50,52]],[[80,10],[50,52]],[[50,52],[50,88]]], words:[['🪀','yo-yo'],['🟡','yellow'],['🛥️','yacht'],['🧶','yarn']] }
 };
 const DISTRACTORS=[['🚗','car'],['🐟','fish'],['🐱','cat'],['🐶','dog'],['🚌','bus'],['⚽','ball'],['🌞','sun'],['🎩','hat'],['🏠','house'],['🦈','shark'],['🍌','banana'],['🐸','frog']];
-const MISSION_LETTERS=['Z','A'];
-const letterScene={ key:'letter', icon:'✏️', name:'the letters', sticker:'✏️', done:'you painted the letters Z and A', enter(root,api){
+// Three different letters from his name each play, picked at random from the ones that have a stroke guide.
+const NAME_LETTERS=Array.from(new Set('ZACHARY'.split(''))).filter(L=>LETTERS[L]);
+const letterScene={ key:'letter', icon:'✏️', name:'the letters', sticker:'✏️', done:'you painted the letters', enter(root,api){
+  const MISSION_LETTERS=shuffle(NAME_LETTERS.slice()).slice(0,3); letterScene.done=`you painted the letters ${MISSION_LETTERS[0]}, ${MISSION_LETTERS[1]} and ${MISSION_LETTERS[2]}`;
   let stumbles=0; const path=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
   const runLetter=(L,idx)=>new Promise(resolve=>{
     const def=LETTERS[L]; const words=shuffle(def.words.slice()); const target=words[0]; const like=`${words[1][1]} and ${words[2][1]}`;
