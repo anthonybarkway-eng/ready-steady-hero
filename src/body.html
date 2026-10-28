@@ -158,7 +158,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .tray{ position:absolute; left:3rem; top:12rem; width:43rem; height:44rem; border-radius:3rem; background:rgba(255,255,255,.35); }
 .build{ position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; transition:transform 2.4s ease-in; }
 .build.still{ transition:none; }
-.build.launch{ transform:translate(28rem,-110rem); }
+.build.launch{ transform:translateY(-120rem); }
 .build.driveoff{ transform:translateX(-125rem); }
 .build.chug{ transform:translateX(-125rem); transition-timing-function:cubic-bezier(.5,0,.9,.6); }
 /* the finished picture: blocks fade away, the real thing pops in on top */
@@ -166,15 +166,16 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .realpic{ position:absolute; transform:translate(-50%,-50%); line-height:1; z-index:3; animation:realpop .7s cubic-bezier(.2,1.6,.4,1) both; }
 @keyframes realpop{ from{ transform:translate(-50%,-50%) scale(0) rotate(-25deg) } to{ transform:translate(-50%,-50%) scale(1) rotate(0) } }
 .realpic .emoji{ display:block; filter:drop-shadow(0 .8rem 0 rgba(0,0,0,.18)); }
+.realpic.rocket .emoji{ transform:rotate(-45deg); }
 .realpic .fire,.realpic .dust,.realpic .steam{ position:absolute; line-height:1; opacity:0; }
-.realpic .fire{ font-size:.42em; left:-28%; top:66%; transform:rotate(-135deg); transform-origin:50% 50%; }
-.realpic .fire.f2{ font-size:.28em; left:-42%; top:84%; }
+.realpic .fire{ font-size:.5em; left:50%; top:84%; transform:translateX(-50%) rotate(180deg); transform-origin:50% 50%; }
+.realpic .fire.f2{ font-size:.32em; top:112%; }
 .build.launch .fire{ opacity:1; animation:flick .1s infinite alternate; }
 .build.launch .fire.f2{ animation-duration:.14s; }
-@keyframes flick{ from{ transform:rotate(-135deg) scale(1) } to{ transform:rotate(-135deg) scale(1.3) } }
-.realpic .dust{ font-size:.5em; right:-45%; top:45%; transform:scaleX(-1); }
+@keyframes flick{ from{ transform:translateX(-50%) rotate(180deg) scale(1) } to{ transform:translateX(-50%) rotate(180deg) scale(1.3) } }
+.realpic .dust{ font-size:.5em; right:-45%; top:45%; }
 .build.driveoff .dust{ opacity:1; animation:dusty .5s infinite alternate; }
-@keyframes dusty{ from{ transform:scaleX(-1) scale(.9) } to{ transform:scaleX(-1) scale(1.2) translateX(-.3em) } }
+@keyframes dusty{ from{ transform:scale(.9) } to{ transform:scale(1.2) translateX(.3em) } }
 .realpic .steam{ font-size:.45em; left:-4%; top:-30%; }
 .realpic .steam.s2{ left:-16%; } .realpic .steam.s3{ left:8%; }
 .build.chug .steam{ animation:steamup 1.1s ease-out infinite; }
@@ -315,7 +316,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
       <div id="bubble">Hi! I'm Whiskers.</div>
       <div id="ghost">👆</div>
       <div id="think">✋ Stop… think… try again</div>
-      <div id="mic">🎤 Say: <b></b></div>
+      <div id="mic">🗣️ Your turn: <b></b></div>
     </div>
     <div id="top" class="layer">
       <button id="cloud" aria-label="Calm cloud">☁️</button>
@@ -453,21 +454,11 @@ function say(text,opt){
 let talkLock=0, holdLock=0;
 const touchLocked=()=>talkLock>0||holdLock>0;
 let listenT=null; function cueListen(){ bubbleEl.classList.add('listen'); clearTimeout(listenT); listenT=setTimeout(()=>bubbleEl.classList.remove('listen'),800); }
-stage.addEventListener('pointerdown',e=>{ if(!touchLocked()) return; if(e.target.closest('#gear,#cloud,#parent,#again,#setup')) return; e.stopImmediatePropagation(); e.preventDefault(); cueListen(); },true);
+stage.addEventListener('pointerdown',e=>{ if(!touchLocked()) return; if(e.target.closest('#gear,#cloud,#parent,#again,#setup,#drive')) return; e.stopImmediatePropagation(); e.preventDefault(); cueListen(); },true);
 // wrong answer: a clear "stop, think, try again", and the screen stays off until three seconds after the words end
 async function thinkPause(api,line){ holdLock++; thinkEl.classList.add('on'); placeCues(); sfx.boop();
   try{ await say(line+' Stop… think… and try again.'); if(api&&!api.alive()) return; await wait(3000); }
   finally{ holdLock=Math.max(0,holdLock-1); thinkEl.classList.remove('on'); } }
-// the iPad's microphone, for saying a shape name out loud: true = heard it, false = heard something else or nothing, null = no microphone
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
-function listenFor(words,ms){ return new Promise(res=>{ if(!SR) return res(null); let r; try{ r=new SR(); }catch(e){ return res(null); }
-  r.lang='en-AU'; r.interimResults=true; r.maxAlternatives=5; r.continuous=false; let done=false, t=null;
-  const fin=v=>{ if(done) return; done=true; clearTimeout(t); try{ r.abort(); }catch(e){} res(v); };
-  r.onresult=ev=>{ let heard=''; for(let i=0;i<ev.results.length;i++) for(let j=0;j<ev.results[i].length;j++) heard+=' '+ev.results[i][j].transcript; heard=heard.toLowerCase();
-    if(words.some(w=>heard.indexOf(w)>=0)) fin(true); else if(ev.results[ev.results.length-1].isFinal) fin(false); };
-  r.onerror=e=>fin((e&&(e.error==='no-speech'||e.error==='aborted'))?false:null); r.onend=()=>fin(false);
-  t=setTimeout(()=>fin(false),ms); try{ r.start(); }catch(e){ fin(null); } }); }
-const SHAPE_WORDS={ circle:['circ','cir','sir','sur','ser','sick'], square:['squ','skw','swe','swa','sqa','scw'], rectangle:['rec','rek','wreck','tang','tangle'], triangle:['tri','try','tra','angle'] };
 let lastNag=0; function nag(t){ const now=Date.now(); if(now-lastNag<2600) return; lastNag=now; sfx.boop(); say(t); }
 
 // ---------- art
@@ -746,21 +737,21 @@ const shapesScene={ key:'shapes', icon:'🔺', name:'shapes', sticker:'🚀', do
       pic.pieces.map((p,i)=>`<div class="piece" data-i="${i}" data-kind="${p.kind}" style="left:${trayPos[i][0]}rem;top:${trayPos[i][1]}rem;width:${p.w}rem;height:${p.h}rem">${SHAPE_SVG[p.kind](`fill="${p.fill}" stroke="#fff" stroke-width="3"`)}</div>`).join('');
     const pieces=[].slice.call(root.querySelectorAll('.piece')); const slots=pic.pieces.map((p,i)=>({p:p,i:i,free:true}));
     let placed=0, naming=false;
-    // after each piece lands he says its name out loud; with a microphone we listen for it, otherwise he gets a moment to say it
+    // after each piece lands Whiskers says its name slowly, then at normal speed, then asks him to say it and gives him a moment
     const askName=async(kind)=>{ naming=true; holdLock++; api.hint=null; micEl.querySelector('b').textContent=kind;
-      try{ await say(`What shape is that? Say: ${kind}!`); if(!api.alive()) return;
-        let heard=null; micEl.classList.add('on'); placeCues();
-        for(let t=0;t<2;t++){ heard=await listenFor(SHAPE_WORDS[kind],4500); if(!api.alive()) return; if(heard!==false) break; if(t===0){ await say(`I didn't hear it. Say: ${kind}!`); if(!api.alive()) return; } }
-        if(heard===true){ micEl.classList.remove('on'); sfx.ding(); await say(`Yes! ${kind}! Well done!`); }
-        else if(heard===null){ await Promise.all([say(`Say it out loud: ${kind}!`),wait(2800)]); }
-        else { micEl.classList.remove('on'); await say(`Let's say it together: ${kind}!`); } }
+      try{ await say(`This is a ${kind}.`); if(!api.alive()) return;
+        await say(kind+'.',{rate:.55}); if(!api.alive()) return;
+        await say(kind+'!',{rate:1}); if(!api.alive()) return;
+        micEl.classList.add('on'); placeCues();
+        await say(`Now you say it: ${kind}!`); if(!api.alive()) return;
+        await wait(3000); }
       finally{ naming=false; holdLock=Math.max(0,holdLock-1); micEl.classList.remove('on'); } };
     api.hint=()=>{ if(naming) return; const free=pieces.find(x=>!x.classList.contains('locked')); if(!free) return; say(`Drag the ${free.dataset.kind} onto the dotted ${free.dataset.kind}.`); ghost(free); };
     say(pi===0?`Shape time! Drag each shape onto its dotted shape, and build ${pic.word}.`:`Now build ${pic.word}! Drag the shapes.`);
     // the blocks become the real picture, sitting where they were built
     const reveal=()=>{ const b=root.querySelector('#build'); const xs=pic.pieces.map(p=>p.x), ys=pic.pieces.map(p=>p.y), x2=pic.pieces.map(p=>p.x+p.w), y2=pic.pieces.map(p=>p.y+p.h);
       const w=Math.max.apply(null,x2)-Math.min.apply(null,xs), h=Math.max.apply(null,y2)-Math.min.apply(null,ys); const cx=Math.min.apply(null,xs)+w/2, cy=Math.min.apply(null,ys)+h/2;
-      const r=document.createElement('div'); r.className='realpic'; r.style.left=cx+'rem'; r.style.top=cy+'rem'; r.style.fontSize=Math.min(34,Math.max(w,h)*.9)+'rem'; r.innerHTML=`<span class="emoji">${pic.emoji}</span>${pic.fx}`; b.appendChild(r); b.classList.add('real'); sfx.ding(); };
+      const r=document.createElement('div'); r.className='realpic '+pic.name; r.style.left=cx+'rem'; r.style.top=cy+'rem'; r.style.fontSize=Math.min(34,Math.max(w,h)*.9)+'rem'; r.innerHTML=`<span class="emoji">${pic.emoji}</span>${pic.fx}`; b.appendChild(r); b.classList.add('real'); sfx.ding(); };
     const depart=async()=>{ const b=root.querySelector('#build'); b.classList.add('still'); b.classList.remove(pic.anim); void b.offsetWidth; b.classList.remove('still'); void b.offsetWidth;
       if(pic.anim==='launch') sfx.whoosh(); else if(pic.anim==='driveoff'){ sfx.horn(); bubble('Beep beep!'); setTimeout(()=>sfx.horn(),700); } else sfx.train();
       b.classList.add(pic.anim); await wait(2600); if(!api.alive()) return; confetti(); sfx.cheer(); };
