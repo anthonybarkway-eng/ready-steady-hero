@@ -106,6 +106,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .faded{ opacity:.22; pointer-events:none; }
 .opts{ position:absolute; left:50%; top:19rem; transform:translateX(-50%); display:flex; gap:2.4rem; }
 .opts .pcard{ width:19rem; height:24rem; }
+.opts.caps .word{ text-transform:capitalize; }
 .again-btn,.next-btn{ position:absolute; bottom:13rem; width:15rem; height:15rem; border-radius:50%; border:0; font-size:6.5rem; line-height:1; box-shadow:0 1rem 0 var(--shadow); background:#fff; }
 .again-btn{ right:23rem; } .next-btn{ right:4rem; background:var(--green); color:#fff; }
 .again-btn.used{ opacity:.35; }
@@ -216,10 +217,13 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .nums{ position:absolute; left:50%; top:38rem; transform:translateX(-50%); display:flex; gap:2.4rem; }
 .numbtn{ width:13rem; height:13rem; border-radius:3rem; border:0; background:#fff; font-size:7rem; font-weight:700; box-shadow:0 1rem 0 var(--shadow); }
 .numbtn:active{ transform:translateY(.5rem); box-shadow:0 .5rem 0 var(--shadow); }
-.dotcard{ position:absolute; left:50%; top:9rem; transform:translateX(-50%); width:27rem; height:27rem; background:#fff; border-radius:4rem; box-shadow:0 1.2rem 0 var(--shadow); display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); padding:2.5rem; box-sizing:border-box; }
+.dotcard{ position:absolute; left:50%; top:16.5rem; transform:translateX(-50%); width:24rem; height:24rem; background:#fff; border-radius:4rem; box-shadow:0 1.2rem 0 var(--shadow); display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); padding:2.5rem; box-sizing:border-box; }
 .dot{ width:5rem; height:5rem; border-radius:50%; background:var(--red); place-self:center; }
-.dotcard.hide .dot{ visibility:hidden; }
-.dotcard.hide:after{ content:'?'; position:absolute; inset:0; display:grid; place-items:center; font-size:14rem; font-weight:700; color:#c9d3e0; }
+.dotcard.hide .dot{ visibility:hidden !important; }
+/* once the dots are hidden, a question mark appears on each side of the card, never over it */
+.dotcard.hide:before,.dotcard.hide:after{ content:'?'; position:absolute; top:0; height:100%; display:flex; align-items:center; font-size:16rem; line-height:1; font-weight:700; color:#fff; text-shadow:0 .6rem 0 rgba(0,0,0,.2); animation:pop .5s cubic-bezier(.2,1.6,.4,1) both; }
+.dotcard.hide:before{ right:100%; margin-right:5rem; } .dotcard.hide:after{ left:100%; margin-left:5rem; }
+.dotcard~.nums{ top:41.5rem; }
 
 /* letter painting */
 .lbox{ position:absolute; left:13rem; top:15rem; width:40rem; height:40rem; }
@@ -247,7 +251,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 
 /* finale */
 .hq{ position:absolute; left:50%; top:9rem; transform:translateX(-50%); text-align:center; }
-.hq-title{ font-size:7.5rem; font-weight:700; color:#fff; text-shadow:0 .5rem 0 rgba(0,0,0,.2); line-height:1; }
+.hq-title{ font-size:7.5rem; font-weight:700; color:#fff; text-shadow:0 .5rem 0 rgba(0,0,0,.2); line-height:1; white-space:nowrap; }
 .badge-big{ margin:1.6rem auto 0; width:34rem; height:34rem; border-radius:50%; background:radial-gradient(#fff5c2,var(--sun)); box-shadow:0 1.4rem 0 var(--sun2), 0 0 0 1.6rem #fff; display:grid; grid-template-columns:1fr 1fr 1fr; place-items:center; gap:.3rem; padding:4.5rem; box-sizing:border-box; }
 .bs{ font-size:6.5rem; line-height:1; animation:pop .6s cubic-bezier(.2,1.6,.4,1) both; }
 .badge-big{ transition:transform .6s ease, opacity .6s ease; }
@@ -256,6 +260,11 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .gold svg{ width:100%; height:100%; overflow:visible; }
 .gold .gloss{ animation:gloss 2.4s ease-in-out infinite; }
 @keyframes gloss{ 0%{ transform:translateX(-30px) skewX(-22deg) } 55%,100%{ transform:translateX(230px) skewX(-22deg) } }
+/* offered: smaller and pulsing, waiting for his tap; accepted: pops to full size with the sparkles */
+.gold.offer{ cursor:pointer; animation:offerpulse 1s ease-in-out infinite alternate; }
+.gold.offer .spark{ display:none; }
+.gold.accepted{ animation:goldin .9s cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes offerpulse{ from{ transform:translateX(-50%) scale(.8) } to{ transform:translateX(-50%) scale(.9) } }
 @keyframes goldin{ from{ transform:translateX(-50%) scale(0) rotate(-25deg) } to{ transform:translateX(-50%) scale(1) rotate(0) } }
 .gold .spark{ position:absolute; font-size:5rem; line-height:1; animation:sparkle 1.3s ease-in-out infinite alternate; }
 .gold .k1{ left:-5rem; top:2rem; } .gold .k2{ right:-6rem; top:9rem; animation-delay:.4s; } .gold .k3{ left:-3rem; top:24rem; animation-delay:.8s; font-size:4rem; } .gold .k4{ right:-4rem; top:27rem; animation-delay:.2s; font-size:4rem; }
@@ -481,7 +490,7 @@ let lastNag=0; function nag(t){ const now=Date.now(); if(now-lastNag<2600) retur
 const WHISKERS_SVG=`<svg viewBox="0 0 200 200" aria-label="Whiskers the cat hero"><path d="M40 118Q100 92 160 118L176 196Q100 174 24 196Z" fill="#e63946"/><ellipse cx="100" cy="162" rx="56" ry="40" fill="#f4a261"/><path d="M55 60L62 14L96 48Z" fill="#f4a261"/><path d="M145 60L138 14L104 48Z" fill="#f4a261"/><path d="M63 55L67 30L86 50Z" fill="#ffb4a2"/><path d="M137 55L133 30L114 50Z" fill="#ffb4a2"/><circle cx="100" cy="96" r="56" fill="#f4a261"/><path d="M44 86Q100 60 156 86Q151 116 100 113Q49 116 44 86Z" fill="#1d3557"/><ellipse cx="78" cy="93" rx="13" ry="15" fill="#fff"/><ellipse cx="122" cy="93" rx="13" ry="15" fill="#fff"/><circle cx="80" cy="96" r="7" fill="#222"/><circle cx="120" cy="96" r="7" fill="#222"/><circle cx="83" cy="93" r="2.6" fill="#fff"/><circle cx="123" cy="93" r="2.6" fill="#fff"/><path d="M93 119L107 119L100 127Z" fill="#e76f51"/><path d="M100 127Q92 137 84 131M100 127Q108 137 116 131" stroke="#7a3b10" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 116L70 121M34 129L70 127M166 116L130 121M166 129L130 127" stroke="#7a3b10" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="160" r="15" fill="#ffd166"/><path d="M90 152L95 169L100 158L105 169L110 152" stroke="#e63946" stroke-width="4.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
 const RUBY_SVG=`<svg viewBox="0 0 260 120" aria-label="Ruby the race car"><path d="M15 55L15 40L47 40L47 48L22 48L22 55Z" fill="#1d3557"/><path d="M15 85L25 55Q40 40 80 38L105 18Q120 10 160 12L200 40Q245 45 250 70L250 85Q250 95 240 95L25 95Q15 95 15 85Z" fill="#e63946"/><path d="M110 22Q122 16 155 17L185 40L108 40Z" fill="#a8dadc"/><circle cx="135" cy="30" r="7" fill="#fff"/><circle cx="160" cy="30" r="7" fill="#fff"/><circle cx="137" cy="31" r="3.6" fill="#222"/><circle cx="162" cy="31" r="3.6" fill="#222"/><path d="M30 70L240 70" stroke="#ffd166" stroke-width="6"/><circle cx="70" cy="66" r="14" fill="#fff"/><text x="70" y="72" font-size="18" text-anchor="middle" font-weight="700" fill="#1d3557" font-family="Fredoka, sans-serif">3</text><path d="M214 80Q232 90 246 76" stroke="#7a1a24" stroke-width="4" fill="none" stroke-linecap="round"/><g class="wheel"><circle cx="60" cy="95" r="22" fill="#222"/><circle cx="60" cy="95" r="11" fill="#ccc"/><path d="M60 84L60 106M49 95L71 95" stroke="#777" stroke-width="3"/></g><g class="wheel"><circle cx="200" cy="95" r="22" fill="#222"/><circle cx="200" cy="95" r="11" fill="#ccc"/><path d="M200 84L200 106M189 95L211 95" stroke="#777" stroke-width="3"/></g></svg>`;
 const BALLOON_SVG=`<svg viewBox="0 0 100 130" aria-hidden="true"><path d="M50 3C22 3 9 30 13 56c4 24 26 38 37 44 11-6 33-20 37-44C91 30 78 3 50 3z" fill="#e63946"/><ellipse cx="34" cy="30" rx="7" ry="13" fill="#fff" opacity=".35" transform="rotate(-18 34 30)"/><circle cx="40" cy="48" r="4" fill="#1d3557"/><circle cx="60" cy="48" r="4" fill="#1d3557"/><path d="M40 62q10 9 20 0" stroke="#1d3557" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M45 100l10 0-3 7-4 0z" fill="#a4262f"/><path d="M50 107c-8 8 8 14 0 22" stroke="#5a6b85" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`;
-const FINN_SVG=`<svg viewBox="0 0 260 160" aria-label="Finn the baby shark"><path d="M62 84C46 62 34 46 20 34C28 58 30 74 40 84C30 94 26 108 20 124C34 114 48 102 62 84Z" fill="#f4b53f"/><path d="M104 50C112 30 128 18 146 20C137 34 136 46 140 54Z" fill="#f4b53f"/><path d="M118 42C166 36 212 50 228 76C234 82 234 90 228 96C212 120 166 134 118 128C92 126 70 108 54 84C70 62 92 46 118 42Z" fill="#ffd84a"/><path d="M80 98C116 126 180 128 226 96C186 114 128 114 80 98Z" fill="#fff6d6"/><path d="M122 112C132 130 152 140 172 136C162 128 156 118 154 108Z" fill="#f4b53f"/><path d="M176 70q5 10 0 20M184 68q5 12 0 24" stroke="#e3b73a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M228 92C218 106 202 112 188 108C200 100 214 96 228 92Z" fill="#b83a3a"/><path d="M212 104C206 108 200 109 194 107C200 103 206 103 212 104Z" fill="#ff8a9b"/><path d="M206 101l3-4 3 4M215 98l3-4 3 4" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><circle cx="200" cy="70" r="12" fill="#fff"/><circle cx="203" cy="71" r="7" fill="#222"/><circle cx="206" cy="67" r="2.6" fill="#fff"/><circle cx="184" cy="90" r="6" fill="#ffb3a7" opacity=".85"/></svg>`;
+const FINN_SVG=`<svg viewBox="0 0 260 160" aria-label="Finn the shark"><path d="M62 84C46 62 34 46 20 34C28 58 30 74 40 84C30 94 26 108 20 124C34 114 48 102 62 84Z" fill="#f4b53f"/><path d="M104 50C112 30 128 18 146 20C137 34 136 46 140 54Z" fill="#f4b53f"/><path d="M118 42C166 36 212 50 228 76C234 82 234 90 228 96C212 120 166 134 118 128C92 126 70 108 54 84C70 62 92 46 118 42Z" fill="#ffd84a"/><path d="M80 98C116 126 180 128 226 96C186 114 128 114 80 98Z" fill="#fff6d6"/><path d="M122 112C132 130 152 140 172 136C162 128 156 118 154 108Z" fill="#f4b53f"/><path d="M176 70q5 10 0 20M184 68q5 12 0 24" stroke="#e3b73a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M228 92C218 106 202 112 188 108C200 100 214 96 228 92Z" fill="#b83a3a"/><path d="M212 104C206 108 200 109 194 107C200 103 206 103 212 104Z" fill="#ff8a9b"/><path d="M206 101l3-4 3 4M215 98l3-4 3 4" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><circle cx="200" cy="70" r="12" fill="#fff"/><circle cx="203" cy="71" r="7" fill="#222"/><circle cx="206" cy="67" r="2.6" fill="#fff"/><circle cx="184" cy="90" r="6" fill="#ffb3a7" opacity=".85"/></svg>`;
 const HOOT_SVG=`<svg viewBox="0 0 120 150" aria-label="Hoot the owl"><ellipse cx="60" cy="88" rx="46" ry="52" fill="#d94f6b"/><path d="M18 46L28 10L52 40ZM102 46L92 10L68 40Z" fill="#d94f6b"/><ellipse cx="60" cy="100" rx="28" ry="32" fill="#ffd9e0"/><circle cx="42" cy="60" r="16" fill="#fff"/><circle cx="78" cy="60" r="16" fill="#fff"/><circle cx="44" cy="62" r="8" fill="#222"/><circle cx="80" cy="62" r="8" fill="#222"/><path d="M54 74L66 74L60 86Z" fill="#ffb703"/><path d="M40 136L46 148M58 136L60 148M76 136L82 148" stroke="#ffb703" stroke-width="5" stroke-linecap="round"/></svg>`;
 // the golden HERO badge for the end of the mission: a starburst medal on a red ribbon, with a gloss sweep that keeps shining
 const GOLD_SVG=`<svg viewBox="0 0 200 236" aria-label="Golden HERO badge"><defs><radialGradient id="gg" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fff8d0"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#c98a12"/></radialGradient><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe888"/><stop offset="1" stop-color="#b5740a"/></linearGradient><linearGradient id="gs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="gc"><circle cx="100" cy="100" r="80"/></clipPath></defs>
@@ -696,7 +705,7 @@ const karutaScene={ key:'karuta', icon:'🙌', name:'karuta', sticker:'🙌', do
       await say(ri===0?'Karuta time! Hands up! Listen…':'Your turn! Hands up! Listen…'); if(!api.alive()) return;
       await wait(rnd(900,1900)); if(!api.alive()) return;
       api.phase='find'; kb.textContent=`Find the… ${target.w.toUpperCase()}!`; say(`Find the… ${target.w}!`);
-      api.hint=()=>{ say(`Find the… ${target.w}! Tap it.`); ghost(cards[items.indexOf(target)]); };
+      api.hint=()=>{ say(`Find the… ${target.w}! Tap it.`); };
       let wrongs=0;
       cards.forEach(c=>c.addEventListener('pointerdown',async()=>{ if(api.phase!=='find') return; const it=items[+c.dataset.i];
         if(it===target){ api.phase='done'; api.hint=null; c.classList.add('win'); sfx.ding(); await say(`Yes! ${target.w}!`); if(!api.alive()) return; ri++; await wait(500); round(); }
@@ -780,8 +789,9 @@ const shapesScene={ key:'shapes', icon:'🔺', name:'shapes', sticker:'🚀', do
         const me=pic.pieces[+pc.dataset.i];
         let best=null, bd=1e9; slots.forEach(s=>{ if(!s.free||s.p.kind!==me.kind||s.p.w!==me.w||s.p.h!==me.h) return; const sx=s.p.x+s.p.w/2, sy=s.p.y+s.p.h/2; const dist=Math.hypot(cx-sx,cy-sy); if(dist<bd){ bd=dist; best=s; } });
         if(best&&bd<9){ best.free=false; pc.classList.add('locked'); pc.style.left=best.p.x+'rem'; pc.style.top=best.p.y+'rem'; pc.style.zIndex=String(2+(+pc.dataset.i)); root.querySelector('#build').appendChild(pc); sfx.ding(); placed++;
+          await say(`Correct! You have placed the ${pc.dataset.kind} correctly!`); if(!api.alive()) return;
           await askName(pc.dataset.kind); if(!api.alive()) return;
-          if(placed<pic.pieces.length){ say('Now the next shape!'); }
+          if(placed<pic.pieces.length){ say("Now let's place the next shape…"); }
           else { api.hint=null; await say(`You built ${pic.word}, ${SAY()}!`); if(!api.alive()) return; reveal(); await say(`Look! A real ${pic.name}!`); if(!api.alive()) return;
             await depart(); if(!api.alive()) return; await offerAgain(root,api,depart); if(!api.alive()) return; pi++; round(); } }
         else { stumbles++; pc.style.left=d.ox+'rem'; pc.style.top=d.oy+'rem'; thinkPause(api,`Nearly! Put the ${pc.dataset.kind} on the dotted ${pc.dataset.kind}.`); } };
@@ -809,10 +819,10 @@ const countScene={ key:'count', icon:'🔢', name:'counting', sticker:'🔢', do
     say(`Counting time! ${N} cars. Tap each car, and count with me. Tap the first car.`);
     await allTapped;
     if(!api.alive()) return;
-    await say(`${N} cars! How many cars? Tap the number.`); if(!api.alive()) return;
-    await askNumber(root,n,10,'How many cars? Tap the number.'); };
+    await say(`${N} cars! Now, how many cars did we count?`); if(!api.alive()) return;
+    await askNumber(root,n,10,'How many cars? Tap the correct number.'); };
   const DICE={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
-  const roundDots=async(k)=>{ root.innerHTML=`<div class="banner">Look… how many dots?</div><div class="dotcard" id="dc">${[1,2,3,4,5,6,7,8,9].map(c=>`<div class="dot" style="grid-area:${Math.ceil(c/3)} / ${((c-1)%3)+1}; visibility:${DICE[k].includes(c)?'visible':'hidden'}"></div>`).join('')}</div>`;
+  const roundDots=async(k)=>{ root.innerHTML=`<div class="banner">Look at the dots!</div><div class="dotcard" id="dc">${[1,2,3,4,5,6,7,8,9].map(c=>`<div class="dot" style="grid-area:${Math.ceil(c/3)} / ${((c-1)%3)+1}; visibility:${DICE[k].includes(c)?'visible':'hidden'}"></div>`).join('')}</div>`;
     api.hint=null; await say('Look at the dots!'); if(!api.alive()) return; await wait(1200); if(!api.alive()) return; root.querySelector('#dc').classList.add('hide');
     await askNumber(root,k,6,'How many dots did you see? Tap the number.'); };
   (async()=>{ await roundCars(); if(!api.alive()) return; await wait(400);
@@ -854,13 +864,14 @@ const letterScene={ key:'letter', icon:'✏️', name:'the letters', sticker:'�
     const question=async()=>{ api.hint=null; sdot.style.display='none'; root.querySelector('#lbox').classList.add('done'); confetti(); sfx.cheer();
       await say(`${L}! You painted ${L}, ${SAY()}! ${L}, like ${like}.`); if(!api.alive()) return;
       const pool=shuffle(DISTRACTORS.filter(d=>d[1].charAt(0).toUpperCase()!==L)).slice(0,2); const opts=shuffle([target].concat(pool));
-      root.innerHTML=`<div class="banner">Which one starts with ${L}?</div><div class="opts">${opts.map((o,i)=>`<button class="pcard" data-i="${i}"><span class="emo">${o[0]}</span><span class="word">${o[1]}</span></button>`).join('')}</div>`;
+      root.innerHTML=`<div class="banner">Which one starts with ${L}?</div><div class="opts caps">${opts.map((o,i)=>`<button class="pcard" data-i="${i}"><span class="emo">${o[0]}</span><span class="word">${o[1]}</span></button>`).join('')}</div>`;
       let done=false;
-      api.hint=()=>{ say(`Which one starts with ${L}, like ${target[1]}? Tap it.`); ghost(root.querySelector('.pcard')); };
+      const choices=`Is it ${opts[0][1]}, ${opts[1][1]}, or ${opts[2][1]}?`;
+      api.hint=()=>{ say(`Which one starts with ${L}? ${choices}`); };
       root.querySelectorAll('.pcard').forEach(b=>b.addEventListener('pointerdown',async()=>{ if(done) return; const o=opts[+b.dataset.i];
         if(o===target){ done=true; api.hint=null; b.classList.add('win'); sfx.ding(); await say(`Yes! ${o[1]} starts with ${L}!`); if(!api.alive()) return; if(!PROG.letters.includes(L)){ PROG.letters.push(L); save('rsh-progress',PROG); } await wait(400); resolve(); }
-        else { stumbles++; wobble(b); b.classList.add('faded'); thinkPause(api,`${o[1]} doesn't start with ${L}.`); } }));
-      say(`Which one starts with ${L}? Tap it.`); };
+        else { stumbles++; wobble(b); thinkPause(api,`${o[1]} doesn't start with ${L}.`); } }));
+      say(`Which one starts with ${L}? ${choices}`); };
     const onDown=e=>{ e.preventDefault(); try{ svg.setPointerCapture(e.pointerId); }catch(x){} down=true; onMove(e); };
     const onMove=e=>{ if(!down||si>=def.strokes.length) return; const pt=toSvg(e); const pr=project(pt); if(pr.d>13) return; if(pr.t>prog && pr.t<prog+.3){ prog=Math.min(1,pr.t); render(); if(prog>=.97){ sfx.pop(); si++; prog=0; if(si<def.strokes.length){ setDot(); say('Lovely! Now the next bit.'); } else { down=false; question(); } } } };
     const onUp=()=>{ down=false; };
@@ -885,24 +896,29 @@ const sharkScene={ key:'shark', icon:'🦈', name:"Finn's snack", sticker:'🦈'
     it.addEventListener('pointerdown',()=>{ if(ended||it.classList.contains('eat')||it.classList.contains('puff')) return;
       const p=posOf(it); it.style.transition='none'; it.style.left=(p.x-5)+'rem'; it.style.top=(p.y-5)+'rem'; void it.offsetWidth;
       if(it.dataset.bad){ stumbles++; it.classList.add('puff'); it.style.top=(p.y-30)+'rem'; finn.classList.remove('ouch'); void finn.offsetWidth; finn.classList.add('ouch'); thinkPause(api,'Ouch! Spiky! Not that one.'); setTimeout(()=>it.remove(),1300); }
-      else { it.classList.add('eat'); it.style.left='24rem'; it.style.top='30rem'; finn.classList.remove('chomp'); void finn.offsetWidth; finn.classList.add('chomp'); sfx.yum(); eaten++; counter.textContent=`🐟 ${eaten} / ${need}`; bubble(pick(['Yum!','Chomp!','Doo doo doo!','Tasty!'])); setTimeout(()=>it.remove(),500);
-        if(eaten>=need){ ended=true; api.hint=null; clearInterval(spawnT); (async()=>{ await wait(500); confetti(); sfx.cheer(); await say(`Finn is full! Burp! Thank you, ${SAY()}!`); if(!api.alive()) return; bump('shark',stumbles); api.sticker(); await wait(500); api.next(); })(); } } }); };
+      else { it.classList.add('eat'); it.style.left='24rem'; it.style.top='30rem'; finn.classList.remove('chomp'); void finn.offsetWidth; finn.classList.add('chomp'); sfx.yum(); eaten++; counter.textContent=`🐟 ${eaten} / ${need}`; bubble(pick(['Yum!','Chomp!','Tasty!'])); setTimeout(()=>it.remove(),500);
+        if(eaten>=need){ ended=true; api.hint=null; clearInterval(spawnT); (async()=>{ await wait(500); confetti(); sfx.cheer(); await say(`Finn is full! Thank you, ${SAY()}!`); if(!api.alive()) return; bump('shark',stumbles); api.sticker(); await wait(500); api.next(); })(); } } }); };
   api.cleanup=()=>clearInterval(spawnT);
-  (async()=>{ await say(`This is Finn, the baby shark. Doo doo doo doo doo doo! Tap the fish to feed Finn. But don't tap the spiky puffer fish!`); if(!api.alive()) return;
+  (async()=>{ await say(`This is Finn, the shark. Finn is feeling hungry, so we need to feed Finn! Tap the fish to feed Finn. But don't tap the spiky puffer fish!`); if(!api.alive()) return;
     api.hint=()=>{ say('Tap the fish to feed Finn. Not the spiky ones!'); const f=root.querySelector('.item:not([data-bad="1"])'); if(f) ghost(f); };
     spawn(); spawnT=setInterval(spawn,1400); })();
 }};
 
 const hqScene={ key:'hq', icon:'🏆', name:'Hero HQ', stop:true, async enter(root,api){
-  root.innerHTML=`<div class="hq"><div class="hq-title">Hero Badge!</div><div class="badge-big" id="bb"></div></div>`;
+  root.innerHTML=`<div class="hq"><div class="hq-title">Hero HQ</div><div class="badge-big" id="bb"></div></div>`;
   const bb=root.querySelector('#bb'); stickers.forEach((s,i)=>{ const d=document.createElement('div'); d.className='bs'; d.textContent=s; d.style.animationDelay=(i*.25)+'s'; bb.appendChild(d); });
-  confetti(220); sfx.cheer();
-  await say(`You did it, ${SAY()}! Now you are a hero like me and Spidey, and you get the HERO status badge!`,{rate:.95,pitch:1.2}); if(!api.alive()) return;
+  confetti(140); sfx.cheer();
+  await say(`Congratulations, ${SAY()}! You are our new Hero!`,{rate:.95,pitch:1.2}); if(!api.alive()) return;
   const recap=doneList.slice(-3); if(recap.length){ await say(`Today ${recap.join(', ')}.`); if(!api.alive()) return; }
-  // then the sticker ring makes way for the real golden badge
-  bb.classList.add('away'); const g=document.createElement('div'); g.className='gold'; g.innerHTML=GOLD_SVG+'<span class="spark k1">✨</span><span class="spark k2">✨</span><span class="spark k3">✨</span><span class="spark k4">⭐</span>'; root.querySelector('.hq').appendChild(g);
-  root.querySelector('.hq-title').textContent='HERO!'; confetti(180); sfx.cheer();
-  await say('Here is your shining golden HERO badge!',{pitch:1.15}); if(!api.alive()) return;
+  // the sticker ring makes way for the golden badge, offered for him to tap and accept
+  bb.classList.add('away'); const g=document.createElement('div'); g.className='gold offer'; g.innerHTML=GOLD_SVG+'<span class="spark k1">✨</span><span class="spark k2">✨</span><span class="spark k3">✨</span><span class="spark k4">⭐</span>'; root.querySelector('.hq').appendChild(g); root.querySelector('.hq-title').textContent='👆 Tap to accept';
+  const tapped=new Promise(res=>g.addEventListener('pointerdown',()=>res(),{once:true}));
+  await say('Please accept your new Hero status badge for completing this mission. Tap the badge!'); if(!api.alive()) return;
+  api.hint=()=>{ say('Tap the badge to accept it.'); ghost(g); };
+  await tapped; if(!api.alive()) return;
+  api.hint=null; g.classList.remove('offer'); g.classList.add('accepted');
+  root.querySelector('.hq-title').textContent='HERO!'; confetti(240); sfx.cheer();
+  await say(`Here is your shining golden Hero status badge, ${SAY()}! Now you are a Hero, like me and Spidey!`,{pitch:1.15}); if(!api.alive()) return;
   PROG.missions=(PROG.missions||0)+1; PROG.lastPlayed=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
   whisk.classList.add('breath'); await say('One big breath together… in… and out.'); whisk.classList.remove('breath'); if(!api.alive()) return;
   await wait(600); if(!api.alive()) return;
