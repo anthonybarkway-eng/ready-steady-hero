@@ -17,8 +17,9 @@ Grandpa and Grandma; counting cars to ten; four colours; want, don't want and mo
 snacks; head, hands and feet; and a cheering goodbye. Whiskers gives the instructions in English.
 Every Mandarin word is shown as a large Traditional character with small pinyin, is spoken by the
 iPad's own Taiwan Mandarin voice, and says itself again when it is tapped. The rules are the same
-as in Mission 1: nothing can be failed, a wrong tap gets "Oops! That's okay", each slide keeps a
-level, and the mission ends itself with the goodbye.
+as in Mission 1: nothing can be failed, the screen is off while a voice is speaking, a wrong tap
+gets the "Stop… think… and try again" pause with the word said again, nothing points at the
+answer, each slide keeps a level, and the mission ends itself with the goodbye.
 
 - The mission needs a Chinese (Taiwan) voice on the device; iPads come with one (Meijia). If no
   such voice is found, the button is greyed out, and Mandarin is never read by an English voice.

@@ -285,6 +285,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 /* parent corner */
 #parent{ z-index:12; display:none; background:rgba(23,33,58,.92); }
 #parent.on{ display:block; }
+#parent.arming .panel{ pointer-events:none; }
 .panel{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:86rem; max-height:71rem; overflow:auto; background:#fff; border-radius:3rem; padding:2.5rem 3rem; box-sizing:border-box; font-size:2.7rem; touch-action:pan-y; }
 .panel h2{ margin:0 0 1rem; font-size:4rem; }
 .panel label{ display:flex; align-items:center; gap:1.2rem; margin:.7rem 0; }
@@ -1349,7 +1350,13 @@ function openParent(){ const p=$('#parent'); if(curApi&&curApi.pause) curApi.pau
   $('#p-tw').checked=SET.mandarin!==false;
   $('#p-twslides').innerHTML=TW_SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
   pickZhVoice(); twStatus();
-  p.classList.add('on'); }
+  p.classList.add('on');
+  // The finger that opened the corner by holding is still down, and lifting it would also tap whatever has appeared under it
+  // (a tick box in the slide list, which then switched that slide off). The panel stays deaf until that finger has lifted.
+  p.classList.add('arming'); clearTimeout(armT);
+  const lifted=()=>{ removeEventListener('pointerup',lifted,true); removeEventListener('pointercancel',lifted,true); clearTimeout(armT); armT=setTimeout(()=>p.classList.remove('arming'),350); };
+  addEventListener('pointerup',lifted,true); addEventListener('pointercancel',lifted,true); armT=setTimeout(lifted,6000); }
+let armT=null;
 // Mission Taiwan in the parent corner: which Mandarin voice was found (or how to add one), and its own progress
 function twStatus(){ const v=zhVoice;
   $('#p-twstats').textContent=(v?`Mandarin voice: ${v.name} (${v.lang}).`:'No Taiwan Mandarin voice was found on this device, so Mission Taiwan shows as unavailable. On an iPad: Settings → Accessibility → Spoken Content → Voices → Chinese, and choose Meijia under Chinese (Taiwan).')
