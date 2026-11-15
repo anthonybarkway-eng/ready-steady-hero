@@ -299,6 +299,107 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .panel .stats{ color:var(--muted); font-size:2.3rem; margin-top:.8rem; line-height:1.3; }
 .panel .row{ display:flex; flex-wrap:wrap; align-items:center; margin-top:.6rem; }
 
+/* Mission Taiwan (Mandarin). A word card is a big Traditional character with small pinyin; tapping it says the word again. */
+.han{ font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC","Noto Sans CJK TC",sans-serif; font-weight:600; line-height:1.08; }
+.py{ font-family:ui-rounded,"SF Pro Rounded","Segoe UI","Helvetica Neue",system-ui,sans-serif; font-weight:600; color:var(--muted); line-height:1.15; }
+.hid{ visibility:hidden; }
+.missions{ display:flex; justify-content:center; align-items:flex-start; gap:3rem; }
+.title .missions .big{ margin:0; }
+.title .big.tw{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.1rem 4.5rem .9rem; background:var(--sun); color:var(--ink); box-shadow:0 1.2rem 0 var(--sun2); letter-spacing:0; }
+.title .big.tw:active{ box-shadow:0 .4rem 0 var(--sun2); }
+.big.tw .l1{ font-size:5.9rem; line-height:1.05; white-space:nowrap; }
+.big.tw .l2{ font-size:2.3rem; line-height:1.1; font-weight:600; white-space:nowrap; }
+.title .big.tw.off{ background:#c9d3e0; color:var(--muted); box-shadow:0 1.2rem 0 #9aa7b8; }
+#bubble .bz{ font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC","Noto Sans CJK TC",sans-serif; font-weight:600; font-size:1.15em; line-height:1; }
+#bubble .bp{ font-family:ui-rounded,"SF Pro Rounded","Segoe UI","Helvetica Neue",system-ui,sans-serif; font-size:.8em; color:var(--muted); }
+#bubble .bw{ white-space:nowrap; }
+.zcard{ position:relative; border:0; background:var(--card); border-radius:3rem; box-shadow:0 1rem 0 var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.3rem; padding:1rem; box-sizing:border-box; color:var(--ink); }
+.zcard:before{ content:'🔊'; position:absolute; top:.8rem; right:1.2rem; font-size:2rem; line-height:1; opacity:.45; }
+.zcard:active{ transform:translateY(.5rem); box-shadow:0 .5rem 0 var(--shadow); }
+.zcard .pic{ font-size:8.5rem; line-height:1.1; }
+.zcard .han{ font-size:8rem; white-space:nowrap; }
+.zcard .py{ font-size:3.1rem; white-space:nowrap; }
+.zcard.speaking,.zhear.speaking,.zball.speaking .lab{ box-shadow:0 0 0 .9rem var(--sun), 0 1rem 0 var(--shadow); }
+.speaking .han{ color:var(--red); }
+.zyes{ animation:zhop .45s ease 2; }
+@keyframes zhop{ 40%{ transform:translateY(-1.8rem) scale(1.1) } }
+.zrow{ position:absolute; left:50%; top:17rem; transform:translateX(-50%); display:flex; gap:2.5rem; align-items:flex-start; }
+.zrow .zcard{ width:24rem; height:30rem; }
+.zrow.two{ top:16rem; gap:6rem; }
+.zrow.two .zcard{ width:29rem; height:32rem; }
+.zcard.face .pic{ width:19rem; height:19rem; font-size:0; line-height:0; }
+.zcard.face .pic svg{ width:100%; height:100%; display:block; overflow:visible; }
+.zcard.face .han{ font-size:6.6rem; }
+.zhear{ position:absolute; right:2rem; top:7.9rem; width:9rem; height:9rem; border-radius:50%; border:0; background:var(--card); font-size:4.6rem; line-height:1; box-shadow:0 .8rem 0 var(--shadow); }
+.zhear[hidden]{ display:none; }
+.zhear:active{ transform:translateY(.4rem); box-shadow:0 .4rem 0 var(--shadow); }
+/* counting cars */
+.zlot{ position:absolute; left:3rem; top:15rem; display:flex; flex-direction:column; gap:.6rem; }
+.zcars{ display:flex; gap:.6rem; }
+.zcar{ position:relative; width:13.4rem; height:16.2rem; border:0; border-radius:2rem; background:transparent; padding:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; color:var(--ink); }
+.zcar .zn{ width:5.6rem; height:5.6rem; border-radius:50%; background:var(--sun); font-size:3.6rem; line-height:1; display:grid; place-items:center; transform:scale(0); transition:transform .3s cubic-bezier(.2,1.6,.4,1); }
+.zcar .car{ font-size:7.6rem; line-height:1.05; }
+.zcar .py{ font-size:2.3rem; color:var(--ink); background:rgba(255,255,255,.8); border-radius:1.2rem; padding:0 .9rem; visibility:hidden; }
+.zcar.counted .zn{ transform:scale(1); }
+.zcar.counted .py{ visibility:visible; }
+.zcar.counted{ animation:win .6s ease; }
+.zcar.hop{ animation:zhop .5s ease; }
+.zcard.board{ position:absolute; left:76rem; top:15.5rem; width:21rem; height:31rem; }
+.zcard.board .han{ font-size:15rem; }
+.zcard.board .py{ font-size:4.2rem; }
+/* colours */
+.zrow.balls{ top:14.5rem; gap:1.5rem; }
+.zball{ width:18rem; border:0; border-radius:3rem; background:transparent; padding:0; display:flex; flex-direction:column; align-items:center; gap:.6rem; color:var(--ink); }
+.zball .bal{ width:15rem; height:19.5rem; display:block; }
+.zball .bal svg{ width:100%; height:100%; display:block; overflow:visible; }
+.zball .lab{ background:var(--card); border-radius:2rem; box-shadow:0 .6rem 0 var(--shadow); padding:.5rem 1.2rem .7rem; display:flex; flex-direction:column; align-items:center; min-width:13rem; box-sizing:border-box; }
+.zball .han{ font-size:5.4rem; white-space:nowrap; }
+.zball .py{ font-size:2.5rem; white-space:nowrap; }
+.zball:active .bal{ transform:scale(.94); }
+.zball.win{ background:transparent !important; animation:none; }
+.zball.win .bal{ animation:zfloat .9s ease; }
+@keyframes zfloat{ 35%{ transform:translateY(-3rem) scale(1.12) rotate(-5deg) } 70%{ transform:translateY(-1rem) rotate(4deg) } }
+/* Finn's snacks */
+.finn.tw{ top:17rem; }
+.zcard.fsay{ position:absolute; left:33rem; top:10.5rem; min-width:18rem; height:13.4rem; padding:.4rem 2.2rem; }
+.zcard.fsay:after{ content:''; position:absolute; left:3rem; bottom:-1.3rem; border:1.4rem solid transparent; border-top-color:var(--card); border-bottom:0; }
+.zcard.fsay .han{ font-size:7rem; }
+.zcard.fsay .py{ font-size:2.9rem; }
+.zsnack{ position:absolute; left:38rem; top:27rem; font-size:9rem; line-height:1.1; pointer-events:none; transition:left .45s ease-in, top .45s ease-in, transform .45s ease-in, opacity .45s ease-in; }
+.zsnack.still{ transition:none; }
+.zsnack.eat{ left:20.5rem; top:25rem; transform:scale(.2); opacity:0; }
+.zsnack.away{ left:58rem; top:-14rem; transform:rotate(200deg) scale(.7); opacity:0; transition-duration:.9s; }
+.zbtns{ position:absolute; right:3rem; top:10.5rem; display:flex; flex-direction:column; gap:1.5rem; }
+.zcard.wbtn{ flex-direction:row; justify-content:flex-start; width:31rem; height:11.4rem; gap:1.2rem; padding:0 1.8rem; }
+.zcard.wbtn .pic{ font-size:6rem; width:8rem; text-align:center; flex:none; white-space:nowrap; }
+.zcard.wbtn .wd{ display:flex; flex-direction:column; align-items:flex-start; }
+.zcard.wbtn .han{ font-size:6.2rem; }
+.zcard.wbtn .py{ font-size:2.7rem; }
+/* head, hands and feet */
+.zkid{ position:absolute; left:35.6rem; top:15.5rem; width:28.8rem; height:34.5rem; }
+.zkid svg{ width:100%; height:100%; display:block; overflow:visible; touch-action:none; }
+.zkid [data-part]{ cursor:pointer; transform-box:fill-box; transform-origin:50% 50%; }
+.zkid .ring{ fill:rgba(255,209,102,0); stroke:rgba(255,209,102,0); stroke-width:5; pointer-events:all; transition:fill .2s, stroke .2s; }
+.zkid .glow .ring{ fill:rgba(255,209,102,.5); stroke:var(--sun); }
+.zcard.tag{ position:absolute; flex-direction:row; gap:1.2rem; width:20rem; height:11rem; }
+.zcard.tag .han{ font-size:7rem; }
+.zcard.tag .py{ font-size:3rem; }
+/* the cheering end */
+.zword{ display:flex; flex-direction:column; align-items:center; margin:0 auto; border:0; background:transparent; padding:0 2rem; border-radius:2rem; color:#fff; }
+.zword .han{ font-size:9.5rem; text-shadow:0 .5rem 0 rgba(0,0,0,.2); }
+.zword .py{ font-size:3.4rem; color:#fff; text-shadow:0 .25rem 0 rgba(0,0,0,.25); }
+.zword.speaking .han,#night .bye .han.speaking{ color:var(--sun); }
+.badge-big.tw{ width:28rem; height:28rem; padding:3rem; margin-top:1.2rem; }
+.badge-big.tw .bs{ font-size:5.4rem; }
+#night .bye .han{ font-size:1.25em; }
+/* parent corner: with the Mission Taiwan block the panel is taller than the screen, so its body scrolls and the three action buttons stay put below it */
+.panel{ display:flex; flex-direction:column; overflow:hidden; padding:0; }
+.panel .pbody{ flex:1 1 auto; min-height:0; overflow:auto; -webkit-overflow-scrolling:touch; touch-action:pan-y; padding:2.5rem 3rem 1.2rem; }
+.panel .row.foot{ flex:none; margin:0; padding:.7rem 3rem 1.3rem; border-top:.2rem solid #e3e9f1; }
+.panel .slides label.wide{ grid-column:1 / 3; }
+.panel .slides button{ margin:0; justify-self:start; }
+.panel .slides.two{ grid-template-columns:repeat(2,1fr); }
+
 #fx{ z-index:10; pointer-events:none; width:100%; height:100%; }
 #rotate{ position:absolute; left:0; right:0; top:0; z-index:20; display:none; text-align:center; font-size:14px; padding:6px; background:var(--sun); color:var(--ink); border-radius:0 0 8px 8px; }
 
@@ -336,7 +437,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
     </div>
     <div id="night" class="layer"><div><div class="moon">🌙</div><div class="bye">Bye-bye! 👋</div><div class="sub"></div></div></div>
     <div id="parent" class="layer">
-      <div class="panel">
+      <div class="panel"><div class="pbody">
         <h2>Parent corner</h2>
         <label><span>Name on screen</span><input id="p-name" maxlength="20"></label>
         <label><span>Say the name as</span><input id="p-say" maxlength="24"></label>
@@ -345,8 +446,13 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
         <div class="row"><button id="p-test">▶ Test voice</button><button id="p-save">Save</button></div>
         <div><b>Slides in the mission</b></div>
         <div class="slides" id="p-slides"></div>
-        <div class="row"><button id="p-replay">Replay mission</button><button id="p-reset" class="ghostb">Reset levels</button><button id="p-close" class="ghostb">Close</button></div>
+        <div><b>Mission Taiwan (Mandarin)</b></div>
+        <div class="slides"><label class="wide"><input type="checkbox" id="p-tw"><span>Show Mission Taiwan on the start screen</span></label><button id="p-twtest" class="ghostb">▶ Test Mandarin</button></div>
+        <div class="slides two" id="p-twslides"></div>
+        <div class="stats" id="p-twstats"></div>
         <div class="stats" id="p-stats"></div>
+        </div>
+        <div class="row foot"><button id="p-replay">Replay mission</button><button id="p-reset" class="ghostb">Reset levels</button><button id="p-close" class="ghostb">Close</button></div>
       </div>
     </div>
     <canvas id="fx" class="layer"></canvas>
@@ -379,6 +485,9 @@ try{ const parts=decodeURIComponent(location.hash.slice(1)).split('~'); const cl
   const h=clean(parts[0]), s=clean(parts[1]); if(h&&(h!==SET.name||(s&&s!==SET.sayAs))){ SET.name=h.slice(0,20); SET.sayAs=(s||h).slice(0,24); save('rsh-settings',SET); } }catch(e){}
 const NAME=()=>SET.name||'Hero', SAY=()=>SET.sayAs||SET.name||'Hero';
 function bump(key,stumbles){ if(stumbles===0) LV[key]=Math.min((LV[key]||0)+1,4); else if(stumbles>=3) LV[key]=Math.max((LV[key]||0)-1,0); save('rsh-levels',LV); }
+// Mission Taiwan keeps its own levels, under its own key, so Mission 1's stay as they were
+const LVT=load('rsh-levels-tw',{hello:0,who:0,count:0,colour:0,want:0,body:0});
+function bumpTw(key,stumbles){ if(stumbles===0) LVT[key]=Math.min((LVT[key]||0)+1,4); else if(stumbles>=3) LVT[key]=Math.max((LVT[key]||0)-1,0); save('rsh-levels-tw',LVT); }
 
 // ---------- sizing: the stage is 100rem x 75rem, and 1rem = 1% of the stage width
 function fit(){
@@ -466,6 +575,51 @@ async function thinkPause(api,line){ holdLock++; thinkEl.classList.add('on'); pl
   try{ await say(line+' Stop… think… and try again.'); if(api&&!api.alive()) return; await wait(3000); }
   finally{ holdLock=Math.max(0,holdLock-1); thinkEl.classList.remove('on'); } }
 let lastNag=0; function nag(t){ const now=Date.now(); if(now-lastNag<2600) return; lastNag=now; sfx.boop(); say(t); }
+
+// ---------- Mandarin speech (Mission Taiwan)
+// Mandarin words are only ever spoken by a Taiwan Mandarin (zh-TW) voice: Meijia on an iPad. Without one, Mission Taiwan is
+// shown as unavailable, and sayZh stays silent rather than hand Chinese text to an English voice.
+let zhVoice=null, introPicker=null;
+function zhVoices(){ if(!synth) return []; return (synth.getVoices()||[]).filter(v=>/^(zh|cmn)(-hant)?-tw$/i.test((v.lang||'').replace(/_/g,'-'))); }
+// Enhanced or Premium downloads first, then the natural voices by name (Meijia on Apple devices), on-device before online;
+// Apple's robotic Eloquence voices (Eddy, Flo, Grandma…) also come in zh-TW and are only a last resort.
+function pickZhVoice(){ const rank=v=>(/enhanced|premium/i.test(v.name)?4:0)+(/mei-?jia|美佳|hanhan|yating|hsiao|google/i.test(v.name)?2:0)+(v.localService?1:0)-(/eddy|\bflo\b|grandma|grandpa|reed|rocko|sandy|shelley/i.test(v.name)?4:0);
+  zhVoice=zhVoices().sort((a,b)=>rank(b)-rank(a))[0]||null; return zhVoice; }
+// voices can arrive late: look again when the list changes, and a few times after launch
+function twRefresh(){ pickZhVoice(); if(introPicker) introPicker(); if($('#parent').classList.contains('on')) twStatus(); }
+if(synth){ pickZhVoice(); if(synth.addEventListener) synth.addEventListener('voiceschanged',twRefresh); [400,1500,4000].forEach(ms=>setTimeout(twRefresh,ms)); }
+function sayZh(text,opt){
+  opt=opt||{}; const rate=opt.rate||.8, el=opt.el||null, v=zhVoice;
+  return new Promise(res=>{
+    const est=500+text.length*330;
+    if(!synth||!v){ setTimeout(res,est); return; }
+    let done=false, poll=null; const finish=()=>{ if(done) return; done=true; clearInterval(poll); if(el) el.classList.remove('speaking'); res(); };
+    const speak=()=>{ try{ const u=new SpeechSynthesisUtterance(text); u.voice=v; u.lang='zh-TW'; u.rate=rate; u.pitch=1; u.volume=1; u.onend=finish; u.onerror=finish; if(el) el.classList.add('speaking'); synth.speak(u); setTimeout(finish, est*2+1500);
+      let saw=false; const t0=Date.now(); poll=setInterval(()=>{ if(synth.speaking) saw=true; else if(saw||Date.now()-t0>1500) finish(); },200); }catch(e){ if(el) el.classList.remove('speaking'); setTimeout(finish,est); } };
+    if(synth.speaking||synth.pending){ synth.cancel(); setTimeout(speak,90); } else speak();
+  });
+}
+// A line in two voices: plain strings are Whiskers, in English; zp(word) parts go to the Mandarin voice; a number is a pause in ms.
+// The bubble shows the whole line. A newer line replaces an older one, and lines wait while the calm cloud or the parent corner is open.
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const zp=(w,el)=>({zh:w.zh,py:w.py,tts:w.tts||w.zh,el:el||null});   // tts: what is sent to the voice, should a word ever need a different spelling to be read right
+let talkId=0, talking=0, talkStop=null;
+const held=()=>document.hidden||sleeping||$('#calm').classList.contains('on')||$('#parent').classList.contains('on');
+function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); }
+async function talk(parts){
+  const my=++talkId, run=runId, live=()=>my===talkId&&run===runId;
+  // a newer line ends this one at once, without waiting for the speech engine to report that the old words were cut off
+  if(talkStop) talkStop(); let stopNow; const stopped=new Promise(r=>{ stopNow=r; }); talkStop=stopNow;
+  bubbleZh(parts); talking++;
+  try{ for(const p of parts){
+      while(held()){ await Promise.race([wait(250),stopped]); if(!live()) return false; }
+      if(!live()) return false;
+      await Promise.race([typeof p==='number'?wait(p):typeof p==='string'?say(p,{sub:false}):sayZh(p.tts,{el:p.el}), stopped]); }
+    return live();
+  } finally { talking--; if(talkStop===stopNow) talkStop=null; }
+}
+// for scripted teaching: if a tap interrupted the line, let the tapped word finish before the script carries on
+async function line(parts){ const ok=await talk(parts); while(talking>0||held()) await wait(120); return ok; }
 
 // ---------- art
 const WHISKERS_SVG=`<svg viewBox="0 0 200 200" aria-label="Whiskers the cat hero"><path d="M40 118Q100 92 160 118L176 196Q100 174 24 196Z" fill="#e63946"/><ellipse cx="100" cy="162" rx="56" ry="40" fill="#f4a261"/><path d="M55 60L62 14L96 48Z" fill="#f4a261"/><path d="M145 60L138 14L104 48Z" fill="#f4a261"/><path d="M63 55L67 30L86 50Z" fill="#ffb4a2"/><path d="M137 55L133 30L114 50Z" fill="#ffb4a2"/><circle cx="100" cy="96" r="56" fill="#f4a261"/><path d="M44 86Q100 60 156 86Q151 116 100 113Q49 116 44 86Z" fill="#1d3557"/><ellipse cx="78" cy="93" rx="13" ry="15" fill="#fff"/><ellipse cx="122" cy="93" rx="13" ry="15" fill="#fff"/><circle cx="80" cy="96" r="7" fill="#222"/><circle cx="120" cy="96" r="7" fill="#222"/><circle cx="83" cy="93" r="2.6" fill="#fff"/><circle cx="123" cy="93" r="2.6" fill="#fff"/><path d="M93 119L107 119L100 127Z" fill="#e76f51"/><path d="M100 127Q92 137 84 131M100 127Q108 137 116 131" stroke="#7a3b10" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 116L70 121M34 129L70 127M166 116L130 121M166 129L130 127" stroke="#7a3b10" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="160" r="15" fill="#ffd166"/><path d="M90 152L95 169L100 158L105 169L110 152" stroke="#e63946" stroke-width="4.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
@@ -564,18 +718,29 @@ function balloonWidget(root,o){
 
 // ---------- scenes
 const introScene={ key:'intro', stop:false, enter(root,api){
-  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><button class="big pop-in" id="start" hidden>START</button><div class="tiny" id="tapme">Tap anywhere to say hello 👋</div><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
+  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><div class="missions"><button class="big pop-in" id="start" hidden>START</button><button class="big tw pop-in" id="start-tw" hidden></button></div><div class="tiny" id="tapme">Tap anywhere to say hello 👋</div><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
   holdButton(root.querySelector('#setup'),1200,openParent);
   bubble(`Hello ${NAME()}!`);
   let greeted=false, started=false;
+  // Mission picker: once the welcome has played, Mission Taiwan sits beside START. It is greyed out while the device has no
+  // Taiwan Mandarin voice, and absent when it is switched off in the parent corner.
+  const tw=root.querySelector('#start-tw');
+  const picker=()=>{ const ok=!!zhVoice, state=ok?'on':'off'; tw.hidden=!(greeted&&SET.mandarin!==false); tw.classList.toggle('off',!ok); if(tw.dataset.state===state) return; tw.dataset.state=state;
+    tw.innerHTML=`<span class="l1">${ok?'🏮':'💤'} <span class="han" lang="zh-Hant-TW">台灣</span></span><span class="l2">${ok?'Mission Taiwan':'needs the Mandarin voice'}</span>`; };
+  introPicker=picker; api.resume=twRefresh;
   // iPads only speak after a touch, so the welcome plays on the first tap anywhere and START appears
   const greet=()=>{ if(greeted) return; greeted=true; audio(); whisk.classList.add('wave'); setTimeout(()=>whisk.classList.remove('wave'),2600);
-    say(`Hello ${SAY()}! I am Whiskers! Do you want to become a hero like me? Then tap START!`,{rate:.95,pitch:1.2});
-    const s=root.querySelector('#start'); s.hidden=false; root.querySelector('#tapme').hidden=true; setTimeout(()=>{ if(api.alive()&&!started) ghost(s); },1800); };
+    say(`Hello ${SAY()}! I am Whiskers! Do you want to become a hero like me? Then tap START!`,{rate:.95,pitch:1.2})
+      .then(()=>{ if(api.alive()&&!started&&!tw.hidden&&zhVoice&&!held()) say('Or tap the lantern, for Mission Taiwan!',{rate:.95,pitch:1.2}); });
+    const s=root.querySelector('#start'); s.hidden=false; root.querySelector('#tapme').hidden=true; twRefresh(); setTimeout(()=>{ if(api.alive()&&!started) ghost(s); },1800); };
   const onFirst=e=>{ if(e.target.closest('#setup,#gear,#cloud,#parent')) return; greet(); };
-  stage.addEventListener('pointerdown',onFirst,true); api.cleanup=()=>stage.removeEventListener('pointerdown',onFirst,true);
-  root.querySelector('#start').addEventListener('click',async()=>{ if(started) return; started=true; audio(); sfx.cheer();
+  stage.addEventListener('pointerdown',onFirst,true); api.cleanup=()=>{ stage.removeEventListener('pointerdown',onFirst,true); introPicker=null; };
+  root.querySelector('#start').addEventListener('click',async()=>{ if(started) return; started=true; audio(); sfx.cheer(); mission='hero'; compose();
     await say('Ready… steady… HERO!',{rate:.95,pitch:1.2}); if(api.alive()) api.next(); });
+  tw.addEventListener('click',async()=>{ if(started||SET.mandarin===false) return; audio();
+    if(!pickZhVoice()){ picker(); sfx.boop(); wobble(tw); say('Mission Taiwan is asleep on this iPad. Tap START!'); ghost(root.querySelector('#start')); return; }
+    started=true; sfx.cheer(); mission='taiwan'; compose();
+    await say('Mission Taiwan! Ready… steady… go!',{rate:.95,pitch:1.2}); if(api.alive()) api.next(); });
 }};
 
 const balloonScene={ key:'balloon', icon:'🎈', name:'the balloon', sticker:'🎈', done:'you took calm breaths', async enter(root,api){
@@ -898,10 +1063,242 @@ const hqScene={ key:'hq', icon:'🏆', name:'Hero HQ', stop:true, async enter(ro
   $('#again').classList.add('on');
 }};
 
+// ---------- Mission Taiwan (Mandarin): the words Dad practises with him, for the family trip
+// Whiskers gives every instruction in English. Each Mandarin word is spoken by the Taiwan Mandarin voice, shown as a big
+// Traditional character with small pinyin, and says itself again when it is tapped. Same rules as Mission 1: no way to fail,
+// "Oops. That's okay. Try again." for a wrong tap, a level per slide, and the mission ends itself with a goodbye.
+const Z=(zh,py,tts)=>({zh:zh,py:py,tts:tts||zh});   // shown character(s), pinyin, and (only if the voice misreads it) the spelling to speak
+const TW={ hello:Z('你好','nǐ hǎo'), thanks:Z('謝謝','xièxie'), bye:Z('掰掰','bāibāi'), agong:Z('阿公','Āgōng'), ama:Z('阿嬤','Āmà'),
+  red:Z('紅色','hóngsè'), blue:Z('藍色','lánsè'), yellow:Z('黃色','huángsè'), green:Z('綠色','lǜsè'),
+  want:Z('要','yào'), no:Z('不要','búyào'), more:Z('還要','hái yào'), head:Z('頭','tóu'), hand:Z('手','shǒu'), foot:Z('腳','jiǎo'), great:Z('好棒！','hǎo bàng') };
+const TW_NUM=[Z('一','yī'),Z('二','èr'),Z('三','sān'),Z('四','sì'),Z('五','wǔ'),Z('六','liù'),Z('七','qī'),Z('八','bā'),Z('九','jiǔ'),Z('十','shí')];
+const han=w=>`<span class="han" lang="zh-Hant-TW">${w.zh}</span>`, pyn=w=>`<span class="py">${w.py}</span>`;
+const HEAR=`<button class="zhear" hidden aria-label="Hear it again">🔊</button>`;
+const popIn=el=>{ el.classList.remove('hid'); el.classList.add('pop-in'); setTimeout(()=>el.classList.remove('pop-in'),700); };
+const AGONG_SVG=`<svg viewBox="0 0 120 120" aria-label="Grandpa"><path d="M20 120Q22 95 60 93Q98 95 100 120Z" fill="#4c8fd9"/><path d="M49 94L60 107L71 94Z" fill="#fff"/><circle cx="24" cy="60" r="8" fill="#eec39b"/><circle cx="96" cy="60" r="8" fill="#eec39b"/><ellipse cx="60" cy="55" rx="36" ry="40" fill="#f6d3ae"/><path d="M24 54Q20 30 40 20Q31 34 32 50Z" fill="#c9ced6"/><path d="M96 54Q100 30 80 20Q89 34 88 50Z" fill="#c9ced6"/><path d="M47 19Q60 13 73 19" stroke="#c9ced6" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M37 43Q45 38 53 42M67 42Q75 38 83 43" stroke="#aeb4bd" stroke-width="4.5" fill="none" stroke-linecap="round"/><circle cx="45" cy="56" r="11.5" fill="#fff" fill-opacity=".6" stroke="#1d3557" stroke-width="3"/><circle cx="75" cy="56" r="11.5" fill="#fff" fill-opacity=".6" stroke="#1d3557" stroke-width="3"/><path d="M56.5 55L63.5 55" stroke="#1d3557" stroke-width="3"/><circle cx="45" cy="57" r="3.6" fill="#222"/><circle cx="75" cy="57" r="3.6" fill="#222"/><path d="M60 61Q57 70 62 71" stroke="#d9a67c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M43 78Q52 71 60 76Q68 71 77 78Q68 82 60 79Q52 82 43 78Z" fill="#c9ced6"/><path d="M50 84Q60 92 70 84" stroke="#a4552b" stroke-width="3.2" fill="none" stroke-linecap="round"/></svg>`;
+const AMA_SVG=`<svg viewBox="0 0 120 120" aria-label="Grandma"><path d="M20 120Q22 95 60 93Q98 95 100 120Z" fill="#c05299"/><path d="M49 94L60 105L71 94Z" fill="#ffd9e8"/><g fill="#d9dde3"><circle cx="60" cy="13" r="12"/><circle cx="35" cy="29" r="13"/><circle cx="50" cy="21" r="13"/><circle cx="70" cy="21" r="13"/><circle cx="85" cy="29" r="13"/><circle cx="25" cy="46" r="12"/><circle cx="95" cy="46" r="12"/><circle cx="23" cy="63" r="10"/><circle cx="97" cy="63" r="10"/></g><ellipse cx="60" cy="60" rx="33" ry="36" fill="#f6d3ae"/><g fill="#d9dde3"><circle cx="41" cy="33" r="9"/><circle cx="54" cy="29" r="9"/><circle cx="67" cy="29" r="9"/><circle cx="80" cy="34" r="8"/></g><circle cx="27" cy="73" r="3.6" fill="#ffd166"/><circle cx="93" cy="73" r="3.6" fill="#ffd166"/><path d="M39 58Q46 50 53 58M67 58Q74 50 81 58" stroke="#222" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="38" cy="70" r="6.5" fill="#ffb3a7" opacity=".8"/><circle cx="82" cy="70" r="6.5" fill="#ffb3a7" opacity=".8"/><path d="M60 62Q58 68 62 69" stroke="#d9a67c" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M48 76Q60 89 72 76" stroke="#c0392b" stroke-width="3.4" fill="none" stroke-linecap="round"/></svg>`;
+const balloonSvg=(fill,dark)=>`<svg viewBox="0 0 100 130" aria-hidden="true"><path d="M50 3C22 3 9 30 13 56c4 24 26 38 37 44 11-6 33-20 37-44C91 30 78 3 50 3z" fill="${fill}" stroke="#fff" stroke-width="3"/><ellipse cx="34" cy="30" rx="7" ry="13" fill="#fff" opacity=".35" transform="rotate(-18 34 30)"/><circle cx="40" cy="48" r="4" fill="#1d3557"/><circle cx="60" cy="48" r="4" fill="#1d3557"/><path d="M40 62q10 9 20 0" stroke="#1d3557" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M45 100l10 0-3 7-4 0z" fill="${dark}"/><path d="M50 107c-8 8 8 14 0 22" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`;
+const KID_SVG=`<svg viewBox="0 0 200 240" aria-label="A little hero"><path d="M64 98Q100 86 136 98L158 196Q100 176 42 196Z" fill="#e63946"/><g data-part="body"><path d="M72 114L34 142M128 114L166 142" stroke="#2f6fe4" stroke-width="19" stroke-linecap="round" fill="none"/><path d="M88 170L80 212M112 170L120 212" stroke="#2f6fe4" stroke-width="21" stroke-linecap="round" fill="none"/><rect x="68" y="98" width="64" height="82" rx="24" fill="#2f6fe4"/><rect x="68" y="152" width="64" height="10" fill="#ffd166"/><path d="M100 113L102.7 120.3L110.5 120.6L104.4 125.4L106.5 132.9L100 128.6L93.5 132.9L95.6 125.4L89.5 120.6L97.3 120.3Z" fill="#ffd166"/></g><g data-part="hand"><circle class="ring" cx="28" cy="147" r="27"/><circle cx="28" cy="147" r="17" fill="#f6d3ae"/></g><g data-part="hand"><circle class="ring" cx="172" cy="147" r="27"/><circle cx="172" cy="147" r="17" fill="#f6d3ae"/></g><g data-part="foot"><ellipse class="ring" cx="72" cy="224" rx="34" ry="21"/><ellipse cx="72" cy="224" rx="25" ry="13" fill="#e63946"/></g><g data-part="foot"><ellipse class="ring" cx="128" cy="224" rx="34" ry="21"/><ellipse cx="128" cy="224" rx="25" ry="13" fill="#e63946"/></g><g data-part="head"><circle class="ring" cx="100" cy="54" r="52"/><circle cx="60" cy="58" r="9" fill="#eec39b"/><circle cx="140" cy="58" r="9" fill="#eec39b"/><circle cx="100" cy="54" r="42" fill="#f6d3ae"/><path d="M58 52Q58 10 100 10Q142 10 142 52Q130 26 100 28Q70 26 58 52Z" fill="#5b3a1e"/><path d="M60 50Q100 36 140 50Q137 70 100 68Q63 70 60 50Z" fill="#1d3557"/><ellipse cx="84" cy="56" rx="9" ry="10" fill="#fff"/><ellipse cx="116" cy="56" rx="9" ry="10" fill="#fff"/><circle cx="85" cy="58" r="5" fill="#222"/><circle cx="115" cy="58" r="5" fill="#222"/><path d="M86 78Q100 90 114 78" stroke="#a4552b" stroke-width="4" fill="none" stroke-linecap="round"/></g></svg>`;
+
+// One listening question: the Mandarin voice names a word and the child taps it. A wrong tap says its own name, wobbles (and
+// fades, where asked), then the word is said again. Nothing is lost and there is no way to fail. Resolves with the wrong taps.
+function listenTap(api,o){ return new Promise(res=>{
+  const want=o.want, hear=o.hear||null, offs=[], cls=o.win||'win'; let done=false, wrongs=0;
+  const els=it=>it.els||[it.el], word=()=>zp(want.w,hear);
+  const on=(el,fn)=>{ el.addEventListener('pointerdown',fn); offs.push(()=>el.removeEventListener('pointerdown',fn)); };
+  const point=()=>{ if(!done&&api.alive()) ghost(els(want)[0]); };
+  const right=async el=>{ done=true; api.hint=null; ghostEl.classList.remove('on'); el.classList.add(cls); sfx.ding(); if(o.onRight) o.onRight(want,el);
+    await line(['Yes!',zp(want.w,el)].concat(o.yes?o.yes(want):[])); el.classList.remove(cls); offs.forEach(f=>f()); if(api.alive()) res(wrongs); };
+  const wrong=(it,el)=>{ wrongs++; wobble(el); sfx.boop(); if(o.fade) els(it).forEach(x=>x.classList.add('faded'));
+    talk((it.w?['Oops! That one is',zp(it.w,o.fade?null:el)]:['Oops!']).concat(["That's okay. Listen again:",word()])).then(ok=>{ if(ok&&(wrongs>=2||o.easy)) point(); }); };
+  o.items.forEach(it=>els(it).forEach(el=>on(el,e=>{ if(done||!api.alive()) return; e.preventDefault(); if(it===want) right(el); else wrong(it,el); })));
+  if(hear) on(hear,()=>{ if(!done) talk([word()]); });
+  api.hint=()=>{ talk([o.again||'Listen again:',word()]); point(); };
+  talk((o.intro||[]).concat([word()],o.outro||[])).then(ok=>{ if(ok&&o.easy) setTimeout(point,o.easy); });
+});}
+
+const twHelloScene={ key:'twhello', icon:'👋', name:'hello and bye-bye', sticker:'👋', done:'you said hello in Mandarin', enter(root,api){
+  const lv=LVT.hello||0; let stumbles=0;
+  const items=[{w:TW.hello,pic:'🙋',en:'Hello'},{w:TW.thanks,pic:'🎁',en:'Thank you'},{w:TW.bye,pic:'👋',en:'Bye-bye'}];
+  root.innerHTML=`<div class="banner" id="zb">Hello, Taiwan!</div><div class="zrow" id="zr">${items.map(x=>`<button class="zcard hid"><span class="pic">${x.pic}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
+  const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
+  items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
+  (async()=>{
+    api.phase='free'; api.hint=null;
+    await line([`We are going to Taiwan, ${SAY()}! Let's learn to say hello.`]); if(!api.alive()) return;
+    // each word is shown and said; below level 2 there is a gap for the child to say it too, then it is said once more
+    for(const x of items){ popIn(x.el); sfx.pop();
+      await line(lv<2?[`${x.en} is`,zp(x.w,x.el),'You say it!']:[`${x.en} is`,zp(x.w,x.el)]); if(!api.alive()) return;
+      if(lv<2){ await wait(1500); if(!api.alive()) return; await line([zp(x.w,x.el)]); if(!api.alive()) return; }
+      await wait(350); if(!api.alive()) return; }
+    zb.textContent='👂 Listen… then tap!'; hear.hidden=false;
+    const order=shuffle(items.slice()).concat(lv>=3?shuffle(items.slice()).slice(0,2):[]);
+    for(let r=0;r<order.length;r++){
+      items.forEach(x=>x.el.classList.remove('faded'));
+      if(lv>=2&&r>0) shuffle(items.slice()).forEach(x=>row.appendChild(x.el));
+      api.phase='ask';
+      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, fade:true, easy:lv===0?3500:0, intro:[r===0?'Now listen. Which one is it?':'Listen!']});
+      api.phase='free'; await wait(400); if(!api.alive()) return; }
+    items.forEach(x=>x.el.classList.remove('faded')); hear.hidden=true; zb.textContent='Hello, Taiwan!';
+    bumpTw('hello',stumbles); api.sticker(); await line(['Lovely listening!']); if(api.alive()) api.next();
+  })();
+}};
+
+const twWhoScene={ key:'twwho', icon:'👵', name:'Grandpa and Grandma', sticker:'👵', done:'you found Grandpa and Grandma', enter(root,api){
+  const lv=LVT.who||0; let stumbles=0;
+  const items=[{w:TW.agong,svg:AGONG_SVG,en:'Grandpa'},{w:TW.ama,svg:AMA_SVG,en:'Grandma'}];
+  root.innerHTML=`<div class="banner" id="zb">Who is it?</div><div class="zrow two" id="zr">${items.map(x=>`<button class="zcard face hid"><span class="pic">${x.svg}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
+  const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
+  items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
+  (async()=>{
+    api.phase='free'; api.hint=null;
+    popIn(items[0].el); sfx.pop(); await line(['This is Grandpa. In Taiwan we say',zp(TW.agong,items[0].el)]); if(!api.alive()) return;
+    popIn(items[1].el); sfx.pop(); await line(['And this is Grandma:',zp(TW.ama,items[1].el)]); if(!api.alive()) return;
+    zb.textContent='👂 Listen… who is it?'; hear.hidden=false;
+    // three to five turns, never the same name three times running; from level 2 the two swap places now and then
+    const n=lv===0?3:lv===1?4:5, order=shuffle(items.slice());
+    while(order.length<n){ const a=order[order.length-1], b=order[order.length-2]; order.push(a===b?items.find(x=>x!==a):pick(items)); }
+    for(let r=0;r<n;r++){
+      if(r>0&&lv>=2&&(lv>=3||Math.random()<.5)){ row.appendChild(row.firstElementChild); [].forEach.call(row.children,popIn); sfx.whoosh(); await wait(700); if(!api.alive()) return; }
+      api.phase='ask';
+      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, easy:lv===0?3500:0, intro:[r===0?'Who is it? Listen, then tap.':'Who is it?'], yes:w=>lv<2?[w.en+'!']:[]});
+      api.phase='free'; await wait(400); if(!api.alive()) return; }
+    hear.hidden=true; zb.textContent='Who is it?';
+    bumpTw('who',stumbles); api.sticker(); await line(['Now you know Grandpa and Grandma!']); if(api.alive()) api.next();
+  })();
+}};
+
+const twCountScene={ key:'twcount', icon:'🚗', name:'counting cars', sticker:'🚗', done:'you counted to ten in Mandarin', enter(root,api){
+  const lv=LVT.count||0; let stumbles=0; const CARS=['🚗','🚙','🚕','🚓','🚐','🚚','🚒','🚑','🚌','🏎️'];
+  root.innerHTML=`<div class="banner sm" id="zb">Tap each car and count!</div><div class="zlot">${[0,1].map(r=>`<div class="zcars">${[0,1,2,3,4].map(c=>`<button class="zcar${r?' hid':''}"><span class="zn han" lang="zh-Hant-TW"></span><span class="car">${CARS[r*5+c]}</span><span class="py"></span></button>`).join('')}</div>`).join('')}</div><button class="zcard board hid" id="zboard">${han({zh:''})}${pyn({py:''})}</button>`;
+  const cars=[].slice.call(root.querySelectorAll('.zcar')), board=root.querySelector('#zboard'), zb=root.querySelector('#zb');
+  let k=0, upto=0, counted=null, shown=-1;
+  // the big board shows the number just said; it and every counted car say their number again when tapped
+  const show=n=>{ shown=n; board.classList.remove('hid'); board.querySelector('.han').textContent=TW_NUM[n].zh; board.querySelector('.py').textContent=TW_NUM[n].py; return zp(TW_NUM[n],board); };
+  board.addEventListener('pointerdown',()=>{ if(shown>=0&&(api.phase==='count'||api.phase==='free')) talk([show(shown)]); });
+  cars.forEach(c=>c.addEventListener('pointerdown',()=>{
+    if(api.phase!=='count'&&api.phase!=='free') return;
+    if(c.classList.contains('counted')){ talk([show(+c.dataset.n)]); return; }
+    if(api.phase!=='count'||k>=upto) return;
+    const n=k++; c.dataset.n=n; c.querySelector('.zn').textContent=TW_NUM[n].zh; c.querySelector('.py').textContent=TW_NUM[n].py; c.classList.add('counted'); sfx.pop(); talk([show(n)]);
+    if(k>=upto&&counted){ const f=counted; counted=null; api.hint=null; api.phase='busy'; setTimeout(f,900); }
+  }));
+  const countTo=n=>new Promise(res=>{ upto=n; counted=res; api.phase='count'; api.hint=()=>{ talk(['Tap the next car, and count.']); ghost(cars.find(c=>!c.classList.contains('counted')&&!c.classList.contains('hid'))); }; });
+  (async()=>{
+    api.phase='busy'; api.hint=null;
+    talk([`Here are Ruby's friends! Tap each car, and count with me.`]); await countTo(5); if(!api.alive()) return;
+    await line(['Five cars!',show(4),'Here come some more!']); if(!api.alive()) return;
+    sfx.horn(); for(const c of cars.slice(5)){ popIn(c); await wait(180); } if(!api.alive()) return;
+    talk(['Count on! Tap the next car.']); await countTo(10); if(!api.alive()) return;
+    confetti(); sfx.cheer(); await line(['Ten cars!',show(9)]); if(!api.alive()) return;
+    zb.textContent='Count together!'; await line(["Now let's count them all together."]); if(!api.alive()) return;
+    for(let n=0;n<10;n++){ const c=cars.find(x=>+x.dataset.n===n); c.classList.remove('hop'); void c.offsetWidth; c.classList.add('hop'); await line([show(n)]); if(!api.alive()) return; }
+    // from level 1: find a car by its number (one to five first, then one to ten)
+    const qn=Math.min(lv,3);
+    if(qn){ zb.textContent='👂 Listen… which car is it?'; board.classList.add('hid'); shown=-1;
+      const items=cars.map(c=>({el:c,w:TW_NUM[+c.dataset.n]})), asks=shuffle(items.filter(it=>lv>=2||+it.el.dataset.n<5)).slice(0,qn);
+      for(let r=0;r<asks.length;r++){ api.phase='ask';
+        stumbles+=await listenTap(api,{want:asks[r], items:items, win:'hop', intro:[r===0?'Now listen. Tap car number':'Tap car number'], again:'Count along the cars. Tap number'});
+        api.phase='busy'; await wait(400); if(!api.alive()) return; } }
+    api.phase='free'; zb.textContent='You counted to ten!';
+    bumpTw('count',stumbles); api.sticker(); await line(['You counted to ten in Mandarin!']); if(api.alive()) api.next();
+  })();
+}};
+
+const twColourScene={ key:'twcolour', icon:'🎨', name:'the colours', sticker:'🎨', done:'you found the colours', enter(root,api){
+  const lv=LVT.colour||0; let stumbles=0;
+  const items=[{w:TW.red,fill:'#e63946',dark:'#a4262f',en:'Red, like Ruby!'},{w:TW.blue,fill:'#2f6fe4',dark:'#1d4aa8',en:'Blue, like the sea!'},{w:TW.yellow,fill:'#ffd23f',dark:'#c9961d',en:'Yellow, like Finn!'},{w:TW.green,fill:'#2dc653',dark:'#1f8f3b',en:'Green, like the green light!'}];
+  root.innerHTML=`<div class="banner" id="zb">Colours!</div><div class="zrow balls" id="zr">${items.map(x=>`<button class="zball hid"><span class="bal">${balloonSvg(x.fill,x.dark)}</span><span class="lab">${han(x.w)}${pyn(x.w)}</span></button>`).join('')}</div>${HEAR}`;
+  const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
+  items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
+  (async()=>{
+    api.phase='free'; api.hint=null;
+    for(const x of items){ popIn(x.el); sfx.pop(); await line([x.en,zp(x.w,x.el)]); if(!api.alive()) return; await wait(250); if(!api.alive()) return; }
+    zb.textContent='👂 Listen… tap the colour!'; hear.hidden=false;
+    // each colour is asked once (two more from level 3); two balloons to choose from at level 0, three at level 1, then all four
+    const order=shuffle(items.slice()).concat(lv>=3?shuffle(items.slice()).slice(0,2):[]), choices=lv===0?2:lv===1?3:4;
+    for(let r=0;r<order.length;r++){
+      if(lv>=3&&r>0) shuffle(items.slice()).forEach(x=>row.appendChild(x.el));
+      const inPlay=[order[r]].concat(shuffle(items.filter(x=>x!==order[r])).slice(0,choices-1));
+      items.forEach(x=>x.el.classList.toggle('faded',inPlay.indexOf(x)<0));
+      api.phase='ask';
+      stumbles+=await listenTap(api,{want:order[r], items:inPlay, hear:hear, fade:true, easy:lv===0?3500:0, intro:[r===0?'Now listen. Tap the balloon that is':'Tap'], onRight:()=>sfx.pop()});
+      api.phase='free'; await wait(400); if(!api.alive()) return; }
+    items.forEach(x=>x.el.classList.remove('faded')); hear.hidden=true; zb.textContent='Colours!';
+    bumpTw('colour',stumbles); api.sticker(); await line(['Beautiful colours!']); if(api.alive()) api.next();
+  })();
+}};
+
+const twWantScene={ key:'twwant', icon:'🍪', name:"Finn's snacks", sticker:'🍪', done:'you gave Finn his snacks', enter(root,api){
+  const lv=LVT.want||0; let stumbles=0, said=null;
+  const B=[{w:TW.want,pic:'😋'},{w:TW.no,pic:'🙅'},{w:TW.more,pic:'🐟🐟'}];
+  root.innerHTML=`<div class="water"></div><div class="finn tw" id="finn">${FINN_SVG}</div><button class="zcard fsay hid" id="fsay">${han({zh:''})}${pyn({py:''})}</button><div class="zsnack hid" id="snack"></div><div class="zbtns">${B.map((b,i)=>`<button class="zcard wbtn${i===2?' hid':''}"><span class="pic">${b.pic}</span><span class="wd">${han(b.w)}${pyn(b.w)}</span></button>`).join('')}</div>`;
+  const finn=root.querySelector('#finn'), fsay=root.querySelector('#fsay'), snack=root.querySelector('#snack'), btns=root.querySelectorAll('.wbtn');
+  B.forEach((b,i)=>{ b.el=btns[i]; b.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(b.w,b.el)]); }); });
+  // Finn's speech bubble holds the word he just said; tap it to hear him again
+  fsay.addEventListener('pointerdown',()=>{ if(said&&api.phase==='free') talk([zp(said,fsay)]); });
+  const finnSays=w=>{ said=w; fsay.querySelector('.han').textContent=w.zh; fsay.querySelector('.py').textContent=w.py; if(fsay.classList.contains('hid')) popIn(fsay); return zp(w,fsay); };
+  const serve=(e,pop)=>{ snack.className='zsnack still'; snack.textContent=e; void snack.offsetWidth; snack.classList.remove('still'); if(pop){ popIn(snack); sfx.pop(); } };
+  const chomp=()=>{ snack.classList.add('eat'); finn.classList.remove('chomp'); void finn.offsetWidth; finn.classList.add('chomp'); sfx.yum(); };
+  const toss=()=>{ snack.classList.add('away'); sfx.whoosh(); };
+  (async()=>{
+    api.phase='free'; api.hint=null;
+    await line(['Finn is hungry! When Finn wants a snack, he says',finnSays(TW.want)]); if(!api.alive()) return;
+    await line(['When he does not want it, he says',finnSays(TW.no)]); if(!api.alive()) return;
+    // three to six snacks: Finn says whether he wants each one, and the child taps the word he said
+    const n=3+Math.min(lv,3), seq=['y'].concat(shuffle(Array.from({length:n-1},(_,i)=>i%2?'y':'n')));
+    const yum=shuffle(['🐟','🍪','🦐','🐠']), yuck=shuffle(['🐡','🥾','🧦']); let yi=0, ni=0;
+    for(let r=0;r<n;r++){ const good=seq[r]==='y', want=B[good?0:1];
+      serve(good?yum[yi++%yum.length]:yuck[ni++%yuck.length],true); finnSays(want.w); await wait(500); if(!api.alive()) return;
+      api.phase='ask';
+      stumbles+=await listenTap(api,{want:want, items:B.slice(0,2), hear:fsay, easy:lv===0?3000:0, intro:r===0?['Here comes a snack! Finn says']:[], outro:r===0?['Tap what Finn said!']:[], again:'What did Finn say? Listen:', onRight:()=>{ if(good) chomp(); else toss(); }, yes:()=>[good?'Yum!':'Away it goes!']});
+      api.phase='free'; await wait(500); if(!api.alive()) return; }
+    // then Finn wants more: a third button, and a shoal of fish each time it is tapped
+    const more=B[2], times=lv===0?1:2;
+    for(let m=0;m<times;m++){ snack.classList.add('hid'); finnSays(TW.more); if(m===0){ popIn(more.el); sfx.pop(); }
+      api.phase='ask';
+      stumbles+=await listenTap(api,{want:more, items:B, hear:fsay, easy:m===0?2500:0, intro:[m===0?'Finn wants more! He says':'And again! Finn says'], outro:m===0?['Tap the new button!']:[], again:'Finn wants more. Listen:', yes:()=>['More fish for Finn!']});
+      api.phase='busy'; for(let j=0;j<3;j++){ serve('🐟',false); await wait(420); chomp(); await wait(560); if(!api.alive()) return; }
+      api.phase='free'; }
+    snack.classList.add('hid'); confetti(); sfx.cheer();
+    await line(['Finn is full! Burp! Finn says',finnSays(TW.thanks)]); if(!api.alive()) return;
+    bumpTw('want',stumbles); api.sticker(); await wait(500); if(api.alive()) api.next();
+  })();
+}};
+
+const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', sticker:'🙆', done:'you found head, hands and feet', enter(root,api){
+  const lv=LVT.body||0; let stumbles=0;
+  const P=[{k:'head',w:TW.head,en:'head',say:'This is the head:',pos:'left:67rem;top:17.5rem'},{k:'hand',w:TW.hand,en:'hands',say:'These are the hands:',pos:'left:11rem;top:31rem'},{k:'foot',w:TW.foot,en:'feet',say:'And these are the feet:',pos:'left:67rem;top:40rem'}];
+  root.innerHTML=`<div class="banner sm" id="zb">Head, hands and feet!</div><div class="zkid" id="kid">${KID_SVG}</div>${P.map(p=>`<button class="zcard tag hid" style="${p.pos}">${han(p.w)}${pyn(p.w)}</button>`).join('')}${HEAR}`;
+  const kid=root.querySelector('#kid'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear'), tags=root.querySelectorAll('.tag');
+  // each body part and its word card say the word when tapped; during a question the same taps are the answer
+  P.forEach((p,i)=>{ p.tag=tags[i]; p.parts=[].slice.call(kid.querySelectorAll(`[data-part="${p.k}"]`)); p.glow=on=>p.parts.forEach(g=>g.classList.toggle('glow',on));
+    p.parts.concat([p.tag]).forEach(el=>el.addEventListener('pointerdown',()=>{ if(api.phase==='free'){ p.glow(true); talk([zp(p.w,p.tag)]).then(()=>p.glow(false)); } })); });
+  (async()=>{
+    api.phase='free'; api.hint=null;
+    await line(['Here is a little hero, just like you!']); if(!api.alive()) return;
+    for(const p of P){ popIn(p.tag); sfx.pop(); p.glow(true);
+      await line(lv<2?[p.say,zp(p.w,p.tag),`Touch your ${p.en}!`]:[p.say,zp(p.w,p.tag)]); p.glow(false); if(!api.alive()) return;
+      await wait(lv<2?1300:300); if(!api.alive()) return; }
+    zb.textContent='👂 Listen… then tap the hero!'; hear.hidden=false;
+    // three to five turns, never the same part twice running; from level 2 the word cards hide during the questions
+    if(lv>=2) P.forEach(p=>p.tag.classList.add('hid'));
+    const items=P.map(p=>({w:p.w,en:p.en,els:lv>=2?p.parts:p.parts.concat([p.tag])})), tummy={w:null,els:[kid.querySelector('[data-part="body"]')]};
+    const n=lv===0?3:lv===1?4:5, order=shuffle(items.slice()); while(order.length<n) order.push(pick(items.filter(x=>x!==order[order.length-1])));
+    for(let r=0;r<n;r++){ api.phase='ask';
+      stumbles+=await listenTap(api,{want:order[r], items:items.concat([tummy]), hear:hear, win:'zyes', easy:lv===0?3500:0, intro:[r===0?'Now listen. Tap it on the little hero:':'Tap'], yes:w=>lv<2?[`Now touch your ${w.en}!`]:[]});
+      api.phase='free'; await wait(lv<2?1200:400); if(!api.alive()) return; }
+    P.forEach(p=>p.tag.classList.remove('hid')); hear.hidden=true; zb.textContent='Head, hands and feet!';
+    bumpTw('body',stumbles); api.sticker(); await line(['Head, hands and feet. You know them all!']); if(api.alive()) api.next();
+  })();
+}};
+
+const twEndScene={ key:'twend', icon:'🏮', name:'the hero party', stop:true, async enter(root,api){
+  root.innerHTML=`<div class="hq"><button class="zword" id="gw">${han(TW.great)}${pyn(TW.great)}</button><div class="badge-big tw" id="bb"></div></div>`;
+  const gw=root.querySelector('#gw'), bb=root.querySelector('#bb');
+  gw.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(TW.great,gw)]); });
+  stickers.forEach((s,i)=>{ const d=document.createElement('div'); d.className='bs'; d.textContent=s; d.style.animationDelay=(i*.25)+'s'; bb.appendChild(d); });
+  confetti(220); sfx.cheer(); api.phase='free';
+  await line([`You did it, ${SAY()}!`,zp(TW.great,gw),'That means: well done!']); if(!api.alive()) return;
+  await line(['Say it with me:',zp(TW.great,gw)]); if(!api.alive()) return;
+  await wait(1200); if(!api.alive()) return;
+  const recap=doneList.slice(-3); if(recap.length){ await line([`Today ${recap.join(', ')}.`]); if(!api.alive()) return; }
+  PROG.twMissions=(PROG.twMissions||0)+1; PROG.twLast=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
+  whisk.classList.add('breath'); await line(['One big breath together… in… and out.']); whisk.classList.remove('breath'); if(!api.alive()) return;
+  await wait(600); if(!api.alive()) return;
+  // the same goodbye as Mission 1, with the Mandarin word first; tap it on the night screen to hear it again
+  showNight('',TW.bye.py+(SET.bye?' · '+SET.bye:'')); const byeEl=$('#night .bye'); byeEl.innerHTML=han(TW.bye)+' 👋';
+  sfx.bye(); api.phase='free';
+  await line([zp(TW.bye,byeEl.querySelector('.han')),`Bye-bye, ${SAY()}! ${SET.bye?SET.bye+' ':''}See you tomorrow.`]); if(!api.alive()) return;
+  $('#again').classList.add('on');
+}};
+$('#night .bye').addEventListener('pointerdown',()=>{ const h=$('#night .bye .han'); if(h&&cur&&cur.key==='twend'&&!sleeping) talk([zp(TW.bye,h)]); });
+
 // ---------- mission runner
 const SCENES=[introScene,balloonScene,greenScene,flashScene,karutaScene,shapesScene,countScene,letterScene,sharkScene,hqScene];
-let active=[], cur=null, curApi=null, runId=0;
-function compose(){ active=SCENES.filter(s=>s.key==='intro'||s.key==='hq'||SET.slides[s.key]!==false); }
+const TW_SCENES=[introScene,twHelloScene,twWhoScene,twCountScene,twColourScene,twWantScene,twBodyScene,twEndScene];
+let active=[], cur=null, curApi=null, runId=0, mission='hero';   // 'hero' = Mission 1, 'taiwan' = the Mandarin mission; chosen on the start screen
+function compose(){ active=(mission==='taiwan'?TW_SCENES:SCENES).filter(s=>s.key==='intro'||s.key==='hq'||s.key==='twend'||SET.slides[s.key]!==false); }
 const stopsOf=()=>active.filter(s=>s.key!=='intro');
 function renderStrip(idx){ const stops=stopsOf(), c=idx-1; strip.innerHTML=stops.map((s,i)=>`<div class="stop ${i<c?'done':''} ${i===c?'cur':''}">${i<c?'✓':s.icon}</div>${i<stops.length-1?'<div class="dash"></div>':''}`).join(''); strip.style.visibility=idx<1?'hidden':'visible'; }
 async function drive(next){ const d=$('#drive'); $('#nextstop').textContent='Next stop: '+next.name+'!'; d.classList.add('on'); say(`Beep beep! Next stop: ${next.name}!`); await wait(3400); d.classList.remove('on'); }
@@ -916,7 +1313,7 @@ function goScene(i){
   cur.enter(sceneRoot,api);
 }
 function showNight(title,sub){ const n=$('#night'); n.querySelector('.bye').textContent=title; n.querySelector('.sub').textContent=sub||''; n.classList.add('on'); }
-function reset(){ stickers.length=0; doneList.length=0; badge.innerHTML=''; ['#night','#again','#drive','#calm','#parent'].forEach(s=>$(s).classList.remove('on')); if(synth) synth.cancel(); sleeping=false; compose(); goScene(0); }
+function reset(){ stickers.length=0; doneList.length=0; badge.innerHTML=''; ['#night','#again','#drive','#calm','#parent'].forEach(s=>$(s).classList.remove('on')); if(synth) synth.cancel(); sleeping=false; mission='hero'; compose(); goScene(0); }
 $('#horn').addEventListener('pointerdown',()=>{ sfx.horn(); bubble('Beep beep!'); });
 $('#cloud').addEventListener('click',()=>{
   const c=$('#calm'); if(c.classList.contains('on')) return; audio();
@@ -929,7 +1326,7 @@ holdButton($('#again'),1500,reset);
 // idle nudges (a hint after 15 s of nothing, four at most) and a sleep screen after 2.5 minutes
 let lastTouch=Date.now(), lastHint=0, hintCount=0, sleeping=false;
 document.addEventListener('pointerdown',()=>{ lastTouch=Date.now(); if(sleeping){ sleeping=false; $('#night').classList.remove('on'); if(curApi&&curApi.hint) curApi.hint(); } },true);
-setInterval(()=>{ if(!cur||cur.key==='intro'||cur.key==='hq'||sleeping||$('#parent').classList.contains('on')||$('#calm').classList.contains('on')) return;
+setInterval(()=>{ if(!cur||cur.key==='intro'||cur.key==='hq'||cur.key==='twend'||sleeping||$('#parent').classList.contains('on')||$('#calm').classList.contains('on')) return;
   const idle=Date.now()-lastTouch;
   if(idle>150000){ sleeping=true; showNight('Sleepy time 💤','Tap to wake up'); if(synth) synth.cancel(); return; }
   if(idle>15000 && Date.now()-lastHint>15000 && curApi&&curApi.hint && hintCount<4){ lastHint=Date.now(); hintCount++; try{ curApi.hint(); }catch(e){} } },1000);
@@ -940,20 +1337,30 @@ function openParent(){ const p=$('#parent'); if(curApi&&curApi.pause) curApi.pau
   $('#p-name').value=SET.name; $('#p-say').value=SET.sayAs; $('#p-bye').value=SET.bye||''; fillVoices();
   $('#p-slides').innerHTML=SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
   $('#p-stats').textContent=`Missions finished: ${PROG.missions||0} · Longest wait for green: ${PROG.longestWait||0} s · Letters painted: ${PROG.letters.join(' ')||'none yet'} · Levels: ${Object.keys(LV).map(k=>k+' '+LV[k]).join(', ')}`;
+  $('#p-tw').checked=SET.mandarin!==false;
+  $('#p-twslides').innerHTML=TW_SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
+  pickZhVoice(); twStatus();
   p.classList.add('on'); }
+// Mission Taiwan in the parent corner: which Mandarin voice was found (or how to add one), and its own progress
+function twStatus(){ const v=zhVoice;
+  $('#p-twstats').textContent=(v?`Mandarin voice: ${v.name} (${v.lang}).`:'No Taiwan Mandarin voice was found on this device, so Mission Taiwan shows as unavailable. On an iPad: Settings → Accessibility → Spoken Content → Voices → Chinese, and choose Meijia under Chinese (Taiwan).')
+    +` Mission Taiwan finished: ${PROG.twMissions||0} · Levels: ${Object.keys(LVT).map(k=>k+' '+LVT[k]).join(', ')}`; }
 function saveParent(){ SET.name=($('#p-name').value||'Hero').trim().slice(0,20); SET.sayAs=($('#p-say').value||SET.name).trim().slice(0,24); SET.bye=$('#p-bye').value.trim().slice(0,60); SET.voice=$('#p-voice').value;
+  SET.mandarin=$('#p-tw').checked; $('#p-twslides').querySelectorAll('input').forEach(i=>{ SET.slides[i.dataset.k]=i.checked; });
   $('#p-slides').querySelectorAll('input').forEach(i=>{ SET.slides[i.dataset.k]=i.checked; }); save('rsh-settings',SET); pickVoice(); }
 holdButton($('#gear'),1500,openParent);
 $('#p-test').addEventListener('click',()=>{ audio(); SET.voice=$('#p-voice').value; pickVoice(); say(`Hello ${($('#p-say').value||'Hero').trim()}! I am Whiskers. Ready, steady, hero!`); });
+$('#p-twtest').addEventListener('click',()=>{ audio(); pickZhVoice(); twStatus(); if(zhVoice) sayZh('你好！謝謝！掰掰！'); });
 $('#p-save').addEventListener('click',()=>{ saveParent(); bubble('Saved.'); });
 $('#p-close').addEventListener('click',()=>{ saveParent(); $('#parent').classList.remove('on'); if(curApi&&curApi.resume) curApi.resume(); else if(curApi&&curApi.hint) curApi.hint(); });
 $('#p-replay').addEventListener('click',()=>{ saveParent(); reset(); });
-$('#p-reset').addEventListener('click',()=>{ Object.keys(LV).forEach(k=>LV[k]=0); save('rsh-levels',LV); PROG.letters=[]; PROG.longestWait=0; save('rsh-progress',PROG); bubble('Levels reset.'); $('#p-stats').textContent='Levels reset.'; });
+$('#p-reset').addEventListener('click',()=>{ Object.keys(LV).forEach(k=>LV[k]=0); save('rsh-levels',LV); Object.keys(LVT).forEach(k=>LVT[k]=0); save('rsh-levels-tw',LVT); PROG.letters=[]; PROG.longestWait=0; save('rsh-progress',PROG); bubble('Levels reset.'); $('#p-stats').textContent='Levels reset.'; twStatus(); });
 
 document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(synth) synth.cancel(); engineStop(); } });
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('gesturestart',e=>e.preventDefault());
-window.__rsh={ go:goScene, locked:touchLocked, sticker:addSticker, set:SET, lv:LV, prog:PROG, voice:()=>voice&&voice.name, sfx:sfx };   // parent/dev hook: __rsh.go(2) jumps to a slide
+window.__rsh={ go:goScene, locked:touchLocked, sticker:addSticker, set:SET, lv:LV, prog:PROG, voice:()=>voice&&voice.name, sfx:sfx,
+  mission:m=>{ if(m){ mission=(m==='taiwan')?'taiwan':'hero'; compose(); } return mission; }, lvtw:LVT, zhVoice:()=>zhVoice&&zhVoice.name, scene:()=>cur&&cur.key, phase:()=>curApi&&curApi.phase };   // parent/dev hook: __rsh.go(2) jumps to a slide; __rsh.mission('taiwan') then __rsh.go(1) opens the Mandarin mission
 compose(); goScene(0);
 })();
 </script>
