@@ -323,37 +323,38 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .speaking .han{ color:var(--red); }
 .zyes{ animation:zhop .45s ease 2; }
 @keyframes zhop{ 40%{ transform:translateY(-1.8rem) scale(1.1) } }
-.zrow{ position:absolute; left:50%; top:17rem; transform:translateX(-50%); display:flex; gap:2.5rem; align-items:flex-start; }
-.zrow .zcard{ width:24rem; height:30rem; }
-.zrow.two{ top:16rem; gap:6rem; }
-.zrow.two .zcard{ width:29rem; height:32rem; }
-.zcard.face .pic{ width:19rem; height:19rem; font-size:0; line-height:0; }
+/* the rows end by 43.5rem, so the "Stop… think… try again" pill, which sits above the speech bubble, never covers them */
+.zrow{ position:absolute; left:50%; top:15.5rem; transform:translateX(-50%); display:flex; gap:2.5rem; align-items:flex-start; }
+.zrow .zcard{ width:24rem; height:27rem; }
+.zrow.two{ top:14.8rem; gap:6rem; }
+.zrow.two .zcard{ width:29rem; height:28.6rem; }
+.zcard.face .pic{ width:15.6rem; height:15.6rem; font-size:0; line-height:0; }
 .zcard.face .pic svg{ width:100%; height:100%; display:block; overflow:visible; }
 .zcard.face .han{ font-size:6.6rem; }
 .zhear{ position:absolute; right:2rem; top:7.9rem; width:9rem; height:9rem; border-radius:50%; border:0; background:var(--card); font-size:4.6rem; line-height:1; box-shadow:0 .8rem 0 var(--shadow); }
 .zhear[hidden]{ display:none; }
 .zhear:active{ transform:translateY(.4rem); box-shadow:0 .4rem 0 var(--shadow); }
 /* counting cars */
-.zlot{ position:absolute; left:3rem; top:15rem; display:flex; flex-direction:column; gap:.6rem; }
+.zlot{ position:absolute; left:3rem; top:14.6rem; display:flex; flex-direction:column; gap:.5rem; }
 .zcars{ display:flex; gap:.6rem; }
-.zcar{ position:relative; width:13.4rem; height:16.2rem; border:0; border-radius:2rem; background:transparent; padding:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; color:var(--ink); }
-.zcar .zn{ width:5.6rem; height:5.6rem; border-radius:50%; background:var(--sun); font-size:3.6rem; line-height:1; display:grid; place-items:center; transform:scale(0); transition:transform .3s cubic-bezier(.2,1.6,.4,1); }
-.zcar .car{ font-size:7.6rem; line-height:1.05; }
-.zcar .py{ font-size:2.3rem; color:var(--ink); background:rgba(255,255,255,.8); border-radius:1.2rem; padding:0 .9rem; visibility:hidden; }
+.zcar{ position:relative; width:13.4rem; height:14.1rem; border:0; border-radius:2rem; background:transparent; padding:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; color:var(--ink); }
+.zcar .zn{ width:4.8rem; height:4.8rem; border-radius:50%; background:var(--sun); font-size:3.1rem; line-height:1; display:grid; place-items:center; transform:scale(0); transition:transform .3s cubic-bezier(.2,1.6,.4,1); }
+.zcar .car{ font-size:6.6rem; line-height:1.05; }
+.zcar .py{ font-size:2.1rem; color:var(--ink); background:rgba(255,255,255,.8); border-radius:1.2rem; padding:0 .9rem; visibility:hidden; }
 .zcar.counted .zn{ transform:scale(1); }
 .zcar.counted .py{ visibility:visible; }
 .zcar.counted{ animation:win .6s ease; }
 .zcar.hop{ animation:zhop .5s ease; }
-.zcard.board{ position:absolute; left:76rem; top:15.5rem; width:21rem; height:31rem; }
-.zcard.board .han{ font-size:15rem; }
+.zcard.board{ position:absolute; left:76rem; top:14.6rem; width:21rem; height:28.7rem; }
+.zcard.board .han{ font-size:14rem; }
 .zcard.board .py{ font-size:4.2rem; }
 /* colours */
 .zrow.balls{ top:14.5rem; gap:1.5rem; }
 .zball{ width:18rem; border:0; border-radius:3rem; background:transparent; padding:0; display:flex; flex-direction:column; align-items:center; gap:.6rem; color:var(--ink); }
-.zball .bal{ width:15rem; height:19.5rem; display:block; }
+.zball .bal{ width:13.6rem; height:17.7rem; display:block; }
 .zball .bal svg{ width:100%; height:100%; display:block; overflow:visible; }
 .zball .lab{ background:var(--card); border-radius:2rem; box-shadow:0 .6rem 0 var(--shadow); padding:.5rem 1.2rem .7rem; display:flex; flex-direction:column; align-items:center; min-width:13rem; box-sizing:border-box; }
-.zball .han{ font-size:5.4rem; white-space:nowrap; }
+.zball .han{ font-size:5rem; white-space:nowrap; }
 .zball .py{ font-size:2.5rem; white-space:nowrap; }
 .zball:active .bal{ transform:scale(.94); }
 .zball.win{ background:transparent !important; animation:none; }
@@ -376,7 +377,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .zcard.wbtn .han{ font-size:6.2rem; }
 .zcard.wbtn .py{ font-size:2.7rem; }
 /* head, hands and feet */
-.zkid{ position:absolute; left:35.6rem; top:15.5rem; width:28.8rem; height:34.5rem; }
+.zkid{ position:absolute; left:37.9rem; top:14.6rem; width:24.2rem; height:29rem; }
 .zkid svg{ width:100%; height:100%; display:block; overflow:visible; touch-action:none; }
 .zkid [data-part]{ cursor:pointer; transform-box:fill-box; transform-origin:50% 50%; }
 .zkid .ring{ fill:rgba(255,209,102,0); stroke:rgba(255,209,102,0); stroke-width:5; pointer-events:all; transition:fill .2s, stroke .2s; }
@@ -590,7 +591,9 @@ function twRefresh(){ pickZhVoice(); if(introPicker) introPicker(); if($('#paren
 if(synth){ pickZhVoice(); if(synth.addEventListener) synth.addEventListener('voiceschanged',twRefresh); [400,1500,4000].forEach(ms=>setTimeout(twRefresh,ms)); }
 function sayZh(text,opt){
   opt=opt||{}; const rate=opt.rate||.8, el=opt.el||null, v=zhVoice;
-  return new Promise(res=>{
+  talkLock++;   // listen first: the touch screen is off while the Mandarin voice speaks, just as it is while Whiskers talks
+  return new Promise(res0=>{
+    let released=false; const res=()=>{ if(!released){ released=true; talkLock=Math.max(0,talkLock-1); } res0(); };
     const est=500+text.length*330;
     if(!synth||!v){ setTimeout(res,est); return; }
     let done=false, poll=null; const finish=()=>{ if(done) return; done=true; clearInterval(poll); if(el) el.classList.remove('speaking'); res(); };
@@ -605,7 +608,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const zp=(w,el)=>({zh:w.zh,py:w.py,tts:w.tts||w.zh,el:el||null});   // tts: what is sent to the voice, should a word ever need a different spelling to be read right
 let talkId=0, talking=0, talkStop=null;
 const held=()=>document.hidden||sleeping||$('#calm').classList.contains('on')||$('#parent').classList.contains('on');
-function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); }
+function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); placeCues(); }
 async function talk(parts){
   const my=++talkId, run=runId, live=()=>my===talkId&&run===runId;
   // a newer line ends this one at once, without waiting for the speech engine to report that the old words were cut off
@@ -620,6 +623,11 @@ async function talk(parts){
 }
 // for scripted teaching: if a tap interrupted the line, let the tapped word finish before the script carries on
 async function line(parts){ const ok=await talk(parts); while(talking>0||held()) await wait(120); return ok; }
+// a wrong answer in the Mandarin mission gets the same "stop, think, try again" as Mission 1's thinkPause: the pill, the words,
+// and the screen kept off until three seconds after they end. The line may hold a Mandarin word, so it goes through talk().
+async function thinkTalk(api,parts){ holdLock++; thinkEl.classList.add('on'); sfx.boop();
+  try{ await talk(parts.concat(['Stop… think… and try again.'])); if(api&&!api.alive()) return; await wait(3000); }
+  finally{ holdLock=Math.max(0,holdLock-1); thinkEl.classList.remove('on'); } }
 
 // ---------- art
 const WHISKERS_SVG=`<svg viewBox="0 0 200 200" aria-label="Whiskers the cat hero"><path d="M40 118Q100 92 160 118L176 196Q100 174 24 196Z" fill="#e63946"/><ellipse cx="100" cy="162" rx="56" ry="40" fill="#f4a261"/><path d="M55 60L62 14L96 48Z" fill="#f4a261"/><path d="M145 60L138 14L104 48Z" fill="#f4a261"/><path d="M63 55L67 30L86 50Z" fill="#ffb4a2"/><path d="M137 55L133 30L114 50Z" fill="#ffb4a2"/><circle cx="100" cy="96" r="56" fill="#f4a261"/><path d="M44 86Q100 60 156 86Q151 116 100 113Q49 116 44 86Z" fill="#1d3557"/><ellipse cx="78" cy="93" rx="13" ry="15" fill="#fff"/><ellipse cx="122" cy="93" rx="13" ry="15" fill="#fff"/><circle cx="80" cy="96" r="7" fill="#222"/><circle cx="120" cy="96" r="7" fill="#222"/><circle cx="83" cy="93" r="2.6" fill="#fff"/><circle cx="123" cy="93" r="2.6" fill="#fff"/><path d="M93 119L107 119L100 127Z" fill="#e76f51"/><path d="M100 127Q92 137 84 131M100 127Q108 137 116 131" stroke="#7a3b10" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 116L70 121M34 129L70 127M166 116L130 121M166 129L130 127" stroke="#7a3b10" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="160" r="15" fill="#ffd166"/><path d="M90 152L95 169L100 158L105 169L110 152" stroke="#e63946" stroke-width="4.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
@@ -1066,7 +1074,8 @@ const hqScene={ key:'hq', icon:'🏆', name:'Hero HQ', stop:true, async enter(ro
 // ---------- Mission Taiwan (Mandarin): the words Dad practises with him, for the family trip
 // Whiskers gives every instruction in English. Each Mandarin word is spoken by the Taiwan Mandarin voice, shown as a big
 // Traditional character with small pinyin, and says itself again when it is tapped. Same rules as Mission 1: no way to fail,
-// "Oops. That's okay. Try again." for a wrong tap, a level per slide, and the mission ends itself with a goodbye.
+// listen first (the screen is off while a voice speaks), "Stop… think… and try again" after a wrong tap, no pointers to an
+// answer, a level per slide, and the mission ends itself with a goodbye.
 const Z=(zh,py,tts)=>({zh:zh,py:py,tts:tts||zh});   // shown character(s), pinyin, and (only if the voice misreads it) the spelling to speak
 const TW={ hello:Z('你好','nǐ hǎo'), thanks:Z('謝謝','xièxie'), bye:Z('掰掰','bāibāi'), agong:Z('阿公','Āgōng'), ama:Z('阿嬤','Āmà'),
   red:Z('紅色','hóngsè'), blue:Z('藍色','lánsè'), yellow:Z('黃色','huángsè'), green:Z('綠色','lǜsè'),
@@ -1080,27 +1089,27 @@ const AMA_SVG=`<svg viewBox="0 0 120 120" aria-label="Grandma"><path d="M20 120Q
 const balloonSvg=(fill,dark)=>`<svg viewBox="0 0 100 130" aria-hidden="true"><path d="M50 3C22 3 9 30 13 56c4 24 26 38 37 44 11-6 33-20 37-44C91 30 78 3 50 3z" fill="${fill}" stroke="#fff" stroke-width="3"/><ellipse cx="34" cy="30" rx="7" ry="13" fill="#fff" opacity=".35" transform="rotate(-18 34 30)"/><circle cx="40" cy="48" r="4" fill="#1d3557"/><circle cx="60" cy="48" r="4" fill="#1d3557"/><path d="M40 62q10 9 20 0" stroke="#1d3557" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M45 100l10 0-3 7-4 0z" fill="${dark}"/><path d="M50 107c-8 8 8 14 0 22" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`;
 const KID_SVG=`<svg viewBox="0 0 200 240" aria-label="A little hero"><path d="M64 98Q100 86 136 98L158 196Q100 176 42 196Z" fill="#e63946"/><g data-part="body"><path d="M72 114L34 142M128 114L166 142" stroke="#2f6fe4" stroke-width="19" stroke-linecap="round" fill="none"/><path d="M88 170L80 212M112 170L120 212" stroke="#2f6fe4" stroke-width="21" stroke-linecap="round" fill="none"/><rect x="68" y="98" width="64" height="82" rx="24" fill="#2f6fe4"/><rect x="68" y="152" width="64" height="10" fill="#ffd166"/><path d="M100 113L102.7 120.3L110.5 120.6L104.4 125.4L106.5 132.9L100 128.6L93.5 132.9L95.6 125.4L89.5 120.6L97.3 120.3Z" fill="#ffd166"/></g><g data-part="hand"><circle class="ring" cx="28" cy="147" r="27"/><circle cx="28" cy="147" r="17" fill="#f6d3ae"/></g><g data-part="hand"><circle class="ring" cx="172" cy="147" r="27"/><circle cx="172" cy="147" r="17" fill="#f6d3ae"/></g><g data-part="foot"><ellipse class="ring" cx="72" cy="224" rx="34" ry="21"/><ellipse cx="72" cy="224" rx="25" ry="13" fill="#e63946"/></g><g data-part="foot"><ellipse class="ring" cx="128" cy="224" rx="34" ry="21"/><ellipse cx="128" cy="224" rx="25" ry="13" fill="#e63946"/></g><g data-part="head"><circle class="ring" cx="100" cy="54" r="52"/><circle cx="60" cy="58" r="9" fill="#eec39b"/><circle cx="140" cy="58" r="9" fill="#eec39b"/><circle cx="100" cy="54" r="42" fill="#f6d3ae"/><path d="M58 52Q58 10 100 10Q142 10 142 52Q130 26 100 28Q70 26 58 52Z" fill="#5b3a1e"/><path d="M60 50Q100 36 140 50Q137 70 100 68Q63 70 60 50Z" fill="#1d3557"/><ellipse cx="84" cy="56" rx="9" ry="10" fill="#fff"/><ellipse cx="116" cy="56" rx="9" ry="10" fill="#fff"/><circle cx="85" cy="58" r="5" fill="#222"/><circle cx="115" cy="58" r="5" fill="#222"/><path d="M86 78Q100 90 114 78" stroke="#a4552b" stroke-width="4" fill="none" stroke-linecap="round"/></g></svg>`;
 
-// One listening question: the Mandarin voice names a word and the child taps it. A wrong tap says its own name, wobbles (and
-// fades, where asked), then the word is said again. Nothing is lost and there is no way to fail. Resolves with the wrong taps.
+// One listening question, played like Mission 1's karuta: the Mandarin voice names a word and the child taps it. A wrong tap
+// wobbles and gets the think-pause with the word said again; where asked, a card greys out from the second wrong tap. No
+// pointers to the answer: the idle hint only repeats the word. Nothing is lost. Resolves with the number of wrong taps.
 function listenTap(api,o){ return new Promise(res=>{
   const want=o.want, hear=o.hear||null, offs=[], cls=o.win||'win'; let done=false, wrongs=0;
   const els=it=>it.els||[it.el], word=()=>zp(want.w,hear);
   const on=(el,fn)=>{ el.addEventListener('pointerdown',fn); offs.push(()=>el.removeEventListener('pointerdown',fn)); };
-  const point=()=>{ if(!done&&api.alive()) ghost(els(want)[0]); };
-  const right=async el=>{ done=true; api.hint=null; ghostEl.classList.remove('on'); el.classList.add(cls); sfx.ding(); if(o.onRight) o.onRight(want,el);
+  const right=async el=>{ done=true; api.hint=null; el.classList.add(cls); sfx.ding(); if(o.onRight) o.onRight(want,el);
     await line(['Yes!',zp(want.w,el)].concat(o.yes?o.yes(want):[])); el.classList.remove(cls); offs.forEach(f=>f()); if(api.alive()) res(wrongs); };
-  const wrong=(it,el)=>{ wrongs++; wobble(el); sfx.boop(); if(o.fade) els(it).forEach(x=>x.classList.add('faded'));
-    talk((it.w?['Oops! That one is',zp(it.w,o.fade?null:el)]:['Oops!']).concat(["That's okay. Listen again:",word()])).then(ok=>{ if(ok&&(wrongs>=2||o.easy)) point(); }); };
+  const wrong=(it,el)=>{ wrongs++; wobble(el); if(o.fade&&wrongs>=2) els(it).forEach(x=>x.classList.add('faded'));
+    thinkTalk(api,[o.again||'Not that one. Listen again:',word()]); };
   o.items.forEach(it=>els(it).forEach(el=>on(el,e=>{ if(done||!api.alive()) return; e.preventDefault(); if(it===want) right(el); else wrong(it,el); })));
   if(hear) on(hear,()=>{ if(!done) talk([word()]); });
-  api.hint=()=>{ talk([o.again||'Listen again:',word()]); point(); };
-  talk((o.intro||[]).concat([word()],o.outro||[])).then(ok=>{ if(ok&&o.easy) setTimeout(point,o.easy); });
+  api.hint=()=>{ talk([o.ask||'Listen again:',word()]); };
+  talk((o.intro||[]).concat([word()],o.outro||[]));
 });}
 
 const twHelloScene={ key:'twhello', icon:'👋', name:'hello and bye-bye', sticker:'👋', done:'you said hello in Mandarin', enter(root,api){
   const lv=LVT.hello||0; let stumbles=0;
   const items=[{w:TW.hello,pic:'🙋',en:'Hello'},{w:TW.thanks,pic:'🎁',en:'Thank you'},{w:TW.bye,pic:'👋',en:'Bye-bye'}];
-  root.innerHTML=`<div class="banner" id="zb">Hello, Taiwan!</div><div class="zrow" id="zr">${items.map(x=>`<button class="zcard hid"><span class="pic">${x.pic}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
+  root.innerHTML=`<div class="banner sm" id="zb">Hello, Taiwan!</div><div class="zrow" id="zr">${items.map(x=>`<button class="zcard hid"><span class="pic">${x.pic}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
   const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
   items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
   (async()=>{
@@ -1117,7 +1126,7 @@ const twHelloScene={ key:'twhello', icon:'👋', name:'hello and bye-bye', stick
       items.forEach(x=>x.el.classList.remove('faded'));
       if(lv>=2&&r>0) shuffle(items.slice()).forEach(x=>row.appendChild(x.el));
       api.phase='ask';
-      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, fade:true, easy:lv===0?3500:0, intro:[r===0?'Now listen. Which one is it?':'Listen!']});
+      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, fade:true, intro:[r===0?'Now listen. Which one is it?':'Listen!']});
       api.phase='free'; await wait(400); if(!api.alive()) return; }
     items.forEach(x=>x.el.classList.remove('faded')); hear.hidden=true; zb.textContent='Hello, Taiwan!';
     bumpTw('hello',stumbles); api.sticker(); await line(['Lovely listening!']); if(api.alive()) api.next();
@@ -1127,7 +1136,7 @@ const twHelloScene={ key:'twhello', icon:'👋', name:'hello and bye-bye', stick
 const twWhoScene={ key:'twwho', icon:'👵', name:'Grandpa and Grandma', sticker:'👵', done:'you found Grandpa and Grandma', enter(root,api){
   const lv=LVT.who||0; let stumbles=0;
   const items=[{w:TW.agong,svg:AGONG_SVG,en:'Grandpa'},{w:TW.ama,svg:AMA_SVG,en:'Grandma'}];
-  root.innerHTML=`<div class="banner" id="zb">Who is it?</div><div class="zrow two" id="zr">${items.map(x=>`<button class="zcard face hid"><span class="pic">${x.svg}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
+  root.innerHTML=`<div class="banner sm" id="zb">Who is it?</div><div class="zrow two" id="zr">${items.map(x=>`<button class="zcard face hid"><span class="pic">${x.svg}</span>${han(x.w)}${pyn(x.w)}</button>`).join('')}</div>${HEAR}`;
   const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
   items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
   (async()=>{
@@ -1141,7 +1150,7 @@ const twWhoScene={ key:'twwho', icon:'👵', name:'Grandpa and Grandma', sticker
     for(let r=0;r<n;r++){
       if(r>0&&lv>=2&&(lv>=3||Math.random()<.5)){ row.appendChild(row.firstElementChild); [].forEach.call(row.children,popIn); sfx.whoosh(); await wait(700); if(!api.alive()) return; }
       api.phase='ask';
-      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, easy:lv===0?3500:0, intro:[r===0?'Who is it? Listen, then tap.':'Who is it?'], yes:w=>lv<2?[w.en+'!']:[]});
+      stumbles+=await listenTap(api,{want:order[r], items:items, hear:hear, intro:[r===0?'Who is it? Listen, then tap.':'Who is it?'], ask:'Who is it?', yes:w=>lv<2?[w.en+'!']:[]});
       api.phase='free'; await wait(400); if(!api.alive()) return; }
     hear.hidden=true; zb.textContent='Who is it?';
     bumpTw('who',stumbles); api.sticker(); await line(['Now you know Grandpa and Grandma!']); if(api.alive()) api.next();
@@ -1178,7 +1187,7 @@ const twCountScene={ key:'twcount', icon:'🚗', name:'counting cars', sticker:'
     if(qn){ zb.textContent='👂 Listen… which car is it?'; board.classList.add('hid'); shown=-1;
       const items=cars.map(c=>({el:c,w:TW_NUM[+c.dataset.n]})), asks=shuffle(items.filter(it=>lv>=2||+it.el.dataset.n<5)).slice(0,qn);
       for(let r=0;r<asks.length;r++){ api.phase='ask';
-        stumbles+=await listenTap(api,{want:asks[r], items:items, win:'hop', intro:[r===0?'Now listen. Tap car number':'Tap car number'], again:'Count along the cars. Tap number'});
+        stumbles+=await listenTap(api,{want:asks[r], items:items, win:'hop', intro:[r===0?'Now listen. Tap car number':'Tap car number'], again:'Not that one. Tap car number', ask:'Tap car number'});
         api.phase='busy'; await wait(400); if(!api.alive()) return; } }
     api.phase='free'; zb.textContent='You counted to ten!';
     bumpTw('count',stumbles); api.sticker(); await line(['You counted to ten in Mandarin!']); if(api.alive()) api.next();
@@ -1188,7 +1197,7 @@ const twCountScene={ key:'twcount', icon:'🚗', name:'counting cars', sticker:'
 const twColourScene={ key:'twcolour', icon:'🎨', name:'the colours', sticker:'🎨', done:'you found the colours', enter(root,api){
   const lv=LVT.colour||0; let stumbles=0;
   const items=[{w:TW.red,fill:'#e63946',dark:'#a4262f',en:'Red, like Ruby!'},{w:TW.blue,fill:'#2f6fe4',dark:'#1d4aa8',en:'Blue, like the sea!'},{w:TW.yellow,fill:'#ffd23f',dark:'#c9961d',en:'Yellow, like Finn!'},{w:TW.green,fill:'#2dc653',dark:'#1f8f3b',en:'Green, like the green light!'}];
-  root.innerHTML=`<div class="banner" id="zb">Colours!</div><div class="zrow balls" id="zr">${items.map(x=>`<button class="zball hid"><span class="bal">${balloonSvg(x.fill,x.dark)}</span><span class="lab">${han(x.w)}${pyn(x.w)}</span></button>`).join('')}</div>${HEAR}`;
+  root.innerHTML=`<div class="banner sm" id="zb">Colours!</div><div class="zrow balls" id="zr">${items.map(x=>`<button class="zball hid"><span class="bal">${balloonSvg(x.fill,x.dark)}</span><span class="lab">${han(x.w)}${pyn(x.w)}</span></button>`).join('')}</div>${HEAR}`;
   const row=root.querySelector('#zr'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear');
   items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
   (async()=>{
@@ -1202,7 +1211,7 @@ const twColourScene={ key:'twcolour', icon:'🎨', name:'the colours', sticker:'
       const inPlay=[order[r]].concat(shuffle(items.filter(x=>x!==order[r])).slice(0,choices-1));
       items.forEach(x=>x.el.classList.toggle('faded',inPlay.indexOf(x)<0));
       api.phase='ask';
-      stumbles+=await listenTap(api,{want:order[r], items:inPlay, hear:hear, fade:true, easy:lv===0?3500:0, intro:[r===0?'Now listen. Tap the balloon that is':'Tap'], onRight:()=>sfx.pop()});
+      stumbles+=await listenTap(api,{want:order[r], items:inPlay, hear:hear, fade:inPlay.length>2, intro:[r===0?'Now listen. Tap the balloon that is':'Tap'], again:'Not that one. Tap', ask:'Tap', onRight:()=>sfx.pop()});
       api.phase='free'; await wait(400); if(!api.alive()) return; }
     items.forEach(x=>x.el.classList.remove('faded')); hear.hidden=true; zb.textContent='Colours!';
     bumpTw('colour',stumbles); api.sticker(); await line(['Beautiful colours!']); if(api.alive()) api.next();
@@ -1231,24 +1240,24 @@ const twWantScene={ key:'twwant', icon:'🍪', name:"Finn's snacks", sticker:'�
     for(let r=0;r<n;r++){ const good=seq[r]==='y', want=B[good?0:1];
       serve(good?yum[yi++%yum.length]:yuck[ni++%yuck.length],true); finnSays(want.w); await wait(500); if(!api.alive()) return;
       api.phase='ask';
-      stumbles+=await listenTap(api,{want:want, items:B.slice(0,2), hear:fsay, easy:lv===0?3000:0, intro:r===0?['Here comes a snack! Finn says']:[], outro:r===0?['Tap what Finn said!']:[], again:'What did Finn say? Listen:', onRight:()=>{ if(good) chomp(); else toss(); }, yes:()=>[good?'Yum!':'Away it goes!']});
+      stumbles+=await listenTap(api,{want:want, items:B.slice(0,2), hear:fsay, intro:r===0?['Here comes a snack! Finn says']:[], outro:r===0?['Tap what Finn said!']:[], again:'Not that one. Finn said', ask:'What did Finn say? Listen:', onRight:()=>{ if(good) chomp(); else toss(); }, yes:()=>[good?'Yum!':'Away it goes!']});
       api.phase='free'; await wait(500); if(!api.alive()) return; }
     // then Finn wants more: a third button, and a shoal of fish each time it is tapped
     const more=B[2], times=lv===0?1:2;
     for(let m=0;m<times;m++){ snack.classList.add('hid'); finnSays(TW.more); if(m===0){ popIn(more.el); sfx.pop(); }
       api.phase='ask';
-      stumbles+=await listenTap(api,{want:more, items:B, hear:fsay, easy:m===0?2500:0, intro:[m===0?'Finn wants more! He says':'And again! Finn says'], outro:m===0?['Tap the new button!']:[], again:'Finn wants more. Listen:', yes:()=>['More fish for Finn!']});
+      stumbles+=await listenTap(api,{want:more, items:B, hear:fsay, intro:[m===0?'Finn wants more! He says':'And again! Finn says'], outro:m===0?['Tap the new button!']:[], again:'Not that one. Finn said', ask:'Finn wants more. He says', yes:()=>['More fish for Finn!']});
       api.phase='busy'; for(let j=0;j<3;j++){ serve('🐟',false); await wait(420); chomp(); await wait(560); if(!api.alive()) return; }
       api.phase='free'; }
     snack.classList.add('hid'); confetti(); sfx.cheer();
-    await line(['Finn is full! Burp! Finn says',finnSays(TW.thanks)]); if(!api.alive()) return;
+    await line(['Finn is full! Finn says',finnSays(TW.thanks)]); if(!api.alive()) return;
     bumpTw('want',stumbles); api.sticker(); await wait(500); if(api.alive()) api.next();
   })();
 }};
 
 const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', sticker:'🙆', done:'you found head, hands and feet', enter(root,api){
   const lv=LVT.body||0; let stumbles=0;
-  const P=[{k:'head',w:TW.head,en:'head',say:'This is the head:',pos:'left:67rem;top:17.5rem'},{k:'hand',w:TW.hand,en:'hands',say:'These are the hands:',pos:'left:11rem;top:31rem'},{k:'foot',w:TW.foot,en:'feet',say:'And these are the feet:',pos:'left:67rem;top:40rem'}];
+  const P=[{k:'head',w:TW.head,en:'head',say:'This is the head:',pos:'left:60rem;top:15.6rem'},{k:'hand',w:TW.hand,en:'hands',say:'These are the hands:',pos:'left:15rem;top:27rem'},{k:'foot',w:TW.foot,en:'feet',say:'And these are the feet:',pos:'left:60rem;top:33rem'}];
   root.innerHTML=`<div class="banner sm" id="zb">Head, hands and feet!</div><div class="zkid" id="kid">${KID_SVG}</div>${P.map(p=>`<button class="zcard tag hid" style="${p.pos}">${han(p.w)}${pyn(p.w)}</button>`).join('')}${HEAR}`;
   const kid=root.querySelector('#kid'), zb=root.querySelector('#zb'), hear=root.querySelector('.zhear'), tags=root.querySelectorAll('.tag');
   // each body part and its word card say the word when tapped; during a question the same taps are the answer
@@ -1266,7 +1275,7 @@ const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', stic
     const items=P.map(p=>({w:p.w,en:p.en,els:lv>=2?p.parts:p.parts.concat([p.tag])})), tummy={w:null,els:[kid.querySelector('[data-part="body"]')]};
     const n=lv===0?3:lv===1?4:5, order=shuffle(items.slice()); while(order.length<n) order.push(pick(items.filter(x=>x!==order[order.length-1])));
     for(let r=0;r<n;r++){ api.phase='ask';
-      stumbles+=await listenTap(api,{want:order[r], items:items.concat([tummy]), hear:hear, win:'zyes', easy:lv===0?3500:0, intro:[r===0?'Now listen. Tap it on the little hero:':'Tap'], yes:w=>lv<2?[`Now touch your ${w.en}!`]:[]});
+      stumbles+=await listenTap(api,{want:order[r], items:items.concat([tummy]), hear:hear, win:'zyes', intro:[r===0?'Now listen. Tap it on the little hero:':'Tap'], again:'Not that one. Tap', ask:'Tap', yes:w=>lv<2?[`Now touch your ${w.en}!`]:[]});
       api.phase='free'; await wait(lv<2?1200:400); if(!api.alive()) return; }
     P.forEach(p=>p.tag.classList.remove('hid')); hear.hidden=true; zb.textContent='Head, hands and feet!';
     bumpTw('body',stumbles); api.sticker(); await line(['Head, hands and feet. You know them all!']); if(api.alive()) api.next();
