@@ -425,6 +425,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .zname{ position:absolute; left:50%; top:9.2rem; transform:translateX(-50%); height:7.4rem; padding:0 2.6rem; border:0; border-radius:3.7rem; background:var(--card); color:var(--ink); box-shadow:0 .7rem 0 var(--shadow); display:flex; align-items:center; gap:1.5rem; white-space:nowrap; z-index:4; }
 .zname .pic{ font-size:4.8rem; line-height:1; width:5.4rem; height:5.4rem; display:grid; place-items:center; }
 .zname .pic svg{ width:100%; height:100%; display:block; }
+.zname .pic svg.wide{ width:128%; height:128%; }
 .zname .en{ font-size:3.6rem; font-weight:700; color:var(--muted); }
 .zname .han{ font-size:5.4rem; }
 .zname .py{ font-size:2.8rem; }
@@ -435,6 +436,7 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .zthing.sm{ width:9.6rem; height:9.1rem; font-size:6.8rem; }
 .zthing.sm svg{ width:7rem; height:7rem; }
 .zthing.hero svg{ width:7.4rem; height:8.9rem; }
+.zthing.sm svg.wide{ width:9.2rem; height:9.2rem; }   /* a flat, wide picture (the plane ticket) is drawn larger, to look as big as its neighbours */
 .zthing.drag{ transition:transform .15s ease; transform:scale(1.14); z-index:6; }
 .zthing.speaking{ transform:scale(1.14); }
 .zthing.heard:after{ content:'✓'; position:absolute; right:.3rem; top:.1rem; width:2.8rem; height:2.8rem; border-radius:50%; background:#d8f5d0; color:#1f7a2e; font:700 2rem/2.8rem var(--font); text-align:center; }
@@ -696,12 +698,13 @@ function pickZhVoice(){ const rank=v=>(/enhanced|premium/i.test(v.name)?4:0)+(/m
 // voices can arrive late: look again when the list changes, and a few times after launch
 function twRefresh(){ pickZhVoice(); if(introPicker) introPicker(); if($('#parent').classList.contains('on')) twStatus(); }
 if(synth){ pickZhVoice(); if(synth.addEventListener) synth.addEventListener('voiceschanged',twRefresh); [400,1500,4000].forEach(ms=>setTimeout(twRefresh,ms)); }
+const ZH_RATE=.8;   // the Mandarin voice's usual speed (a request said again after a wrong move goes at half of it)
 function sayZh(text,opt){
-  opt=opt||{}; const rate=opt.rate||.8, el=opt.el||null, v=zhVoice;
+  opt=opt||{}; const rate=opt.rate||ZH_RATE, el=opt.el||null, v=zhVoice;
   talkLock++;   // listen first: the touch screen is off while the Mandarin voice speaks, just as it is while Whiskers talks
   return new Promise(res0=>{
     let released=false; const res=()=>{ if(!released){ released=true; talkLock=Math.max(0,talkLock-1); } res0(); };
-    const est=500+text.length*330;
+    const est=(500+text.length*330)*(ZH_RATE/rate);
     if(!synth||!v){ setTimeout(res,est); return; }
     let done=false, poll=null; const finish=()=>{ if(done) return; done=true; clearInterval(poll); if(el) el.classList.remove('speaking'); res(); };
     const speak=()=>{ try{ const u=new SpeechSynthesisUtterance(text); u.voice=v; u.lang='zh-TW'; u.rate=rate; u.pitch=1; u.volume=1; u.onend=finish; u.onerror=finish; if(el) el.classList.add('speaking'); synth.speak(u); setTimeout(finish, est*2+1500);
@@ -709,22 +712,23 @@ function sayZh(text,opt){
     if(synth.speaking||synth.pending){ synth.cancel(); setTimeout(speak,90); } else speak();
   });
 }
-// A line in two voices: plain strings are Whiskers, in English; zp(word) parts go to the Mandarin voice; a number is a pause in ms.
+// A line in two voices: plain strings are Whiskers, in English; zp(word) parts go to the Mandarin voice (at the part's own rate,
+// if it has one); a number is a pause in ms.
 // The bubble shows the whole line. A newer line replaces an older one, and lines wait while the calm cloud or the parent corner is open.
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const zp=(w,el)=>({zh:w.zh,py:w.py,tts:w.tts||w.zh,el:el||null});   // tts: what is sent to the voice, should a word ever need a different spelling to be read right
 let talkId=0, talking=0, talkStop=null;
 const held=()=>document.hidden||sleeping||$('#calm').classList.contains('on')||$('#parent').classList.contains('on');
 function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw${p.s?' bsn':''}"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); placeCues(); }
-async function talk(parts){
+async function talk(parts,show){
   const my=++talkId, run=runId, live=()=>my===talkId&&run===runId;
   // a newer line ends this one at once, without waiting for the speech engine to report that the old words were cut off
   if(talkStop) talkStop(); let stopNow; const stopped=new Promise(r=>{ stopNow=r; }); talkStop=stopNow;
-  bubbleZh(parts); talking++;
+  bubbleZh(show||parts); talking++;
   try{ for(const p of parts){
       while(held()){ await Promise.race([wait(250),stopped]); if(!live()) return false; }
       if(!live()) return false;
-      await Promise.race([typeof p==='number'?wait(p):typeof p==='string'?say(p,{sub:false}):sayZh(p.tts,{el:p.el}), stopped]); }
+      await Promise.race([typeof p==='number'?wait(p):typeof p==='string'?say(p,{sub:false}):sayZh(p.tts,{el:p.el,rate:p.rate}), stopped]); }
     return live();
   } finally { talking--; if(talkStop===stopNow) talkStop=null; }
 }
@@ -732,8 +736,9 @@ async function talk(parts){
 async function line(parts){ const ok=await talk(parts); while(talking>0||held()) await wait(120); return ok; }
 // a wrong answer in the Mandarin mission gets the same "stop, think, try again" as Mission 1's thinkPause: the pill, the words,
 // and the screen kept off until three seconds after they end. The line may hold a Mandarin word, so it goes through talk().
-async function thinkTalk(api,parts){ holdLock++; thinkEl.classList.add('on'); sfx.boop();
-  try{ await talk(parts.concat(['Stop… think… and try again.'])); if(api&&!api.alive()) return; await wait(3000); }
+// show: what the bubble holds meanwhile, if not the spoken line (the trip keeps its request there; the pill has the other words).
+async function thinkTalk(api,parts,show){ holdLock++; thinkEl.classList.add('on'); sfx.boop();
+  try{ await talk(parts.concat(['Stop… think… and try again.']),show); if(api&&!api.alive()) return; await wait(3000); }
   finally{ holdLock=Math.max(0,holdLock-1); thinkEl.classList.remove('on'); } }
 // A quiet moment in a scripted lesson, for saying the word or tapping it to hear it again. It ends after `ms` of silence, so it
 // stays open for as long as a word is being tapped and heard (the screen is off while a voice speaks, so this is when taps land).
@@ -1409,24 +1414,30 @@ const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', stic
 
 // ---------- Mission Taiwan, the trip: packing the suitcase at home, then the airport
 // The second way to play Mission Taiwan. Every thing has a name card (picture, English word, big characters, pinyin) and says
-// its name in both languages when it is tapped. Then the things are asked for one at a time, in English and in Mandarin and in a
-// new order every time, and the child drags each one to where it goes. The rules are the same as everywhere else: listen first,
-// the think-pause after a wrong one, no pointers to an answer, a level per slide.
+// its name in both languages when it is tapped. Then the things are asked for one at a time, in a new order every time, and the
+// child drags each one to where it goes. A request is made in Mandarin first, and only the Mandarin names the thing: the English
+// that follows says what to do with "it", so the thing has to be found from its Mandarin name. After a wrong move the Mandarin
+// is said again at half speed, then the English as before. The rules are the same as everywhere else: listen first, the
+// think-pause after a wrong one, no pointers to an answer, a level per slide.
 const T=(en,zh,py,pic)=>({en:en,w:Z(zh,py),pic:pic});
 const PASSPORT_SVG=`<svg viewBox="0 0 80 100" aria-hidden="true"><rect x="8" y="4" width="64" height="92" rx="8" fill="#1d3557"/><rect x="8" y="4" width="9" height="92" rx="4" fill="#16294a"/><circle cx="43" cy="44" r="17" fill="none" stroke="#ffd166" stroke-width="3.5"/><path d="M26 44H60M43 27V61M31 33Q43 41 55 33M31 55Q43 47 55 55" stroke="#ffd166" stroke-width="2.6" fill="none"/><rect x="26" y="72" width="34" height="6" rx="3" fill="#ffd166"/></svg>`;
 const NAPPY_SVG=`<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M10 20H90V44Q70 50 66 80Q50 90 34 80Q30 50 10 44Z" fill="#fff" stroke="#b8c7d9" stroke-width="3" stroke-linejoin="round"/><path d="M10 20H90V31H10Z" fill="#bfe3ff"/><rect x="3" y="23" width="16" height="12" rx="3.5" fill="#ffd166"/><rect x="81" y="23" width="16" height="12" rx="3.5" fill="#ffd166"/><circle cx="50" cy="56" r="7" fill="#ffd9e0"/><circle cx="38" cy="45" r="3" fill="#bfe3ff"/><circle cx="62" cy="45" r="3" fill="#bfe3ff"/></svg>`;
 const BOTTLE_SVG=`<svg viewBox="0 0 80 100" aria-hidden="true"><rect x="36" y="2" width="8" height="16" rx="4" fill="#f4a261"/><rect x="24" y="14" width="32" height="12" rx="5" fill="#e63946"/><rect x="18" y="24" width="44" height="72" rx="14" fill="#4cc9f0"/><rect x="18" y="52" width="44" height="15" fill="#fff" opacity=".88"/><path d="M40 53.5l2.4 4.6 5 .8-3.6 3.5.9 5-4.7-2.4-4.7 2.4.9-5-3.6-3.5 5-.8z" fill="#ffb703"/><rect x="24" y="30" width="6" height="17" rx="3" fill="#fff" opacity=".5"/></svg>`;
 const PLANE_SVG=`<svg viewBox="0 0 300 110" aria-label="A plane"><path d="M34 36L14 4L42 4L74 36Z" fill="#e63946"/><path d="M24 58L4 48L6 42L44 50Z" fill="#c9d3e0"/><path d="M26 44Q26 34 44 34L232 34Q282 36 294 58Q282 78 232 80L62 80Q30 78 26 60Z" fill="#fff" stroke="#b8c7d9" stroke-width="2.5"/><path d="M254 44Q272 46 282 57L252 57Z" fill="#4cc9f0"/><path d="M32 67L284 67" stroke="#e63946" stroke-width="5" stroke-linecap="round"/><g fill="#4cc9f0"><circle cx="70" cy="48" r="4.6"/><circle cx="90" cy="48" r="4.6"/><circle cx="110" cy="48" r="4.6"/><circle cx="130" cy="48" r="4.6"/><circle cx="150" cy="48" r="4.6"/><circle cx="170" cy="48" r="4.6"/><circle cx="190" cy="48" r="4.6"/><circle cx="234" cy="48" r="4.6"/></g><rect x="206" y="40" width="14" height="24" rx="5" fill="#eef3f8" stroke="#9aa7b8" stroke-width="2.2"/><path d="M118 72L76 106L112 106L172 74Z" fill="#c9d3e0" stroke="#b0bccb" stroke-width="2"/><ellipse cx="124" cy="94" rx="15" ry="7.5" fill="#8fa0b3"/></svg>`;
+// a boarding pass: a navy band, a plane, a tear-off stub with a bar code (the ticket emoji is a show ticket, and no emoji is a plane ticket)
+const TICKET_SVG=`<svg class="wide" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(-8 50 50)"><path d="M8 21H66A4.5 4.5 0 0 0 75 21H92Q96 21 96 25V75Q96 79 92 79H75A4.5 4.5 0 0 0 66 79H8Q4 79 4 75V25Q4 21 8 21Z" fill="#fffdf4"/><path d="M8 21H66A4.5 4.5 0 0 0 75 21H92Q96 21 96 25V37H4V25Q4 21 8 21Z" fill="#1d3557"/><path d="M8 21H66A4.5 4.5 0 0 0 75 21H92Q96 21 96 25V75Q96 79 92 79H75A4.5 4.5 0 0 0 66 79H8Q4 79 4 75V25Q4 21 8 21Z" fill="none" stroke="#8fa0b3" stroke-width="2.5" stroke-linejoin="round"/><path d="M70.5 40V76" stroke="#8fa0b3" stroke-width="2" stroke-dasharray="3.2 3"/><path transform="translate(37 58.5) rotate(-28) scale(.82)" d="M-27 0Q-27 -3 -23 -3L15 -3Q25 -2.5 27 0Q25 2.5 15 3L-23 3Q-27 3 -27 0ZM-1 -2.5L-11 -20L-5 -20L9 -2.5ZM-1 2.5L-11 20L-5 20L9 2.5ZM-21 -2.5L-26 -12L-22 -12L-15 -2.5ZM-21 2.5L-26 12L-22 12L-15 2.5Z" fill="#e63946"/><rect x="10" y="27" width="24" height="4" rx="2" fill="#fff"/><circle cx="60" cy="29" r="3.2" fill="#ffd166"/><g stroke="#1d3557"><path d="M79.5 44V72M86 44V72M91.5 44V72" stroke-width="2.4"/><path d="M82.8 44V72M88.8 44V72" stroke-width="1.2"/></g></g></svg>`;
 const THINGS={
   suitcase:T('suitcase','行李箱','xínglǐxiāng','🧳'), passport:T('passport','護照','hùzhào',PASSPORT_SVG), shirt:T('shirt','衣服','yīfú','👕'), pants:T('pants','褲子','kùzi','👖'),
   jacket:T('jacket','外套','wàitào','🧥'), socks:T('socks','襪子','wàzi','🧦'), shoes:T('shoes','鞋子','xiézi','👟'), hat:T('hat','帽子','màozi','🧢'), nappy:T('nappy','尿布','niàobù',NAPPY_SVG),
   toothbrush:T('toothbrush','牙刷','yáshuā','🪥'), toy:T('toy','玩具','wánjù','🧸'), books:T('books','書','shū','📚'), bottle:T('water bottle','水壺','shuǐhú',BOTTLE_SVG),
-  airport:T('airport','機場','jīchǎng','🛫'), plane:T('plane','飛機','fēijī','✈️'), trolley:T('trolley','推車','tuīchē','🛒'), backpack:T('backpack','背包','bēibāo','🎒'), ticket:T('ticket','機票','jīpiào','🎫') };
+  airport:T('airport','機場','jīchǎng','🛫'), plane:T('plane','飛機','fēijī','✈️'), trolley:T('trolley','推車','tuīchē','🛒'), backpack:T('backpack','背包','bēibāo','🎒'), ticket:T('ticket','機票','jīpiào',TICKET_SVG) };
 const PACK=['passport','shirt','pants','jacket','socks','shoes','hat','nappy','toothbrush','toy','books','bottle'];
 const mkThing=k=>Object.assign({k:k,heard:false},THINGS[k]);
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-// both languages, one after the other: English first at level 0, Mandarin first from level 1
+// both languages, one after the other, for the names and the praise: English first at level 0, Mandarin first from level 1
 const both=(lv,en,part)=>lv>=1?[part,en]:[en,part];
+// a Mandarin part of a line at half the voice's usual speed: how a request is said again after a wrong move
+const slowly=part=>Object.assign({},part,{rate:ZH_RATE/2});
 // a whole Mandarin sentence as one part of a line (the bubble gives it and its pinyin lines of their own)
 const zs=(zh,py,el)=>({zh:zh,py:py,tts:zh,el:el||null,s:true});
 
@@ -1450,8 +1461,9 @@ function draggable(el,h){ let d=null;
     h.drop({moved:o.moved,far:Math.hypot(parseFloat(el.style.left)-o.ox,parseFloat(el.style.top)-o.oy)>6,cx:c.cx,cy:c.cy,back(){ el.style.left=o.ox+'rem'; el.style.top=o.oy+'rem'; }}); };
   el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up); }
 
-// Learning the names. Each thing says its name in both languages when tapped and gets a tick. When every one has been heard
-// (from level 2, straight away) a green arrow appears; they can keep tapping to hear names again, and go on when they are ready.
+// Learning the names. Each thing says its name in both languages when tapped and gets a tick. When every one of o.things has
+// been heard (from level 2, straight away) a green arrow appears; they can keep tapping to hear names again, and go on when
+// they are ready. Things outside o.things can say their names too (L.hear), but nobody has to tap them.
 function tripLearn(root,api,o){ const L={}; let arrow=null, over=false, go=null;
   const offer=()=>{ if(arrow||over) return; arrow=document.createElement('button'); arrow.className='next-btn'; arrow.textContent='➡'; arrow.setAttribute('aria-label','Go on'); root.appendChild(arrow);
     arrow.addEventListener('pointerdown',()=>{ if(over) return; over=true; api.hint=null; arrow.remove(); go(); }); };
@@ -1461,7 +1473,7 @@ function tripLearn(root,api,o){ const L={}; let arrow=null, over=false, go=null;
     if(!arrow&&o.things.every(x=>x.heard)){ offer(); said.then(ok=>{ if(ok&&!over&&api.alive()){ talk(['Tap the green arrow when you are ready.']); ghost(arrow); } }); } };
   L.begin=()=>{ api.hint=()=>{ const t=o.things.find(x=>!x.heard); if(t){ talk(['Tap this one to hear its name.']); ghost(t.el); } else if(arrow){ talk(['Tap the green arrow when you are ready.']); ghost(arrow); } };
     if(o.lv>=2||o.things.every(x=>x.heard)) offer(); };
-  L.intro=o.lv>=2?'Tap a thing to hear its name again. Tap the green arrow to go on.':'Tap each thing to hear its name.';
+  L.intro=o.lv>=2?'Tap a thing to hear its name again. Tap the green arrow to go on.':(o.intro||'Tap each thing to hear its name.');
   return L; }
 
 // 1. Packing the suitcase. Six things at level 0, then eight, ten and all twelve; the ones he has met least often are chosen first.
@@ -1476,7 +1488,8 @@ const twPackScene={ key:'twpack', icon:'🧳', name:'packing the suitcase', stic
   const card=nameCard(root), caseEl=root.querySelector('#case'), cnt=root.querySelector('#cnt');
   things.forEach(t=>{ t.el=root.querySelector(`.zthing[data-k="${t.k}"]`); }); bag.el=caseEl;
   const inCase=(x,y)=>x>66&&y>14&&y<49;
-  const directive=t=>both(lv,`Let's put away the ${t.en}!`,zs(`我們把${t.w.zh}收起來！`,`wǒmen bǎ ${t.w.py} shōu qǐlái`,card.el));
+  // the request: Mandarin first, naming the thing; then English, which does not name it. slow: the Mandarin at half speed.
+  const directive=(t,slow)=>{ const z=zs(`我們把${t.w.zh}收起來！`,`wǒmen bǎ ${t.w.py} shōu qǐlái`,card.el); return [slow?slowly(z):z,"Let's put it away!"]; };
   const L=tripLearn(root,api,{things:things.concat([bag]),card:card,lv:lv});
   // Things touched but not carried, twice during one request: once the touched thing has said its name, Whiskers says how to
   // pack and the suitcase lights up. It is said whichever thing was touched, so it shows how, not which.
@@ -1497,7 +1510,8 @@ const twPackScene={ key:'twpack', icon:'🧳', name:'packing the suitcase', stic
         if(!d.far){ if(++taps>=2){ taps=0; howTo(named); } }        // touched, not carried: see howTo
         else if(t===want) talk(['Nearly! Put it in the suitcase.']);
         return; }
-      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,['Not that one.',zp(want.w,card.el)]); return; }
+      // a wrong thing in the suitcase: it goes home, and the request is made again, the Mandarin slowly (the bubble keeps the request)
+      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,directive(want,true),directive(want)); return; }
       gotIt(); } }));
   (async()=>{
     api.phase='busy'; api.hint=null;
@@ -1530,11 +1544,11 @@ const twAirScene={ key:'twair', icon:'✈️', name:'the airport', sticker:'✈�
   // four things to use, in new places on the trolley each time; from level 2 two more that are never asked for
   const movable=shuffle(['suitcase','passport','backpack','ticket'].concat(lv>=2?['toy','hat']:[]).map(mkThing));
   const cell=i=>[76.6+(i%2)*10.2,17.6+Math.floor(i/2)*9.2];
-  // where each thing goes and what is said
-  const S={ suitcase:{at:[14,39.7],zone:'#belt',en:"Let's put the suitcase on the belt!",zh:'我們把行李箱放上去！',py:'wǒmen bǎ xínglǐxiāng fàng shàngqù'},
-    passport:{at:[41,39.5],zone:'#desk',en:"Let's show the passport!",zh:'我們把護照拿出來！',py:'wǒmen bǎ hùzhào ná chūlái'},
-    backpack:{at:[52.5,40],zone:'#xray',en:"Let's put the backpack on the belt!",zh:'我們把背包放上去！',py:'wǒmen bǎ bēibāo fàng shàngqù'},
-    ticket:{at:[66.5,24.5],zone:'#gate',en:"Let's show the ticket!",zh:'我們把機票拿出來！',py:'wǒmen bǎ jīpiào ná chūlái'},
+  // where each thing goes and what is said: the Mandarin names the thing, the English does not
+  const S={ suitcase:{at:[14,39.7],zone:'#belt',en:"Let's put it on the belt!",zh:'我們把行李箱放上去！',py:'wǒmen bǎ xínglǐxiāng fàng shàngqù'},
+    passport:{at:[41,39.5],zone:'#desk',en:"Let's show it!",zh:'我們把護照拿出來！',py:'wǒmen bǎ hùzhào ná chūlái'},
+    backpack:{at:[52.5,40],zone:'#xray',en:"Let's put it on the belt!",zh:'我們把背包放上去！',py:'wǒmen bǎ bēibāo fàng shàngqù'},
+    ticket:{at:[66.5,24.5],zone:'#gate',en:"Let's show it!",zh:'我們把機票拿出來！',py:'wǒmen bǎ jīpiào ná chūlái'},
     hero:{at:[20.2,23.9],r:15,zone:'',en:`Let's get on the plane, ${SAY()}!`,zh:'我們上飛機！',py:'wǒmen shàng fēijī'} };
   root.innerHTML=`<div class="zterm"></div>${NAME_CARD}<div class="zwin"><button class="zplane" id="plane">${PLANE_SVG}</button></div>`+
     `<div class="zgate" id="gate"><span class="sign">GATE 3</span><span class="door"></span><span class="reader"><i class="lamp"></i></span></div>`+
@@ -1546,8 +1560,11 @@ const twAirScene={ key:'twair', icon:'✈️', name:'the airport', sticker:'✈�
     `<button class="zthing sm hero gone" data-k="hero" style="left:${cell(0)[0]}rem;top:${cell(0)[1]}rem">${KID_SVG}</button>`;
   const q=s=>root.querySelector(s), card=nameCard(root), spot=q('#spot');
   plane.el=q('#plane'); trolley.el=q('#trolley'); hero.el=q('.zthing.hero'); movable.forEach(t=>{ t.el=q(`.zthing[data-k="${t.k}"]`); });
-  const directive=k=>both(lv,S[k].en,zs(S[k].zh,S[k].py,card.el));
-  const L=tripLearn(root,api,{things:[plane,trolley].concat(movable),card:card,lv:lv});
+  // the request: Mandarin first, then the English. slow: the Mandarin at half speed (after a wrong move).
+  const directive=(k,slow)=>{ const z=zs(S[k].zh,S[k].py,card.el); return [slow?slowly(z):z,S[k].en]; };
+  // only the things on the trolley have to be heard before the green arrow comes; the plane and the trolley itself say their
+  // names when tapped, but nobody has to tap them
+  const L=tripLearn(root,api,{things:movable,card:card,lv:lv,intro:'Tap each thing on the trolley to hear its name.'});
   // as in the packing slide: things touched but not carried, twice during one request, and Whiskers says how it is done
   const howTo=after=>Promise.resolve(after).then(ok=>{ if(ok===false||!api.alive()||api.phase!=='ask') return; talk(['Pick it up and put it on the dotted spot.']); });
   [plane,trolley].forEach(t=>t.el.addEventListener('pointerdown',()=>{ if(api.phase==='learn') L.hear(t); }));
@@ -1560,7 +1577,8 @@ const twAirScene={ key:'twair', icon:'✈️', name:'the airport', sticker:'✈�
         if(!d.far){ if(++taps>=2){ taps=0; howTo(named); } }        // touched, not carried: see howTo
         else if(t===want) talk(['Nearly! Put it on the dotted spot.']);
         return; }
-      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,want.w?['Not that one.',zp(want.w,card.el)]:['Not that one. The little hero gets on the plane.']); return; }
+      // a wrong thing on the spot: it goes back to the trolley, and the request is made again, the Mandarin slowly
+      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,directive(want.k,true),directive(want.k)); return; }
       gotIt(); } }));
   // what happens at each place once the right thing has arrived
   const glide=(el,x,y,ms,ease)=>{ el.style.transition=`left ${ms}ms ${ease||'ease'}, top ${ms}ms ${ease||'ease'}, transform .3s ease, opacity .4s`; el.style.left=x+'rem'; el.style.top=y+'rem'; return wait(ms); };

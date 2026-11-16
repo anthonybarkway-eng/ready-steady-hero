@@ -23,21 +23,27 @@ and more with Finn's snacks; head, hands and feet; and a cheering goodbye.
 1. *Packing the suitcase.* The things to take lie around the room: passport, shirt, pants,
    jacket, socks, shoes, hat, nappy, toothbrush, toy, books and water bottle. Tapping a thing
    shows its name card (picture, English word, characters, pinyin) and says the name in English
-   and in Mandarin. Then each thing is asked for in both languages ("Let's put away the
-   toothbrush!" / 我們把牙刷收起來！), in a new order every time, and is dragged into the suitcase.
-   Six things at first, then eight, ten and all twelve as the level rises; the ones met least
-   often are chosen first. If things are only touched, not carried, Whiskers says how to pack.
-2. *The airport.* Plane, trolley, suitcase, backpack, passport and ticket get their names. Then
-   the suitcase rides away on the check-in belt, the passport gets its stamp, the backpack goes
+   and in Mandarin. Then each thing is asked for, in a new order every time, and is dragged into
+   the suitcase. Six things at first, then eight, ten and all twelve as the level rises; the
+   ones met least often are chosen first. If things are only touched, not carried, Whiskers says
+   how to pack.
+2. *The airport.* The things on the trolley (suitcase, backpack, passport and plane ticket) get
+   their names; the plane and the trolley say theirs too when tapped, but need not be. Then the
+   suitcase rides away on the check-in belt, the passport gets its stamp, the backpack goes
    through the scanner (the screen shows who is hiding inside), the ticket turns the gate light
    green, and the little hero gets on the plane.
+
+A request is made in Mandarin first, and only the Mandarin names the thing: 我們把牙刷收起來！
+and then "Let's put it away!". So the thing has to be found from its Mandarin name. After a
+wrong move the Mandarin is said again at half speed, then the English as before. When the right
+thing arrives, it is named in both languages.
 
 Whiskers gives the instructions in English. Every Mandarin word is shown as a large Traditional
 character with small pinyin, is spoken by the iPad's own Taiwan Mandarin voice, and says itself
 again when it is tapped. The rules are the same as in Mission 1: nothing can be failed, the
 screen is off while a voice is speaking, a wrong answer gets the "Stop… think… and try again"
-pause with the word said again, nothing points at the answer, each slide keeps a level, and the
-mission ends itself with the goodbye.
+pause with the word (in the trip, the request) said again, nothing points at the answer, each
+slide keeps a level, and the mission ends itself with the goodbye.
 
 - The mission needs a Chinese (Taiwan) voice on the device; iPads come with one (Meijia). If no
   such voice is found, the button is greyed out, and Mandarin is never read by an English voice.
