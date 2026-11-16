@@ -629,6 +629,9 @@ async function line(parts){ const ok=await talk(parts); while(talking>0||held())
 async function thinkTalk(api,parts){ holdLock++; thinkEl.classList.add('on'); sfx.boop();
   try{ await talk(parts.concat(['Stop… think… and try again.'])); if(api&&!api.alive()) return; await wait(3000); }
   finally{ holdLock=Math.max(0,holdLock-1); thinkEl.classList.remove('on'); } }
+// A quiet moment in a scripted lesson, for saying the word or tapping it to hear it again. It ends after `ms` of silence, so it
+// stays open for as long as a word is being tapped and heard (the screen is off while a voice speaks, so this is when taps land).
+async function quiet(api,ms){ let t=Date.now(); while(api.alive()){ await wait(120); if(talking>0||touchLocked()||held()) t=Date.now(); else if(Date.now()-t>=ms) return; } }
 
 // ---------- art
 const WHISKERS_SVG=`<svg viewBox="0 0 200 200" aria-label="Whiskers the cat hero"><path d="M40 118Q100 92 160 118L176 196Q100 174 24 196Z" fill="#e63946"/><ellipse cx="100" cy="162" rx="56" ry="40" fill="#f4a261"/><path d="M55 60L62 14L96 48Z" fill="#f4a261"/><path d="M145 60L138 14L104 48Z" fill="#f4a261"/><path d="M63 55L67 30L86 50Z" fill="#ffb4a2"/><path d="M137 55L133 30L114 50Z" fill="#ffb4a2"/><circle cx="100" cy="96" r="56" fill="#f4a261"/><path d="M44 86Q100 60 156 86Q151 116 100 113Q49 116 44 86Z" fill="#1d3557"/><ellipse cx="78" cy="93" rx="13" ry="15" fill="#fff"/><ellipse cx="122" cy="93" rx="13" ry="15" fill="#fff"/><circle cx="80" cy="96" r="7" fill="#222"/><circle cx="120" cy="96" r="7" fill="#222"/><circle cx="83" cy="93" r="2.6" fill="#fff"/><circle cx="123" cy="93" r="2.6" fill="#fff"/><path d="M93 119L107 119L100 127Z" fill="#e76f51"/><path d="M100 127Q92 137 84 131M100 127Q108 137 116 131" stroke="#7a3b10" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 116L70 121M34 129L70 127M166 116L130 121M166 129L130 127" stroke="#7a3b10" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="160" r="15" fill="#ffd166"/><path d="M90 152L95 169L100 158L105 169L110 152" stroke="#e63946" stroke-width="4.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
@@ -1116,11 +1119,12 @@ const twHelloScene={ key:'twhello', icon:'👋', name:'hello and bye-bye', stick
   (async()=>{
     api.phase='free'; api.hint=null;
     await line([`We are going to Taiwan, ${SAY()}! Let's learn to say hello.`]); if(!api.alive()) return;
-    // each word is shown and said; below level 2 there is a gap for the child to say it too, then it is said once more
+    // each word is shown and said; below level 2 there is a gap for the child to say it too, then it is said once more;
+    // every word is followed by a quiet moment in which a tap on a card says it again
     for(const x of items){ popIn(x.el); sfx.pop();
       await line(lv<2?[`${x.en} is`,zp(x.w,x.el),'You say it!']:[`${x.en} is`,zp(x.w,x.el)]); if(!api.alive()) return;
-      if(lv<2){ await wait(1500); if(!api.alive()) return; await line([zp(x.w,x.el)]); if(!api.alive()) return; }
-      await wait(350); if(!api.alive()) return; }
+      if(lv<2){ await quiet(api,1500); if(!api.alive()) return; await line([zp(x.w,x.el)]); if(!api.alive()) return; }
+      await quiet(api,lv<2?500:900); if(!api.alive()) return; }
     zb.textContent='👂 Listen… then tap!'; hear.hidden=false;
     const order=shuffle(items.slice()).concat(lv>=3?shuffle(items.slice()).slice(0,2):[]);
     for(let r=0;r<order.length;r++){
@@ -1142,8 +1146,8 @@ const twWhoScene={ key:'twwho', icon:'👵', name:'Grandpa and Grandma', sticker
   items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
   (async()=>{
     api.phase='free'; api.hint=null;
-    popIn(items[0].el); sfx.pop(); await line(['This is Grandpa. In Taiwan we say',zp(TW.agong,items[0].el)]); if(!api.alive()) return;
-    popIn(items[1].el); sfx.pop(); await line(['And this is Grandma:',zp(TW.ama,items[1].el)]); if(!api.alive()) return;
+    popIn(items[0].el); sfx.pop(); await line(['This is Grandpa. In Taiwan we say',zp(TW.agong,items[0].el)]); if(!api.alive()) return; await quiet(api,lv<2?1000:700); if(!api.alive()) return;
+    popIn(items[1].el); sfx.pop(); await line(['And this is Grandma:',zp(TW.ama,items[1].el)]); if(!api.alive()) return; await quiet(api,lv<2?1000:700); if(!api.alive()) return;
     zb.textContent='👂 Listen… who is it?'; hear.hidden=false;
     // three to five turns, never the same name three times running; from level 2 the two swap places now and then
     const n=lv===0?3:lv===1?4:5, order=shuffle(items.slice());
@@ -1190,7 +1194,7 @@ const twCountScene={ key:'twcount', icon:'🚗', name:'counting cars', sticker:'
       for(let r=0;r<asks.length;r++){ api.phase='ask';
         stumbles+=await listenTap(api,{want:asks[r], items:items, win:'hop', intro:[r===0?'Now listen. Tap car number':'Tap car number'], again:'Not that one. Tap car number', ask:'Tap car number'});
         api.phase='busy'; await wait(400); if(!api.alive()) return; } }
-    api.phase='free'; zb.textContent='You counted to ten!';
+    api.phase='free'; zb.textContent='You counted to ten!'; await quiet(api,900); if(!api.alive()) return;
     bumpTw('count',stumbles); api.sticker(); await line(['You counted to ten in Mandarin!']); if(api.alive()) api.next();
   })();
 }};
@@ -1203,7 +1207,7 @@ const twColourScene={ key:'twcolour', icon:'🎨', name:'the colours', sticker:'
   items.forEach((x,i)=>{ x.el=row.children[i]; x.el.addEventListener('pointerdown',()=>{ if(api.phase==='free') talk([zp(x.w,x.el)]); }); });
   (async()=>{
     api.phase='free'; api.hint=null;
-    for(const x of items){ popIn(x.el); sfx.pop(); await line([x.en,zp(x.w,x.el)]); if(!api.alive()) return; await wait(250); if(!api.alive()) return; }
+    for(const x of items){ popIn(x.el); sfx.pop(); await line([x.en,zp(x.w,x.el)]); if(!api.alive()) return; await quiet(api,lv<2?800:500); if(!api.alive()) return; }
     zb.textContent='👂 Listen… tap the colour!'; hear.hidden=false;
     // each colour is asked once (two more from level 3); two balloons to choose from at level 0, three at level 1, then all four
     const order=shuffle(items.slice()).concat(lv>=3?shuffle(items.slice()).slice(0,2):[]), choices=lv===0?2:lv===1?3:4;
@@ -1234,7 +1238,7 @@ const twWantScene={ key:'twwant', icon:'🍪', name:"Finn's snacks", sticker:'�
   (async()=>{
     api.phase='free'; api.hint=null;
     await line(['Finn is hungry! When Finn wants a snack, he says',finnSays(TW.want)]); if(!api.alive()) return;
-    await line(['When he does not want it, he says',finnSays(TW.no)]); if(!api.alive()) return;
+    await line(['When he does not want it, he says',finnSays(TW.no)]); if(!api.alive()) return; await quiet(api,700); if(!api.alive()) return;
     // three to six snacks: Finn says whether he wants each one, and the child taps the word he said
     const n=3+Math.min(lv,3), seq=['y'].concat(shuffle(Array.from({length:n-1},(_,i)=>i%2?'y':'n')));
     const yum=shuffle(['🐟','🍪','🦐','🐠']), yuck=shuffle(['🐡','🥾','🧦']); let yi=0, ni=0;
@@ -1269,7 +1273,7 @@ const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', stic
     await line(['Here is a little hero, just like you!']); if(!api.alive()) return;
     for(const p of P){ popIn(p.tag); sfx.pop(); p.glow(true);
       await line(lv<2?[p.say,zp(p.w,p.tag),`Touch your ${p.en}!`]:[p.say,zp(p.w,p.tag)]); p.glow(false); if(!api.alive()) return;
-      await wait(lv<2?1300:300); if(!api.alive()) return; }
+      await quiet(api,lv<2?1300:600); if(!api.alive()) return; }
     zb.textContent='👂 Listen… then tap the hero!'; hear.hidden=false;
     // three to five turns, never the same part twice running; from level 2 the word cards hide during the questions
     if(lv>=2) P.forEach(p=>p.tag.classList.add('hid'));
@@ -1291,7 +1295,7 @@ const twEndScene={ key:'twend', icon:'🏮', name:'the hero party', stop:true, a
   confetti(220); sfx.cheer(); api.phase='free';
   await line([`You did it, ${SAY()}!`,zp(TW.great,gw),'That means: well done!']); if(!api.alive()) return;
   await line(['Say it with me:',zp(TW.great,gw)]); if(!api.alive()) return;
-  await wait(1200); if(!api.alive()) return;
+  await quiet(api,1200); if(!api.alive()) return;
   const recap=doneList.slice(-3); if(recap.length){ await line([`Today ${recap.join(', ')}.`]); if(!api.alive()) return; }
   PROG.twMissions=(PROG.twMissions||0)+1; PROG.twLast=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
   whisk.classList.add('breath'); await line(['One big breath together… in… and out.']); whisk.classList.remove('breath'); if(!api.alive()) return;
