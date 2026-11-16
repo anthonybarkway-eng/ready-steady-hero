@@ -410,6 +410,96 @@ button:focus-visible{ outline:.5rem solid var(--sun); outline-offset:.3rem; }
 .badge-big.tw{ width:28rem; height:28rem; padding:3rem; margin-top:1.2rem; }
 .badge-big.tw .bs{ font-size:5.4rem; }
 #night .bye .han{ font-size:1.25em; }
+/* Mission Taiwan, the trip: packing the suitcase, then the airport. Things are dragged the way the shape pieces are.
+   As on the other Mandarin slides, everything a finger needs ends by about 44rem down, clear of the think pill; the right-hand
+   column (suitcase, trolley) sits beside the speech bubble, not above it. */
+.title .big.tw.trip{ background:var(--blue); box-shadow:0 1.2rem 0 #2a9cc0; }
+.title .big.tw.trip:active{ box-shadow:0 .4rem 0 #2a9cc0; }
+#bubble .bsn{ display:block; white-space:normal; }
+#bubble .bsn .bz,#bubble .bsn .bp{ display:block; }
+#bubble .bsn .bp{ font-size:.72em; }
+.zroom,.zterm{ position:absolute; inset:0; }
+.zroom{ background:linear-gradient(180deg,#fdf1dc 0,#fae3c1 58%,#d9a468 58%,#c58d50 100%); }
+.zroom:before{ content:''; position:absolute; left:0; right:0; top:58%; height:1rem; background:rgba(255,255,255,.75); }
+/* the name card: picture, English word, big characters, pinyin; tap it to hear it again */
+.zname{ position:absolute; left:50%; top:9.2rem; transform:translateX(-50%); height:7.4rem; padding:0 2.6rem; border:0; border-radius:3.7rem; background:var(--card); color:var(--ink); box-shadow:0 .7rem 0 var(--shadow); display:flex; align-items:center; gap:1.5rem; white-space:nowrap; z-index:4; }
+.zname .pic{ font-size:4.8rem; line-height:1; width:5.4rem; height:5.4rem; display:grid; place-items:center; }
+.zname .pic svg{ width:100%; height:100%; display:block; }
+.zname .en{ font-size:3.6rem; font-weight:700; color:var(--muted); }
+.zname .han{ font-size:5.4rem; }
+.zname .py{ font-size:2.8rem; }
+.zname.speaking{ box-shadow:0 0 0 .8rem var(--sun), 0 .7rem 0 var(--shadow); }
+/* a thing that can be picked up */
+.zthing{ position:absolute; width:10.2rem; height:11.4rem; border:0; background:transparent; padding:0; display:grid; place-items:center; font-size:8rem; line-height:1; color:var(--ink); touch-action:none; cursor:grab; z-index:2; filter:drop-shadow(0 .6rem 0 rgba(0,0,0,.16)); transition:left .35s ease, top .35s ease, width .35s ease, height .35s ease, font-size .35s ease, transform .25s ease, opacity .4s; }
+.zthing svg{ width:8.4rem; height:8.4rem; display:block; pointer-events:none; transition:width .35s ease, height .35s ease; }
+.zthing.sm{ width:9.6rem; height:9.1rem; font-size:6.8rem; }
+.zthing.sm svg{ width:7rem; height:7rem; }
+.zthing.hero svg{ width:7.4rem; height:8.9rem; }
+.zthing.drag{ transition:transform .15s ease; transform:scale(1.14); z-index:6; }
+.zthing.speaking{ transform:scale(1.14); }
+.zthing.heard:after{ content:'✓'; position:absolute; right:.3rem; top:.1rem; width:2.8rem; height:2.8rem; border-radius:50%; background:#d8f5d0; color:#1f7a2e; font:700 2rem/2.8rem var(--font); text-align:center; }
+.zthing.packed{ pointer-events:none; width:4.2rem; height:4.2rem; font-size:3.3rem; filter:none; z-index:3; }
+.zthing.packed svg{ width:3.5rem; height:3.5rem; }
+.zthing.gone{ opacity:0; pointer-events:none; }
+/* the open suitcase: lid above, things drop into the base; when it is full the lid comes down and the real suitcase pops up */
+.zcase{ position:absolute; left:69rem; top:17.6rem; width:28.4rem; height:27.6rem; border:0; background:transparent; padding:0; touch-action:none; z-index:1; }
+.zcase .lid{ position:absolute; left:0; right:0; top:0; height:12rem; border-radius:2.6rem 2.6rem 1rem 1rem; background:#2f6fe4; box-shadow:inset 0 0 0 .8rem #1d4aa8; display:grid; place-items:center; transition:transform .7s ease, opacity .35s; }
+.zcase .lid:before{ content:''; position:absolute; left:50%; top:-2.2rem; width:9rem; height:3rem; margin-left:-4.5rem; border:.8rem solid #1d3557; border-bottom:0; border-radius:1.6rem 1.6rem 0 0; box-sizing:border-box; }
+.zcase .base{ position:absolute; left:0; right:0; top:12.6rem; height:15rem; border-radius:1rem 1rem 2.6rem 2.6rem; background:#5a93f5; box-shadow:inset 0 0 0 .8rem #1d4aa8; transition:opacity .35s; }
+.zcase .base:before{ content:''; position:absolute; left:3.4rem; bottom:-2rem; width:3.2rem; height:3.2rem; border-radius:50%; background:#1d3557; box-shadow:18.4rem 0 0 #1d3557; z-index:-1; }
+.zcase .lid:after{ content:''; position:absolute; left:2rem; right:2rem; bottom:1.5rem; height:.7rem; border-radius:.4rem; background:rgba(255,255,255,.35); }
+.zcase .cnt{ font-size:4.6rem; font-weight:700; color:#fff; }
+.zcase.over .base{ box-shadow:inset 0 0 0 .8rem #1d4aa8, 0 0 0 .8rem var(--sun); }
+.zcase.speaking .lid{ box-shadow:inset 0 0 0 .8rem #1d4aa8, 0 0 0 .8rem var(--sun); }
+.zcase.shut .lid{ transform:translateY(12.6rem); }
+.zcase .real{ position:absolute; left:50%; top:50%; font-size:25rem; line-height:1; transform:translate(-50%,-50%) scale(0); transition:transform .6s cubic-bezier(.2,1.6,.4,1); pointer-events:none; }
+.zcase.done .lid,.zcase.done .base{ opacity:0; }
+.zcase.done .real{ transform:translate(-50%,-50%) scale(1); }
+/* the airport: a window with the plane, the gate, three stations in a row, and the trolley with the things on the right */
+.zterm{ background:linear-gradient(180deg,#e8f1f8 0,#dbe7f1 63%,#bcc9d6 63%,#aab8c6 100%); }
+.zwin{ position:absolute; left:2.5rem; top:17rem; width:51rem; height:13.2rem; border-radius:1.6rem; background:linear-gradient(180deg,#9fdcff,#e6f6ff); box-shadow:inset 0 0 0 .7rem #fff, 0 .5rem 0 rgba(20,30,60,.12); overflow:hidden; }
+.zplane{ position:absolute; left:2.2rem; top:1.2rem; width:31rem; height:11.4rem; border:0; background:transparent; padding:0; transition:transform 2.8s cubic-bezier(.5,0,.9,.5); }
+.zplane svg{ width:100%; height:100%; display:block; overflow:visible; pointer-events:none; }
+.zplane.speaking{ filter:drop-shadow(0 0 1rem var(--sun)); }
+.zplane.fly{ transform:translate(72rem,-15rem) rotate(-14deg); }
+.zgate{ position:absolute; left:56rem; top:17rem; width:13rem; height:13.2rem; }
+.zgate .sign{ position:absolute; left:0; right:0; top:0; height:2.9rem; border-radius:1rem; background:var(--ink); color:#fff; font-size:2rem; font-weight:700; text-align:center; line-height:2.9rem; }
+.zgate .door{ position:absolute; left:.5rem; top:3.4rem; width:8rem; height:9.8rem; border-radius:4rem 4rem 0 0; background:#7f8ea3; box-shadow:inset 0 0 0 .6rem #5a6b85; transition:background .5s; }
+.zgate.open .door{ background:linear-gradient(180deg,#9fdcff,#e6f6ff); }
+.zgate .reader{ position:absolute; right:0; bottom:0; width:3.4rem; height:7rem; border-radius:.8rem; background:#2b2d42; }
+.zgate .lamp{ position:absolute; left:50%; top:.7rem; width:2rem; height:2rem; margin-left:-1rem; border-radius:50%; background:var(--red); transition:all .2s; }
+.zgate.open .lamp{ background:var(--green); box-shadow:0 0 1.6rem var(--green); }
+.zst{ position:absolute; top:31.6rem; height:16rem; }
+.zst .cap,.zgate .sign{ letter-spacing:.05rem; }
+.zst .cap{ position:absolute; left:50%; top:0; transform:translateX(-50%); padding:0 1.2rem; height:2.8rem; border-radius:1.4rem; background:var(--ink); color:#fff; font-size:1.9rem; font-weight:700; line-height:2.8rem; white-space:nowrap; z-index:5; }
+.zst.done:after,.zgate.done:after{ content:'✓'; position:absolute; right:-.6rem; top:-.6rem; width:4rem; height:4rem; border-radius:50%; background:#d8f5d0; color:#1f7a2e; font:700 2.8rem/4rem var(--font); text-align:center; box-shadow:0 .3rem 0 var(--shadow); z-index:6; }
+.zst .conv{ position:absolute; left:0; right:0; bottom:0; border-radius:1.2rem; background:#3d3f52 repeating-linear-gradient(90deg,transparent 0 2.4rem,rgba(255,255,255,.22) 2.4rem 3rem); }
+.zst.run .conv{ animation:zconv .4s linear infinite; }
+@keyframes zconv{ to{ background-position:-3rem 0; } }
+.zst.belt{ left:3rem; width:21rem; }
+.zst.belt .conv{ height:5.4rem; }
+.zst.belt .flaps{ position:absolute; left:0; bottom:5.4rem; width:6.4rem; height:7.4rem; border-radius:1.2rem 1.2rem 0 0; background:#22242f repeating-linear-gradient(90deg,transparent 0 1.1rem,rgba(255,255,255,.16) 1.1rem 1.4rem); z-index:4; }
+.zst.desk{ left:27rem; width:19rem; }
+.zst.desk .who{ position:absolute; left:34%; top:2.2rem; transform:translateX(-50%); font-size:7.6rem; line-height:1; }
+.zst.desk .counter{ position:absolute; left:0; right:0; bottom:0; height:6.6rem; border-radius:1.6rem; background:#4c8fd9; box-shadow:inset 0 .9rem 0 #7bb1ee; }
+.zst.xray{ left:49rem; width:22rem; }
+.zst.xray .conv{ height:3.2rem; }
+.zst.xray .mach{ position:absolute; left:7rem; right:0; top:3.4rem; bottom:3.2rem; border-radius:1.8rem; background:#7d8ea3; box-shadow:inset 0 0 0 .7rem #5a6b85; z-index:4; }
+.zst.xray .screen{ position:absolute; left:1.5rem; right:1.5rem; top:1.4rem; bottom:1.4rem; border-radius:1rem; background:#0c2238; overflow:hidden; display:grid; place-items:center; }
+.zst.xray .x{ position:relative; font-size:5.2rem; line-height:1; opacity:0; filter:grayscale(1) invert(1) contrast(1.5) brightness(1.25); transition:opacity .4s; }
+.zst.xray .x b{ position:absolute; left:50%; top:56%; margin:-1.5rem 0 0 -1.5rem; width:3rem; font-size:2.7rem; font-weight:400; animation:wave .45s ease-in-out infinite alternate; }
+.zst.xray.seen .x{ opacity:1; }
+.ztrolley{ position:absolute; left:75.4rem; top:17rem; width:22.4rem; height:31.6rem; border:0; background:transparent; padding:0; }
+.ztrolley:before{ content:''; position:absolute; left:.8rem; right:.8rem; top:.4rem; bottom:3.4rem; border:.8rem solid #7d8ea3; border-top:0; border-radius:0 0 2rem 2rem; background:rgba(255,255,255,.4); box-sizing:border-box; }
+.ztrolley:after{ content:''; position:absolute; left:3rem; bottom:0; width:3.4rem; height:3.4rem; border-radius:50%; background:#2b2d42; box-shadow:12.6rem 0 0 #2b2d42; }
+.ztrolley.speaking:before{ border-color:var(--sun); }
+.zspot{ position:absolute; width:11rem; height:11rem; margin:-5.5rem 0 0 -5.5rem; border-radius:50%; border:.6rem dashed #fff; background:rgba(255,255,255,.3); box-sizing:border-box; pointer-events:none; z-index:1; animation:zspot 1s ease-in-out infinite alternate; }
+.zspot.wide{ width:20rem; height:14rem; margin:-7rem 0 0 -10rem; border-radius:7rem; }
+.zspot.hid{ display:none; }
+@keyframes zspot{ from{ transform:scale(.93) } to{ transform:scale(1.05) } }
+.zstamp{ position:absolute; left:45.6rem; top:35.4rem; width:9.4rem; height:9.4rem; margin:-4.7rem 0 0 -4.7rem; border-radius:50%; border:.6rem solid var(--red); color:var(--red); background:rgba(255,255,255,.94); display:grid; place-items:center; font-size:3.5rem; opacity:0; z-index:7; pointer-events:none; }
+.zstamp.on{ animation:zstamp .45s cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes zstamp{ from{ transform:scale(2.4) rotate(-14deg); opacity:0 } to{ transform:scale(1) rotate(-14deg); opacity:1 } }
 /* parent corner: with the Mission Taiwan block the panel is taller than the screen, so its body scrolls and the three action buttons stay put below it */
 .panel{ display:flex; flex-direction:column; overflow:hidden; padding:0; }
 .panel .pbody{ flex:1 1 auto; min-height:0; overflow:auto; -webkit-overflow-scrolling:touch; touch-action:pan-y; padding:2.5rem 3rem 1.2rem; }
@@ -504,7 +594,7 @@ try{ const parts=decodeURIComponent(location.hash.slice(1)).split('~'); const cl
 const NAME=()=>SET.name||'Hero', SAY=()=>SET.sayAs||SET.name||'Hero';
 function bump(key,stumbles){ if(stumbles===0) LV[key]=Math.min((LV[key]||0)+1,4); else if(stumbles>=3) LV[key]=Math.max((LV[key]||0)-1,0); save('rsh-levels',LV); }
 // Mission Taiwan keeps its own levels, under its own key, so Mission 1's stay as they were
-const LVT=load('rsh-levels-tw',{hello:0,who:0,count:0,colour:0,want:0,body:0});
+const LVT=load('rsh-levels-tw',{hello:0,who:0,count:0,colour:0,want:0,body:0,pack:0,air:0});
 function bumpTw(key,stumbles){ if(stumbles===0) LVT[key]=Math.min((LVT[key]||0)+1,4); else if(stumbles>=3) LVT[key]=Math.max((LVT[key]||0)-1,0); save('rsh-levels-tw',LVT); }
 
 // ---------- sizing: the stage is 100rem x 75rem, and 1rem = 1% of the stage width
@@ -625,7 +715,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const zp=(w,el)=>({zh:w.zh,py:w.py,tts:w.tts||w.zh,el:el||null});   // tts: what is sent to the voice, should a word ever need a different spelling to be read right
 let talkId=0, talking=0, talkStop=null;
 const held=()=>document.hidden||sleeping||$('#calm').classList.contains('on')||$('#parent').classList.contains('on');
-function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); placeCues(); }
+function bubbleZh(parts){ bubbleEl.innerHTML=parts.filter(p=>typeof p!=='number').map(p=>typeof p==='string'?esc(p):`<span class="bw${p.s?' bsn':''}"><span class="bz" lang="zh-Hant-TW">${p.zh}</span> <span class="bp">${p.py}</span></span>`).join(' '); placeCues(); }
 async function talk(parts){
   const my=++talkId, run=runId, live=()=>my===talkId&&run===runId;
   // a newer line ends this one at once, without waiting for the speech engine to report that the old words were cut off
@@ -746,14 +836,15 @@ function balloonWidget(root,o){
 
 // ---------- scenes
 const introScene={ key:'intro', stop:false, enter(root,api){
-  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><div class="missions"><button class="big pop-in" id="start" hidden>START</button><button class="big tw pop-in" id="start-tw" hidden></button></div><div class="tiny" id="tapme">Tap anywhere to say hello 👋</div><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
+  root.innerHTML=`<div class="title"><div class="t1">Ready, Steady,</div><div class="t2">HERO!</div><div class="missions"><button class="big pop-in" id="start" hidden>START</button><button class="big tw pop-in" id="start-tw" hidden></button><button class="big tw pop-in" id="mode-words" hidden><span class="l1">🏮 <span class="han" lang="zh-Hant-TW">你好</span></span><span class="l2">Words</span></button><button class="big tw trip pop-in" id="mode-trip" hidden><span class="l1">🧳 <span class="han" lang="zh-Hant-TW">出發</span></span><span class="l2">The trip</span></button></div><div class="tiny" id="tapme">Tap anywhere to say hello 👋</div><button class="tiny-btn" id="mode-back" hidden>⬅ Back</button><button class="tiny-btn holdable" id="setup">Parents: hold to set name &amp; voice</button></div>`;
   holdButton(root.querySelector('#setup'),1200,openParent);
   bubble(`Hello ${NAME()}!`);
-  let greeted=false, started=false;
+  let greeted=false, started=false, choosing=false;
   // Mission picker: once the welcome has played, Mission Taiwan sits beside START. It is greyed out while the device has no
   // Taiwan Mandarin voice, and absent when it is switched off in the parent corner.
   const tw=root.querySelector('#start-tw');
-  const picker=()=>{ const ok=!!zhVoice, state=ok?'on':'off'; tw.hidden=!(greeted&&SET.mandarin!==false); tw.classList.toggle('off',!ok); if(tw.dataset.state===state) return; tw.dataset.state=state;
+  const picker=()=>{ if(choosing&&!twoWays()){ choose(false); return; }
+    const ok=!!zhVoice, state=ok?'on':'off'; tw.hidden=!(greeted&&SET.mandarin!==false)||choosing; tw.classList.toggle('off',!ok); if(tw.dataset.state===state) return; tw.dataset.state=state;
     tw.innerHTML=`<span class="l1">${ok?'🏮':'💤'} <span class="han" lang="zh-Hant-TW">台灣</span></span><span class="l2">${ok?'Mission Taiwan':'needs the Mandarin voice'}</span>`; };
   introPicker=picker; api.resume=twRefresh;
   // iPads only speak after a touch, so the welcome plays on the first tap anywhere and START appears
@@ -765,10 +856,23 @@ const introScene={ key:'intro', stop:false, enter(root,api){
   stage.addEventListener('pointerdown',onFirst,true); api.cleanup=()=>{ stage.removeEventListener('pointerdown',onFirst,true); introPicker=null; };
   root.querySelector('#start').addEventListener('click',async()=>{ if(started) return; started=true; audio(); sfx.cheer(); mission='hero'; compose();
     await say('Ready… steady… HERO!',{rate:.95,pitch:1.2}); if(api.alive()) api.next(); });
-  tw.addEventListener('click',async()=>{ if(started||SET.mandarin===false) return; audio();
-    if(!pickZhVoice()){ picker(); sfx.boop(); wobble(tw); say('Mission Taiwan is asleep on this iPad. Tap START!'); ghost(root.querySelector('#start')); return; }
-    started=true; sfx.cheer(); mission='taiwan'; compose();
-    await say('Mission Taiwan! Ready… steady… go!',{rate:.95,pitch:1.2}); if(api.alive()) api.next(); });
+  // Mission Taiwan can be played two ways: the words (the lantern), or the trip (the suitcase: packing, then the airport).
+  // With both switched on in the parent corner the two are offered side by side, with a way back to START. Should the parent
+  // corner switch Mission Taiwan (or one of the two ways) off while they are on offer, the offer closes again. While they are
+  // on offer Back takes the place of the parents' button, which would otherwise sit behind the speech bubble (the gear still works).
+  const startBtn=root.querySelector('#start'), setupBtn=root.querySelector('#setup'), modes=['#mode-words','#mode-trip','#mode-back'].map(x=>root.querySelector(x));
+  const has=list=>list.some(x=>x.sticker&&SET.slides[x.key]!==false);
+  const twoWays=()=>SET.mandarin!==false&&!!zhVoice&&has(TW_SCENES)&&has(TRIP_SCENES);
+  const begin=async m=>{ if(started) return; if(SET.mandarin===false||!pickZhVoice()){ choose(false); return; }
+    started=true; audio(); sfx.cheer(); mission=m; compose();
+    if(m==='trip') await talk(['The trip to Taiwan! Ready… steady…',zp(Z('出發！','chūfā'))]); else await say('Mission Taiwan! Ready… steady… go!',{rate:.95,pitch:1.2});
+    if(api.alive()) api.next(); };
+  const choose=on=>{ choosing=on; startBtn.hidden=on; setupBtn.hidden=on; modes.forEach(b=>{ b.hidden=!on; }); picker(); if(on) say('Mission Taiwan! Tap the lantern for words, or the suitcase for the trip.'); };
+  tw.addEventListener('click',()=>{ if(started||SET.mandarin===false) return; audio();
+    if(!pickZhVoice()){ picker(); sfx.boop(); wobble(tw); say('Mission Taiwan is asleep on this iPad. Tap START!'); ghost(startBtn); return; }
+    if(twoWays()) choose(true); else begin(has(TRIP_SCENES)?'trip':'taiwan'); });
+  modes[0].addEventListener('click',()=>begin('taiwan')); modes[1].addEventListener('click',()=>begin('trip'));
+  modes[2].addEventListener('click',()=>{ if(!started) choose(false); });
 }};
 
 const balloonScene={ key:'balloon', icon:'🎈', name:'the balloon', sticker:'🎈', done:'you took calm breaths', async enter(root,api){
@@ -1303,6 +1407,200 @@ const twBodyScene={ key:'twbody', icon:'🙆', name:'head, hands and feet', stic
   })();
 }};
 
+// ---------- Mission Taiwan, the trip: packing the suitcase at home, then the airport
+// The second way to play Mission Taiwan. Every thing has a name card (picture, English word, big characters, pinyin) and says
+// its name in both languages when it is tapped. Then the things are asked for one at a time, in English and in Mandarin and in a
+// new order every time, and the child drags each one to where it goes. The rules are the same as everywhere else: listen first,
+// the think-pause after a wrong one, no pointers to an answer, a level per slide.
+const T=(en,zh,py,pic)=>({en:en,w:Z(zh,py),pic:pic});
+const PASSPORT_SVG=`<svg viewBox="0 0 80 100" aria-hidden="true"><rect x="8" y="4" width="64" height="92" rx="8" fill="#1d3557"/><rect x="8" y="4" width="9" height="92" rx="4" fill="#16294a"/><circle cx="43" cy="44" r="17" fill="none" stroke="#ffd166" stroke-width="3.5"/><path d="M26 44H60M43 27V61M31 33Q43 41 55 33M31 55Q43 47 55 55" stroke="#ffd166" stroke-width="2.6" fill="none"/><rect x="26" y="72" width="34" height="6" rx="3" fill="#ffd166"/></svg>`;
+const NAPPY_SVG=`<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M10 20H90V44Q70 50 66 80Q50 90 34 80Q30 50 10 44Z" fill="#fff" stroke="#b8c7d9" stroke-width="3" stroke-linejoin="round"/><path d="M10 20H90V31H10Z" fill="#bfe3ff"/><rect x="3" y="23" width="16" height="12" rx="3.5" fill="#ffd166"/><rect x="81" y="23" width="16" height="12" rx="3.5" fill="#ffd166"/><circle cx="50" cy="56" r="7" fill="#ffd9e0"/><circle cx="38" cy="45" r="3" fill="#bfe3ff"/><circle cx="62" cy="45" r="3" fill="#bfe3ff"/></svg>`;
+const BOTTLE_SVG=`<svg viewBox="0 0 80 100" aria-hidden="true"><rect x="36" y="2" width="8" height="16" rx="4" fill="#f4a261"/><rect x="24" y="14" width="32" height="12" rx="5" fill="#e63946"/><rect x="18" y="24" width="44" height="72" rx="14" fill="#4cc9f0"/><rect x="18" y="52" width="44" height="15" fill="#fff" opacity=".88"/><path d="M40 53.5l2.4 4.6 5 .8-3.6 3.5.9 5-4.7-2.4-4.7 2.4.9-5-3.6-3.5 5-.8z" fill="#ffb703"/><rect x="24" y="30" width="6" height="17" rx="3" fill="#fff" opacity=".5"/></svg>`;
+const PLANE_SVG=`<svg viewBox="0 0 300 110" aria-label="A plane"><path d="M34 36L14 4L42 4L74 36Z" fill="#e63946"/><path d="M24 58L4 48L6 42L44 50Z" fill="#c9d3e0"/><path d="M26 44Q26 34 44 34L232 34Q282 36 294 58Q282 78 232 80L62 80Q30 78 26 60Z" fill="#fff" stroke="#b8c7d9" stroke-width="2.5"/><path d="M254 44Q272 46 282 57L252 57Z" fill="#4cc9f0"/><path d="M32 67L284 67" stroke="#e63946" stroke-width="5" stroke-linecap="round"/><g fill="#4cc9f0"><circle cx="70" cy="48" r="4.6"/><circle cx="90" cy="48" r="4.6"/><circle cx="110" cy="48" r="4.6"/><circle cx="130" cy="48" r="4.6"/><circle cx="150" cy="48" r="4.6"/><circle cx="170" cy="48" r="4.6"/><circle cx="190" cy="48" r="4.6"/><circle cx="234" cy="48" r="4.6"/></g><rect x="206" y="40" width="14" height="24" rx="5" fill="#eef3f8" stroke="#9aa7b8" stroke-width="2.2"/><path d="M118 72L76 106L112 106L172 74Z" fill="#c9d3e0" stroke="#b0bccb" stroke-width="2"/><ellipse cx="124" cy="94" rx="15" ry="7.5" fill="#8fa0b3"/></svg>`;
+const THINGS={
+  suitcase:T('suitcase','行李箱','xínglǐxiāng','🧳'), passport:T('passport','護照','hùzhào',PASSPORT_SVG), shirt:T('shirt','衣服','yīfú','👕'), pants:T('pants','褲子','kùzi','👖'),
+  jacket:T('jacket','外套','wàitào','🧥'), socks:T('socks','襪子','wàzi','🧦'), shoes:T('shoes','鞋子','xiézi','👟'), hat:T('hat','帽子','màozi','🧢'), nappy:T('nappy','尿布','niàobù',NAPPY_SVG),
+  toothbrush:T('toothbrush','牙刷','yáshuā','🪥'), toy:T('toy','玩具','wánjù','🧸'), books:T('books','書','shū','📚'), bottle:T('water bottle','水壺','shuǐhú',BOTTLE_SVG),
+  airport:T('airport','機場','jīchǎng','🛫'), plane:T('plane','飛機','fēijī','✈️'), trolley:T('trolley','推車','tuīchē','🛒'), backpack:T('backpack','背包','bēibāo','🎒'), ticket:T('ticket','機票','jīpiào','🎫') };
+const PACK=['passport','shirt','pants','jacket','socks','shoes','hat','nappy','toothbrush','toy','books','bottle'];
+const mkThing=k=>Object.assign({k:k,heard:false},THINGS[k]);
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+// both languages, one after the other: English first at level 0, Mandarin first from level 1
+const both=(lv,en,part)=>lv>=1?[part,en]:[en,part];
+// a whole Mandarin sentence as one part of a line (the bubble gives it and its pinyin lines of their own)
+const zs=(zh,py,el)=>({zh:zh,py:py,tts:zh,el:el||null,s:true});
+
+// The name card at the top of a trip slide. show(thing) fills it. With pic false an ear stands in for the picture, so the card
+// can carry the word that is being asked for without giving the answer away.
+const NAME_CARD=`<button class="zname hid"><span class="pic"></span><span class="en"></span><span class="han" lang="zh-Hant-TW"></span><span class="py"></span></button>`;
+function nameCard(root){ const el=root.querySelector('.zname'); let cur=null;
+  return { el:el, thing:()=>cur, show(t,pic){ cur=t; el.classList.remove('hid'); el.dataset.k=t.k||''; el.querySelector('.pic').innerHTML=pic===false?'👂':t.pic;
+    el.querySelector('.en').textContent=t.en; el.querySelector('.han').textContent=t.w.zh; el.querySelector('.py').textContent=t.w.py; } }; }
+
+// Pick a thing up and carry it, the way the shape pieces are carried. h.can() says whether it may be lifted now, h.pick() runs as
+// it is lifted, h.move(cx,cy) as it travels, and h.drop({moved,far,cx,cy,back}) when the finger lifts (its centre in rem; far: it was
+// carried a good way from where it lay, not just touched with a wobbly finger; back() sends it home).
+function draggable(el,h){ let d=null;
+  const centre=()=>({cx:parseFloat(el.style.left)+el.offsetWidth/d.u/2, cy:parseFloat(el.style.top)+el.offsetHeight/d.u/2});
+  el.addEventListener('pointerdown',e=>{ if(d||(h.can&&!h.can())) return; e.preventDefault(); try{ el.setPointerCapture(e.pointerId); }catch(x){}
+    d={sx:e.clientX,sy:e.clientY,ox:parseFloat(el.style.left),oy:parseFloat(el.style.top),moved:false,u:REM()}; el.classList.add('drag'); if(h.pick) h.pick(); });
+  el.addEventListener('pointermove',e=>{ if(!d) return; const dx=(e.clientX-d.sx)/d.u, dy=(e.clientY-d.sy)/d.u; if(Math.abs(dx)+Math.abs(dy)>.8) d.moved=true;
+    el.style.left=(d.ox+dx)+'rem'; el.style.top=(d.oy+dy)+'rem'; if(h.move){ const c=centre(); h.move(c.cx,c.cy); } });
+  const up=()=>{ if(!d) return; const c=centre(), o=d; d=null; el.classList.remove('drag');
+    h.drop({moved:o.moved,far:Math.hypot(parseFloat(el.style.left)-o.ox,parseFloat(el.style.top)-o.oy)>6,cx:c.cx,cy:c.cy,back(){ el.style.left=o.ox+'rem'; el.style.top=o.oy+'rem'; }}); };
+  el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up); }
+
+// Learning the names. Each thing says its name in both languages when tapped and gets a tick. When every one has been heard
+// (from level 2, straight away) a green arrow appears; they can keep tapping to hear names again, and go on when they are ready.
+function tripLearn(root,api,o){ const L={}; let arrow=null, over=false, go=null;
+  const offer=()=>{ if(arrow||over) return; arrow=document.createElement('button'); arrow.className='next-btn'; arrow.textContent='➡'; arrow.setAttribute('aria-label','Go on'); root.appendChild(arrow);
+    arrow.addEventListener('pointerdown',()=>{ if(over) return; over=true; api.hint=null; arrow.remove(); go(); }); };
+  L.done=new Promise(res=>{ go=res; });
+  L.hear=t=>{ if(over) return; o.card.show(t); t.heard=true; if(t.el&&t.el.classList.contains('zthing')) t.el.classList.add('heard');
+    const said=talk(both(o.lv,cap(t.en)+'.',zp(t.w,o.card.el)));
+    if(!arrow&&o.things.every(x=>x.heard)){ offer(); said.then(ok=>{ if(ok&&!over&&api.alive()){ talk(['Tap the green arrow when you are ready.']); ghost(arrow); } }); } };
+  L.begin=()=>{ api.hint=()=>{ const t=o.things.find(x=>!x.heard); if(t){ talk(['Tap this one to hear its name.']); ghost(t.el); } else if(arrow){ talk(['Tap the green arrow when you are ready.']); ghost(arrow); } };
+    if(o.lv>=2||o.things.every(x=>x.heard)) offer(); };
+  L.intro=o.lv>=2?'Tap a thing to hear its name again. Tap the green arrow to go on.':'Tap each thing to hear its name.';
+  return L; }
+
+// 1. Packing the suitcase. Six things at level 0, then eight, ten and all twelve; the ones he has met least often are chosen first.
+const twPackScene={ key:'twpack', icon:'🧳', name:'packing the suitcase', sticker:'🧳', done:'you packed your suitcase', enter(root,api){
+  const lv=LVT.pack||0, n=[6,8,10,12,12][lv]; let stumbles=0, packed=0, want=null, gotIt=null, taps=0, named=null;
+  const seen=PROG.twSeen=PROG.twSeen||{};
+  const things=shuffle(shuffle(PACK.slice()).sort((a,b)=>(seen[a]||0)-(seen[b]||0)).slice(0,n)).map(mkThing), bag=mkThing('suitcase');
+  things.forEach(t=>{ seen[t.k]=(seen[t.k]||0)+1; }); save('rsh-progress',PROG);
+  const cols=Math.ceil(n/2), cw=63/cols;
+  root.innerHTML=`<div class="zroom"></div>${NAME_CARD}<button class="zcase" id="case"><span class="lid"><span class="cnt" id="cnt">0 / ${n}</span></span><span class="base"></span><span class="real">🧳</span></button>`+
+    things.map((t,i)=>`<button class="zthing" data-k="${t.k}" style="left:${(3+(i%cols)*cw+(cw-10.2)/2).toFixed(1)}rem;top:${(18.4+Math.floor(i/cols)*13).toFixed(1)}rem">${t.pic}</button>`).join('');
+  const card=nameCard(root), caseEl=root.querySelector('#case'), cnt=root.querySelector('#cnt');
+  things.forEach(t=>{ t.el=root.querySelector(`.zthing[data-k="${t.k}"]`); }); bag.el=caseEl;
+  const inCase=(x,y)=>x>66&&y>14&&y<49;
+  const directive=t=>both(lv,`Let's put away the ${t.en}!`,zs(`我們把${t.w.zh}收起來！`,`wǒmen bǎ ${t.w.py} shōu qǐlái`,card.el));
+  const L=tripLearn(root,api,{things:things.concat([bag]),card:card,lv:lv});
+  // Things touched but not carried, twice during one request: once the touched thing has said its name, Whiskers says how to
+  // pack and the suitcase lights up. It is said whichever thing was touched, so it shows how, not which.
+  const howTo=after=>Promise.resolve(after).then(ok=>{ if(ok===false||!api.alive()||api.phase!=='ask') return;
+    talk(['Pick it up and put it in the suitcase.']); caseEl.classList.add('over'); setTimeout(()=>caseEl.classList.remove('over'),2200); });
+  caseEl.addEventListener('pointerdown',()=>{ if(api.phase==='learn') L.hear(bag); });
+  // the name card says its word again; while a thing is being asked for, it says the whole request again
+  card.el.addEventListener('pointerdown',()=>{ const t=card.thing(); if(!t) return; if(api.phase==='ask'&&want) talk(directive(want)); else if(api.phase==='learn') L.hear(t); });
+  things.forEach(t=>draggable(t.el,{
+    can:()=>!t.packed&&(api.phase==='learn'||api.phase==='ask'),
+    // a thing says its name the moment it is touched (so a wobbly tap counts too): in both languages while the names are being
+    // learned, in Mandarin while packing
+    pick:()=>{ if(api.phase==='learn') L.hear(t); else named=talk([zp(t.w,t.el)]); },
+    move:(x,y)=>caseEl.classList.toggle('over',api.phase==='ask'&&inCase(x,y)),
+    drop:d=>{ caseEl.classList.remove('over');
+      if(api.phase!=='ask'||!want){ d.back(); return; }
+      if(!inCase(d.cx,d.cy)){ d.back();
+        if(!d.far){ if(++taps>=2){ taps=0; howTo(named); } }        // touched, not carried: see howTo
+        else if(t===want) talk(['Nearly! Put it in the suitcase.']);
+        return; }
+      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,['Not that one.',zp(want.w,card.el)]); return; }
+      gotIt(); } }));
+  (async()=>{
+    api.phase='busy'; api.hint=null;
+    await line([`We are going to Taiwan, ${SAY()}! Let's pack the suitcase.`]); if(!api.alive()) return;
+    card.show(bag); bag.heard=true; await line(both(lv,'Suitcase.',zp(bag.w,card.el))); if(!api.alive()) return;
+    api.phase='learn'; L.begin(); await line([L.intro]); if(!api.alive()) return;
+    await L.done; if(!api.alive()) return;
+    api.phase='busy'; things.forEach(t=>t.el.classList.remove('heard'));
+    await line([lv>=2?"Now let's pack! Listen.":"Now let's pack! Listen… and put the thing in the suitcase."]); if(!api.alive()) return;
+    for(const t of shuffle(things.slice())){
+      want=t; taps=0; card.show(t,false); api.phase='ask'; api.hint=()=>{ talk(directive(t)); };
+      const got=new Promise(r=>{ gotIt=r; }); talk(directive(t)); await got; if(!api.alive()) return;
+      // in it goes: a ding, the count on the lid goes up, and the name is said once more in both languages
+      api.phase='busy'; api.hint=null; t.packed=true; t.el.classList.add('packed'); t.el.style.left=(70.6+(packed%6)*4.25)+'rem'; t.el.style.top=(31.8+Math.floor(packed/6)*5.6)+'rem';
+      packed++; sfx.ding(); cnt.textContent=`${packed} / ${n}`; card.show(t);
+      await line(both(lv,`Yes! The ${t.en}!`,zp(t.w,card.el))); if(!api.alive()) return; }
+    // all packed: the lid comes down and the real suitcase pops up
+    want=null; card.show(bag); caseEl.classList.add('shut'); sfx.whoosh(); await wait(900); if(!api.alive()) return;
+    things.forEach(t=>t.el.classList.add('gone')); caseEl.classList.add('done'); sfx.ding(); confetti(); sfx.cheer();
+    await line(['All packed!',zp(TW.great,card.el),`The suitcase is ready, ${SAY()}!`]); if(!api.alive()) return;
+    bumpTw('pack',stumbles); api.sticker(); await wait(600); if(api.alive()) api.next();
+  })();
+}};
+
+// 2. The airport. The suitcase goes on the check-in belt, the passport gets its stamp, the backpack goes through the scanner
+// (and the screen shows who is hiding inside), the ticket opens the gate, and then the little hero gets on the plane.
+const twAirScene={ key:'twair', icon:'✈️', name:'the airport', sticker:'✈️', done:'you got on the plane', enter(root,api){
+  const lv=LVT.air||0; let stumbles=0, want=null, gotIt=null, taps=0, named=null;
+  const plane=mkThing('plane'), trolley=mkThing('trolley'), port=mkThing('airport'), hero={k:'hero',en:'',w:null,pic:KID_SVG};
+  // four things to use, in new places on the trolley each time; from level 2 two more that are never asked for
+  const movable=shuffle(['suitcase','passport','backpack','ticket'].concat(lv>=2?['toy','hat']:[]).map(mkThing));
+  const cell=i=>[76.6+(i%2)*10.2,17.6+Math.floor(i/2)*9.2];
+  // where each thing goes and what is said
+  const S={ suitcase:{at:[14,39.7],zone:'#belt',en:"Let's put the suitcase on the belt!",zh:'我們把行李箱放上去！',py:'wǒmen bǎ xínglǐxiāng fàng shàngqù'},
+    passport:{at:[41,39.5],zone:'#desk',en:"Let's show the passport!",zh:'我們把護照拿出來！',py:'wǒmen bǎ hùzhào ná chūlái'},
+    backpack:{at:[52.5,40],zone:'#xray',en:"Let's put the backpack on the belt!",zh:'我們把背包放上去！',py:'wǒmen bǎ bēibāo fàng shàngqù'},
+    ticket:{at:[66.5,24.5],zone:'#gate',en:"Let's show the ticket!",zh:'我們把機票拿出來！',py:'wǒmen bǎ jīpiào ná chūlái'},
+    hero:{at:[20.2,23.9],r:15,zone:'',en:`Let's get on the plane, ${SAY()}!`,zh:'我們上飛機！',py:'wǒmen shàng fēijī'} };
+  root.innerHTML=`<div class="zterm"></div>${NAME_CARD}<div class="zwin"><button class="zplane" id="plane">${PLANE_SVG}</button></div>`+
+    `<div class="zgate" id="gate"><span class="sign">GATE 3</span><span class="door"></span><span class="reader"><i class="lamp"></i></span></div>`+
+    `<div class="zst belt" id="belt"><span class="cap">CHECK-IN</span><span class="flaps"></span><span class="conv"></span></div>`+
+    `<div class="zst desk" id="desk"><span class="cap">PASSPORTS</span><span class="who">👮</span><span class="counter"></span></div>`+
+    `<div class="zst xray" id="xray"><span class="cap">SCANNER</span><span class="conv"></span><span class="mach"><span class="screen"><span class="x">🎒<b>${pick(['🧸','🦆','🦖','🐙','🚗'])}</b></span></span></span></div>`+
+    `<button class="ztrolley" id="trolley"></button><div class="zspot hid" id="spot"></div><div class="zstamp" id="stamp"><span class="han" lang="zh-Hant-TW">台灣</span></div>`+
+    movable.map((t,i)=>`<button class="zthing sm" data-k="${t.k}" style="left:${cell(i)[0]}rem;top:${cell(i)[1]}rem">${t.pic}</button>`).join('')+
+    `<button class="zthing sm hero gone" data-k="hero" style="left:${cell(0)[0]}rem;top:${cell(0)[1]}rem">${KID_SVG}</button>`;
+  const q=s=>root.querySelector(s), card=nameCard(root), spot=q('#spot');
+  plane.el=q('#plane'); trolley.el=q('#trolley'); hero.el=q('.zthing.hero'); movable.forEach(t=>{ t.el=q(`.zthing[data-k="${t.k}"]`); });
+  const directive=k=>both(lv,S[k].en,zs(S[k].zh,S[k].py,card.el));
+  const L=tripLearn(root,api,{things:[plane,trolley].concat(movable),card:card,lv:lv});
+  // as in the packing slide: things touched but not carried, twice during one request, and Whiskers says how it is done
+  const howTo=after=>Promise.resolve(after).then(ok=>{ if(ok===false||!api.alive()||api.phase!=='ask') return; talk(['Pick it up and put it on the dotted spot.']); });
+  [plane,trolley].forEach(t=>t.el.addEventListener('pointerdown',()=>{ if(api.phase==='learn') L.hear(t); }));
+  card.el.addEventListener('pointerdown',()=>{ const t=card.thing(); if(!t) return; if(api.phase==='ask'&&want) talk(directive(want.k)); else if(api.phase==='learn') L.hear(t); });
+  movable.concat([hero]).forEach(t=>draggable(t.el,{
+    can:()=>!t.used&&(api.phase==='ask'||(api.phase==='learn'&&!!t.w)),
+    pick:()=>{ if(api.phase==='learn') L.hear(t); else named=t.w?talk([zp(t.w,t.el)]):null; },
+    drop:d=>{ if(api.phase!=='ask'||!want){ d.back(); return; }
+      const st=S[want.k]; if(Math.hypot(d.cx-st.at[0],d.cy-st.at[1])>(st.r||9)){ d.back();
+        if(!d.far){ if(++taps>=2){ taps=0; howTo(named); } }        // touched, not carried: see howTo
+        else if(t===want) talk(['Nearly! Put it on the dotted spot.']);
+        return; }
+      if(t!==want){ stumbles++; d.back(); wobble(t.el); thinkTalk(api,want.w?['Not that one.',zp(want.w,card.el)]:['Not that one. The little hero gets on the plane.']); return; }
+      gotIt(); } }));
+  // what happens at each place once the right thing has arrived
+  const glide=(el,x,y,ms,ease)=>{ el.style.transition=`left ${ms}ms ${ease||'ease'}, top ${ms}ms ${ease||'ease'}, transform .3s ease, opacity .4s`; el.style.left=x+'rem'; el.style.top=y+'rem'; return wait(ms); };
+  const fx={
+    suitcase:async el=>{ await glide(el,9.2,35.2,300); q('#belt').classList.add('run'); sfx.whoosh(); await glide(el,-12,35.2,1700,'linear'); q('#belt').classList.remove('run'); },
+    passport:async el=>{ await glide(el,36.2,34.9,300); const st=q('#stamp'); st.classList.add('on'); sfx.boop(); await wait(350); sfx.ding(); await wait(1300); st.classList.remove('on'); },
+    backpack:async el=>{ await glide(el,47.7,35.4,300); q('#xray').classList.add('run'); await glide(el,59,35.4,1100,'linear'); q('#xray').classList.remove('run'); q('#xray').classList.add('seen'); tone(880,.12,'sine',.2); tone(1175,.16,'sine',.2,.18); await wait(1300); },
+    ticket:async el=>{ await glide(el,61.7,19.9,300); q('#gate').classList.add('open'); sfx.ding(); await wait(900); },
+    hero:async el=>{ await glide(el,21.9,19.3,450); el.style.transform='scale(.25)'; await wait(350); el.classList.add('gone'); sfx.whoosh(); plane.el.classList.add('fly'); await wait(2800); } };
+  const step=async k=>{ const t=k==='hero'?hero:movable.find(x=>x.k===k), st=S[k];
+    want=t; taps=0; card.show(t.w?t:plane,false); if(!t.w) card.el.dataset.k='hero';
+    spot.style.left=st.at[0]+'rem'; spot.style.top=st.at[1]+'rem'; spot.classList.toggle('wide',k==='hero'); spot.classList.remove('hid');
+    api.phase='ask'; api.hint=()=>{ talk(directive(k)); };
+    const got=new Promise(r=>{ gotIt=r; }); talk(directive(k)); await got; if(!api.alive()) return false;
+    api.phase='busy'; api.hint=null; t.used=true; spot.classList.add('hid'); sfx.ding();
+    const anim=fx[k](t.el);
+    if(t.w){ card.show(t); await line(both(lv,`Yes! The ${t.en}!`,zp(t.w,card.el))); }
+    await anim; if(!api.alive()) return false;
+    if(k==='backpack'){ await line(['Look who is hiding in the backpack!']); if(!api.alive()) return false; }
+    if(k!=='hero'){ t.el.classList.add('gone'); q(st.zone).classList.add('done'); }
+    return true; };
+  (async()=>{
+    api.phase='busy'; api.hint=null; card.show(port);
+    await line(['Here we are, at the airport!'].concat(both(lv,'Airport.',zp(port.w,card.el)))); if(!api.alive()) return;
+    api.phase='learn'; L.begin(); await line([L.intro]); if(!api.alive()) return;
+    await L.done; if(!api.alive()) return;
+    api.phase='busy'; movable.forEach(t=>t.el.classList.remove('heard'));
+    await line([lv>=2?"Now let's catch the plane! Listen.":"Now let's catch the plane! Listen… and put the thing on the dotted spot."]); if(!api.alive()) return;
+    // check-in, passports and the scanner come in a new order each time; then the ticket at the gate
+    for(const k of shuffle(['suitcase','passport','backpack']).concat(['ticket'])){ if(!(await step(k))) return; }
+    // everything is done: the little hero steps out on the trolley, and goes to the plane
+    const free=[0,1,2,3,4,5].find(i=>!(movable[i]&&!movable[i].used)); hero.el.style.left=cell(free)[0]+'rem'; hero.el.style.top=cell(free)[1]+'rem';
+    hero.el.classList.remove('gone'); sfx.pop(); await wait(500); if(!api.alive()) return;
+    if(!(await step('hero'))) return;
+    confetti(200); sfx.cheer(); card.show(plane);
+    await line(['Up, up and away!',zs('台灣，我們來了！','Táiwān, wǒmen lái le',card.el),'Taiwan, here we come!']); if(!api.alive()) return;
+    bumpTw('air',stumbles); api.sticker(); await wait(600); if(api.alive()) api.next();
+  })();
+}};
+
 const twEndScene={ key:'twend', icon:'🏮', name:'the hero party', stop:true, async enter(root,api){
   root.innerHTML=`<div class="hq"><button class="zword" id="gw">${han(TW.great)}${pyn(TW.great)}</button><div class="badge-big tw" id="bb"></div></div>`;
   const gw=root.querySelector('#gw'), bb=root.querySelector('#bb');
@@ -1313,7 +1611,8 @@ const twEndScene={ key:'twend', icon:'🏮', name:'the hero party', stop:true, a
   await line(['Say it with me:',zp(TW.great,gw)]); if(!api.alive()) return;
   await quiet(api,1200); if(!api.alive()) return;
   const recap=doneList.slice(-3); if(recap.length){ await line([`Today ${recap.join(', ')}.`]); if(!api.alive()) return; }
-  PROG.twMissions=(PROG.twMissions||0)+1; PROG.twLast=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
+  if(mission==='trip') PROG.tripMissions=(PROG.tripMissions||0)+1; else PROG.twMissions=(PROG.twMissions||0)+1;
+  PROG.twLast=new Date().toISOString().slice(0,10); save('rsh-progress',PROG);
   whisk.classList.add('breath'); await line(['One big breath together… in… and out.']); whisk.classList.remove('breath'); if(!api.alive()) return;
   await wait(600); if(!api.alive()) return;
   // the same goodbye as Mission 1, with the Mandarin word first; tap it on the night screen to hear it again
@@ -1327,8 +1626,9 @@ $('#night .bye').addEventListener('pointerdown',()=>{ const h=$('#night .bye .ha
 // ---------- mission runner
 const SCENES=[introScene,balloonScene,greenScene,flashScene,karutaScene,shapesScene,countScene,letterScene,sharkScene,hqScene];
 const TW_SCENES=[introScene,twHelloScene,twWhoScene,twCountScene,twColourScene,twWantScene,twBodyScene,twEndScene];
-let active=[], cur=null, curApi=null, runId=0, mission='hero';   // 'hero' = Mission 1, 'taiwan' = the Mandarin mission; chosen on the start screen
-function compose(){ active=(mission==='taiwan'?TW_SCENES:SCENES).filter(s=>s.key==='intro'||s.key==='hq'||s.key==='twend'||SET.slides[s.key]!==false); }
+const TRIP_SCENES=[introScene,twPackScene,twAirScene,twEndScene];
+let active=[], cur=null, curApi=null, runId=0, mission='hero';   // 'hero' = Mission 1, 'taiwan' = Mission Taiwan's words, 'trip' = Mission Taiwan's trip; chosen on the start screen
+function compose(){ active=(mission==='taiwan'?TW_SCENES:mission==='trip'?TRIP_SCENES:SCENES).filter(s=>s.key==='intro'||s.key==='hq'||s.key==='twend'||SET.slides[s.key]!==false); }
 const stopsOf=()=>active.filter(s=>s.key!=='intro');
 function renderStrip(idx){ const stops=stopsOf(), c=idx-1; strip.innerHTML=stops.map((s,i)=>`<div class="stop ${i<c?'done':''} ${i===c?'cur':''}">${i<c?'✓':s.icon}</div>${i<stops.length-1?'<div class="dash"></div>':''}`).join(''); strip.style.visibility=idx<1?'hidden':'visible'; }
 async function drive(next){ const d=$('#drive'); $('#nextstop').textContent='Next stop: '+next.name+'!'; d.classList.add('on'); say(`Beep beep! Next stop: ${next.name}!`); await wait(3400); d.classList.remove('on'); }
@@ -1368,7 +1668,7 @@ function openParent(){ const p=$('#parent'); if(curApi&&curApi.pause) curApi.pau
   $('#p-slides').innerHTML=SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
   $('#p-stats').textContent=`Missions finished: ${PROG.missions||0} · Longest wait for green: ${PROG.longestWait||0} s · Letters painted: ${PROG.letters.join(' ')||'none yet'} · Levels: ${Object.keys(LV).map(k=>k+' '+LV[k]).join(', ')}`;
   $('#p-tw').checked=SET.mandarin!==false;
-  $('#p-twslides').innerHTML=TW_SCENES.filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
+  $('#p-twslides').innerHTML=TW_SCENES.concat(TRIP_SCENES).filter(s=>s.sticker).map(s=>`<label><input type="checkbox" data-k="${s.key}" ${SET.slides[s.key]===false?'':'checked'}><span>${s.icon} ${s.name}</span></label>`).join('');
   pickZhVoice(); twStatus();
   p.classList.add('on');
   // The finger that opened the corner by holding is still down, and lifting it would also tap whatever has appeared under it
@@ -1380,7 +1680,7 @@ let armT=null;
 // Mission Taiwan in the parent corner: which Mandarin voice was found (or how to add one), and its own progress
 function twStatus(){ const v=zhVoice;
   $('#p-twstats').textContent=(v?`Mandarin voice: ${v.name} (${v.lang}).`:'No Taiwan Mandarin voice was found on this device, so Mission Taiwan shows as unavailable. On an iPad: Settings → Accessibility → Spoken Content → Voices → Chinese, and choose Meijia under Chinese (Taiwan).')
-    +` Mission Taiwan finished: ${PROG.twMissions||0} · Levels: ${Object.keys(LVT).map(k=>k+' '+LVT[k]).join(', ')}`; }
+    +` Mission Taiwan finished: words ${PROG.twMissions||0}, the trip ${PROG.tripMissions||0} · Levels: ${Object.keys(LVT).map(k=>k+' '+LVT[k]).join(', ')}`; }
 function saveParent(){ SET.name=($('#p-name').value||'Hero').trim().slice(0,20); SET.sayAs=($('#p-say').value||SET.name).trim().slice(0,24); SET.bye=$('#p-bye').value.trim().slice(0,60); SET.voice=$('#p-voice').value;
   SET.mandarin=$('#p-tw').checked; $('#p-twslides').querySelectorAll('input').forEach(i=>{ SET.slides[i.dataset.k]=i.checked; });
   $('#p-slides').querySelectorAll('input').forEach(i=>{ SET.slides[i.dataset.k]=i.checked; }); save('rsh-settings',SET); pickVoice(); }
@@ -1396,7 +1696,7 @@ document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(synth
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('gesturestart',e=>e.preventDefault());
 window.__rsh={ go:goScene, locked:touchLocked, sticker:addSticker, set:SET, lv:LV, prog:PROG, voice:()=>voice&&voice.name, sfx:sfx,
-  mission:m=>{ if(m){ mission=(m==='taiwan')?'taiwan':'hero'; compose(); } return mission; }, lvtw:LVT, zhVoice:()=>zhVoice&&zhVoice.name, scene:()=>cur&&cur.key, phase:()=>curApi&&curApi.phase };   // parent/dev hook: __rsh.go(2) jumps to a slide; __rsh.mission('taiwan') then __rsh.go(1) opens the Mandarin mission
+  mission:m=>{ if(m){ mission=(m==='taiwan'||m==='trip')?m:'hero'; compose(); } return mission; }, lvtw:LVT, zhVoice:()=>zhVoice&&zhVoice.name, scene:()=>cur&&cur.key, phase:()=>curApi&&curApi.phase };   // parent/dev hook: __rsh.go(2) jumps to a slide; __rsh.mission('taiwan') or __rsh.mission('trip') first for a Mission Taiwan slide
 compose(); goScene(0);
 })();
 </script>

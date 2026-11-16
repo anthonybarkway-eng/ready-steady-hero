@@ -12,22 +12,41 @@ name, settings and progress stay in the iPad's own storage.
 
 ## Mission Taiwan (Mandarin)
 
-Seven short slides of first words for a family trip to Taiwan: hello, thank you and bye-bye;
-Grandpa and Grandma; counting cars to ten; four colours; want, don't want and more with Finn's
-snacks; head, hands and feet; and a cheering goodbye. Whiskers gives the instructions in English.
-Every Mandarin word is shown as a large Traditional character with small pinyin, is spoken by the
-iPad's own Taiwan Mandarin voice, and says itself again when it is tapped. The rules are the same
-as in Mission 1: nothing can be failed, the screen is off while a voice is speaking, a wrong tap
-gets the "Stop… think… and try again" pause with the word said again, nothing points at the
-answer, each slide keeps a level, and the mission ends itself with the goodbye.
+Tapping the lantern offers two ways to play, each a short mission of its own.
+
+**Words** (the lantern): seven short slides of first words for a family trip to Taiwan: hello,
+thank you and bye-bye; Grandpa and Grandma; counting cars to ten; four colours; want, don't want
+and more with Finn's snacks; head, hands and feet; and a cheering goodbye.
+
+**The trip** (the suitcase): two longer challenges on the way to Taiwan.
+
+1. *Packing the suitcase.* The things to take lie around the room: passport, shirt, pants,
+   jacket, socks, shoes, hat, nappy, toothbrush, toy, books and water bottle. Tapping a thing
+   shows its name card (picture, English word, characters, pinyin) and says the name in English
+   and in Mandarin. Then each thing is asked for in both languages ("Let's put away the
+   toothbrush!" / 我們把牙刷收起來！), in a new order every time, and is dragged into the suitcase.
+   Six things at first, then eight, ten and all twelve as the level rises; the ones met least
+   often are chosen first. If things are only touched, not carried, Whiskers says how to pack.
+2. *The airport.* Plane, trolley, suitcase, backpack, passport and ticket get their names. Then
+   the suitcase rides away on the check-in belt, the passport gets its stamp, the backpack goes
+   through the scanner (the screen shows who is hiding inside), the ticket turns the gate light
+   green, and the little hero gets on the plane.
+
+Whiskers gives the instructions in English. Every Mandarin word is shown as a large Traditional
+character with small pinyin, is spoken by the iPad's own Taiwan Mandarin voice, and says itself
+again when it is tapped. The rules are the same as in Mission 1: nothing can be failed, the
+screen is off while a voice is speaking, a wrong answer gets the "Stop… think… and try again"
+pause with the word said again, nothing points at the answer, each slide keeps a level, and the
+mission ends itself with the goodbye.
 
 - The mission needs a Chinese (Taiwan) voice on the device; iPads come with one (Meijia). If no
   such voice is found, the button is greyed out, and Mandarin is never read by an English voice.
   A better-sounding voice: Settings → Accessibility → Spoken Content → Voices → Chinese, and
   download the Enhanced Meijia under Chinese (Taiwan).
 - To hide the mission, hold the gear and untick **Show Mission Taiwan on the start screen**.
-  The same panel switches its slides on and off one by one, and **▶ Test Mandarin** speaks
-  three words with the voice the game found.
+  The same panel switches its slides on and off one by one (with both trip slides off, or all
+  the word slides off, the lantern starts the other way to play at once), and
+  **▶ Test Mandarin** speaks three words with the voice the game found.
 - It keeps its own levels and its own count of finished missions. Mission 1 is untouched.
 
 ## Put it on the iPad
@@ -52,7 +71,8 @@ the Enhanced version of Daniel or Kate, then choose it in the parent panel.
   content hash so iPads pick up the new build on their next launch).
 - `python make_icons.py` redraws the icons.
 - To jump to a slide while testing, type `__rsh.go(3)` in the browser console (Mission 1), or
-  `__rsh.mission('taiwan')` and then `__rsh.go(3)` for a Mandarin slide.
+  `__rsh.mission('taiwan')` (the words) or `__rsh.mission('trip')` (the trip) and then
+  `__rsh.go(1)` for a Mission Taiwan slide.
 - Commit and push; GitHub Pages serves the `main` branch.
 
 ## Links
